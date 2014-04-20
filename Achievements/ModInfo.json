@@ -1,0 +1,10 @@
+{
+    "displayName": "Achievements",
+    "author": "Shockah",
+    "info": "",
+    "internalName": "Shockah.Achievements",
+	"modReferences": [
+		"Shockah.Base"
+	],
+	"includePDB": true
+}

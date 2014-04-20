@@ -1,0 +1,10 @@
+﻿{
+	"displayName": "FIRE",
+	"tooltip": ["'Forceful Ion Radiance Escalator'", "'KILL IT WITH FIRE'", "Use with care"],
+	"useStyle": 4,
+	"useTime": 60,
+	"useAnimation": 60,
+	"value": [25,0,0,0],
+	"rare": 9,
+	"code": "FIRE"
+}

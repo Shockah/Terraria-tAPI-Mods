@@ -1,0 +1,9 @@
+{
+    "displayName": "Item Suffixes",
+    "author": "Shockah",
+    "info": "",
+    "internalName": "Shockah.ItemSuffixes",
+	"modReferences": [
+		"Shockah.Base"
+	]
+}

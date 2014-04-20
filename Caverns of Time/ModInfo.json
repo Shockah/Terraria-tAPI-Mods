@@ -1,0 +1,9 @@
+{
+    "displayName": "Caverns of Time",
+    "author": "Shockah",
+    "info": "",
+    "internalName": "Shockah.CavernsOfTime",
+	"modReferences": [
+		"Shockah.Base"
+	]
+}

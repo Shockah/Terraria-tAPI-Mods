@@ -1,0 +1,9 @@
+{
+    "displayName": "FIRE",
+    "author": "Shockah",
+    "info": "KILL IT WITH FIRE",
+    "internalName": "Shockah.FIRE",
+	"modReferences": [
+		"Shockah.Base"
+	]
+}

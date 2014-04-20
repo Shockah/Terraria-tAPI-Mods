@@ -1,0 +1,10 @@
+{
+    "displayName": "Fancy Cheat Menu",
+    "author": "Shockah",
+    "info": "",
+    "internalName": "Shockah.FCM",
+	"modReferences": [
+		"Shockah.Base"
+	],
+	"includePDB": true
+}
