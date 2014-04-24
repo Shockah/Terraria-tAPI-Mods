@@ -6,5 +6,8 @@
 	"modReferences": [
 		"Shockah.Base"
 	],
+	"dllReferences": [
+		"C3.XNA.Primitives2D.dll"
+	],
 	"includePDB": true
 }

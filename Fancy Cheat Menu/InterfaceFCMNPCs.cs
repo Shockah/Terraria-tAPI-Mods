@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using C3.XNA;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Shockah.Base;
@@ -16,6 +17,8 @@ namespace Shockah.FCM
 		public const float FILTER_W = 140, FILTER_H = 25, FILTER_X_OFF = 4;
 		public const float SORT_TEXT_SCALE = .75f;
 
+		public static NPC spawning = null;
+		public static Vector2? spawnPoint = null;
 		protected static List<NPC> defs = new List<NPC>();
 
 		public static void Reset()
@@ -39,7 +42,9 @@ namespace Shockah.FCM
 		protected NPCSlot[] slots = new NPCSlot[COLS * ROWS];
 		private int _Scroll = 0;
 		protected readonly Filter<NPC>
-			FTown = new Filter<NPC>("Town", Main.npcHeadTexture[22], (npc) => { return npc.townNPC; }), //Guide
+			FFriendly = new Filter<NPC>("Friendly", Defs.items["Vanilla:Carrot"].GetTexture(), (npc) => { return npc.friendly || npc.damage <= 0; }),
+			FTown = new Filter<NPC>("Town", Defs.items["Vanilla:Guide Voodoo Doll"].GetTexture(), (npc) => { return npc.townNPC; }),
+			FBoss = new Filter<NPC>("Boss", Defs.items["Vanilla:Suspicious Looking Eye"].GetTexture(), (npc) => { return SBase.IsBoss(npc); }),
 			FOther = new Filter<NPC>("Other", Defs.unloadedItem.GetTexture(), null);
 		protected readonly Sorter<NPC>
 			SID = new Sorter<NPC>("ID", (i1, i2) => { return i1.type.CompareTo(i2.type); }, (npc) => { return true; }),
@@ -75,7 +80,7 @@ namespace Shockah.FCM
 			};
 			filters.AddRange(new Filter<NPC>[]
 				{
-					FTown, FOther
+					FFriendly, FTown, FBoss, FOther
 				}
 			);
 			sorters.AddRange(new Sorter<NPC>[] { SID, SName, SDamage, SDefense });
@@ -111,6 +116,82 @@ namespace Shockah.FCM
 			string oldTyping = typing;
 			base.Draw(layer, sb);
 			if (oldTyping != typing) Refresh(true);
+
+			if (spawning != null)
+			{
+				Main.localPlayer.mouseInterface = true;
+
+				float radius = (spawning.width + spawning.height) * (1f / 3f);
+				if (!spawnPoint.HasValue)
+				{
+					sb.DrawCircle(Main.mouse, radius, (int)Math.Max(16, radius / 2), Color.White);
+					if (Main.mouseLeft && Main.mouseLeftRelease) spawnPoint = Main.mouseWorld;
+				}
+				else
+				{
+					float radiusSpawner = Vector2.Distance(spawnPoint.Value, Main.mouseWorld);
+					sb.DrawCircle(spawnPoint.Value - Main.screenPosition, radiusSpawner, (int)Math.Max(16, radiusSpawner / 2), Color.White);
+
+					float fieldOne = (float)(Math.PI * Math.Pow(radius, 2));
+					float field = (float)(Math.PI * Math.Pow(radiusSpawner, 2));
+					float fieldMin = field + fieldOne * 4;
+					Random rand = new Random(BitConverter.ToInt32(BitConverter.GetBytes(spawnPoint.Value.X), 0) ^ BitConverter.ToInt32(BitConverter.GetBytes(spawnPoint.Value.Y), 0) ^ Main.mouseX ^ Main.mouseY);
+
+					int count = (int)(fieldMin / (fieldOne * 4));
+					List<NPC> list = new List<NPC>();
+					for (int i = 0; i < count; i++)
+					{
+						Vector2 pos = spawnPoint.Value + Math2.LdirVector2((float)(rand.NextDouble() * radiusSpawner), (float)(rand.NextDouble() * 360d));
+						sb.DrawCircle(pos - Main.screenPosition, radius, (int)Math.Max(16, radius / 2), Color.White);
+						if (!Main.mouseLeft)
+						{
+							int newNPC = NPC.NewNPC((int)pos.X, (int)pos.Y, spawning.netID);
+							if (newNPC >= 0 && newNPC < Main.npc.Length - 1) list.Add(Main.npc[newNPC]);
+						}
+					}
+
+					if (list.Count != 0)
+					{
+						Projectile[] cacheProjectiles = Main.projectile;
+						Main.projectile = new Projectile[Main.projectile.Length];
+						for (int i = 0; i < Main.projectile.Length; i++) Main.projectile[i] = new Projectile();
+
+						NPC[] cacheNPCs = Main.npc;
+						Main.npc = new NPC[Main.npc.Length];
+						for (int i = 0; i < Main.npc.Length; i++) Main.npc[i] = new NPC();
+
+						Dust[] cacheDust = Main.dust;
+						Main.dust = new Dust[Main.dust.Length];
+						for (int i = 0; i < Main.dust.Length; i++) Main.dust[i] = new Dust();
+						
+						foreach (NPC npc in list)
+						{
+							Vector2 pos = npc.position;
+							int times = rand.Next(600);
+							for (int i = 0; i < times; i++) npc.UpdateNPC(npc.whoAmI);
+							npc.position = pos;
+							npc.oldPosition = pos;
+						}
+
+						Main.dust = cacheDust;
+						Main.npc = cacheNPCs;
+						Main.projectile = cacheProjectiles;
+					}
+
+					if (!Main.mouseLeft)
+					{
+						spawnPoint = null;
+						spawning = null;
+					}
+
+					if (Main.mouseRight)
+					{
+						spawnPoint = null;
+					}
+				}
+
+				return;
+			}
 
 			int scrollBy = (Main.mouseState.ScrollWheelValue - Main.oldMouseState.ScrollWheelValue) / 120;
 			int oldScroll = Scroll;
@@ -181,8 +262,8 @@ namespace Shockah.FCM
 			string text = typing == null ? filterText : typing + "|";
 			if (!string.IsNullOrEmpty(text))
 			{
-				Drawing.DrawBox(sb, POS_X, POS_Y + ROWS * OFF_Y * Main.inventoryScale + 4, 20 + COLS * OFF_X * Main.inventoryScale, 32);
-				SDrawing.StringShadowed(sb, Main.fontMouseText, text, new Vector2(POS_X + 8, POS_Y + ROWS * OFF_Y * Main.inventoryScale + 8));
+				Drawing.DrawBox(sb, POS_X, POS_Y + ROWS * OFF_Y * oldInventoryScale + 4, 20 + COLS * OFF_X * oldInventoryScale, 32);
+				SDrawing.StringShadowed(sb, Main.fontMouseText, text, new Vector2(POS_X + 8, POS_Y + ROWS * OFF_Y * oldInventoryScale + 8));
 			}
 		}
 

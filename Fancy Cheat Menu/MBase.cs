@@ -1,5 +1,7 @@
-﻿using Shockah.Base;
+﻿using Microsoft.Xna.Framework.Graphics;
+using Shockah.Base;
 using TAPI;
+using Terraria;
 namespace Shockah.FCM
 {
 	public class MBase : ModBase
@@ -17,6 +19,15 @@ namespace Shockah.FCM
 			InterfaceFCMItems.Reset();
 			InterfaceFCMNPCs.Reset();
 			SBase.EventSTooltipDraw += () => { return tip; };
+		}
+
+		public override void PostGameDraw(SpriteBatch sb)
+		{
+			if (!(Interface.current is InterfaceFCMNPCs) && InterfaceFCMNPCs.spawning != null)
+			{
+				InterfaceFCMNPCs.spawning = null;
+				new InterfaceFCMNPCs().Open();
+			}
 		}
 	}
 }

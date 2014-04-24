@@ -85,7 +85,7 @@ namespace Shockah.FCM
 				if (MyNPC.type > 0)
 				{
 					bool isBoss = SBase.IsBoss(MyNPC);
-					MBase.tip += new STooltip.Line(MyNPC.name, (MyNPC.friendly ? "#0f0;Friendly#;" : "#f00;Hostile#;") + (MyNPC.townNPC ? ", #0f0;Town NPC#;" : "") + (isBoss ? ", #f00;Boss#;" : ""), Color.White, Color.White);
+					MBase.tip += new STooltip.Line(MyNPC.name, (MyNPC.friendly || MyNPC.damage <= 0 ? "#0f0;Friendly#;" : "#f00;Hostile#;") + (MyNPC.townNPC ? ", #0f0;Town NPC#;" : "") + (isBoss ? ", #f00;Boss#;" : ""), Color.White, Color.White);
 
 					if (MyNPC.damage > 0) MBase.tip += new STooltip.Line("" + MyNPC.damage + " damage");
 					MBase.tip += new STooltip.Line("" + MyNPC.defense + " defense");
@@ -99,7 +99,7 @@ namespace Shockah.FCM
 
 		public virtual void OnLeftClick(ref bool release)
 		{
-			
+			InterfaceFCMNPCs.spawning = MyNPC;
 		}
 		public virtual void OnRightClick(ref bool release)
 		{

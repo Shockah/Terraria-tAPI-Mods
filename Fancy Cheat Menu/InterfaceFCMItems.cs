@@ -70,7 +70,7 @@ namespace Shockah.FCM
 			SName = new Sorter<Item>("Name", (i1, i2) => { return i1.displayName.CompareTo(i2.displayName); }, (item) => { return true; }),
 			SValue = new Sorter<Item>("Value", (i1, i2) => { return i1.value.CompareTo(i2.value); }, (item) => { return item.value > 0; }),
 			SRarity = new Sorter<Item>("Rarity", (i1, i2) => { return i1.rare.CompareTo(i2.rare); }, (item) => { return true; }),
-			SDamage = new Sorter<Item>("Damage", (i1, i2) => { return i1.damage.CompareTo(i2.damage); }, (item) => { return item.damage > 0; }),
+			SDamage = new Sorter<Item>("Damage", (i1, i2) => { return i1.damage.CompareTo(i2.damage); }, (item) => { return item.damage > 0 && !item.notAmmo; }),
 			SMana = new Sorter<Item>("Mana", (i1, i2) => { return i1.mana.CompareTo(i2.mana); }, (item) => { return item.mana > 0; }),
 			SStack = new Sorter<Item>("Stack", (i1, i2) => { return i1.maxStack.CompareTo(i2.maxStack); }, (item) => { return true; });
 

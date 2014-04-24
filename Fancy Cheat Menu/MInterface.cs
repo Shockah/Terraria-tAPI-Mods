@@ -17,6 +17,15 @@ namespace Shockah.FCM
 			if (Main.hideUI) return;
 			if (LayerFCMButtons == null) LayerFCMButtons = new ILFCMButtons();
 			SBase.InsertAfter(list, (il) => { return il == InterfaceLayer.LayerInventory; }, LayerFCMButtons);
+
+			foreach (InterfaceLayer il in list) il.visible = true;
+			if (Interface.current is InterfaceFCMNPCs && InterfaceFCMNPCs.spawning != null)
+			{
+				foreach (InterfaceLayer il in list)
+				{
+					if (il != InterfaceLayer.LayerCursor && il != LayerFCMButtons && il != InterfaceLayer.LayerCurrentInterface) il.visible = false;
+				}
+			}
 		}
 
 		public override bool OverrideChat()
