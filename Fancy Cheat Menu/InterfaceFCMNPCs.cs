@@ -150,7 +150,7 @@ namespace Shockah.FCM
 						}
 					}
 
-					if (list.Count != 0)
+					if (list.Count > 1)
 					{
 						Projectile[] cacheProjectiles = Main.projectile;
 						Main.projectile = new Projectile[Main.projectile.Length];
