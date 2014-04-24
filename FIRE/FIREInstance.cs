@@ -97,7 +97,7 @@ namespace Shockah.FIRE
 					}
 				));
 				thread.IsBackground = true;
-				thread.Priority = ThreadPriority.BelowNormal;
+				thread.Priority = ThreadPriority.Lowest;
 				thread.Start();
 			}
 
