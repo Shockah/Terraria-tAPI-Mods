@@ -29,7 +29,7 @@ namespace Shockah.ChestContents
 					float curR = r * fLen;
 					float alpha = 1f * ilcc.life / MAXLIFE;
 
-					for (int i = 0; i < items.Count; i++) ILChestContents.DrawItem(sb, cpos + Math2.LdirVector2(curR, 90 - 360d / items.Count * i + (1 - fLen) * 90), items[i], alpha);
+					for (int i = 0; i < items.Count; i++) ILChestContents.DrawItem(sb, cpos + Math2.LdirVector2(curR, 90 - 360f / items.Count * i + (1 - fLen) * 90), items[i], alpha);
 				}
 			),
 			TwoCircles = new DisplayStyleAImpl((sb, ilcc, items) =>
@@ -49,8 +49,8 @@ namespace Shockah.ChestContents
 					float curR = r * fLen;
 					float alpha = 1f * ilcc.life / MAXLIFE;
 
-					for (int i = 0; i < firstc; i++) ILChestContents.DrawItem(sb, cpos + Math2.LdirVector2(curR, 90 - 360d / firstc * i + (1 - fLen) * 90), items[i], alpha);
-					for (int i = firstc; i < items.Count; i++) ILChestContents.DrawItem(sb, cpos + Math2.LdirVector2(curR + OFFSET_CIRCLES, 90 - 360d / (items.Count - firstc) * i + (1 - fLen) * 90), items[i], alpha);
+					for (int i = 0; i < firstc; i++) ILChestContents.DrawItem(sb, cpos + Math2.LdirVector2(curR, 90 - 360f / firstc * i + (1 - fLen) * 90), items[i], alpha);
+					for (int i = firstc; i < items.Count; i++) ILChestContents.DrawItem(sb, cpos + Math2.LdirVector2(curR + OFFSET_CIRCLES, 90 - 360f / (items.Count - firstc) * i + (1 - fLen) * 90), items[i], alpha);
 				}
 			),
 			Rect = new DisplayStyleAImpl((sb, ilcc, items) =>
