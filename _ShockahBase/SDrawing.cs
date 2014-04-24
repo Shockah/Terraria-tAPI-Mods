@@ -4,7 +4,7 @@ using TAPI;
 
 namespace Shockah.Base
 {
-	public class SDrawing
+	public static class SDrawing
 	{
 		public static void StringShadowed(SpriteBatch sb, SpriteFont font, string text, Vector2 pos)
 		{

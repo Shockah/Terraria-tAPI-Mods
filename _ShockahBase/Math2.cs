@@ -5,26 +5,26 @@ namespace Shockah.Base
 {
 	public class Math2
 	{
-		public static double LdirX(double dist, double angle)
+		public static float LdirX(float dist, float angle)
 		{
-			return -Math.Cos(ToRadians(angle + 180d)) * dist;
+			return (float)(-Math.Cos(ToRadians(angle + 180f)) * dist);
 		}
-		public static double LdirY(double dist, double angle)
+		public static float LdirY(float dist, float angle)
 		{
-			return Math.Sin(ToRadians(angle + 180d)) * dist;
+			return (float)(Math.Sin(ToRadians(angle + 180f)) * dist);
 		}
-		public static Vector2 LdirVector2(double dist, double angle)
+		public static Vector2 LdirVector2(float dist, float angle)
 		{
 			return new Vector2((float)Math2.LdirX(dist, angle), (float)Math2.LdirY(dist, angle));
 		}
 
-		public static double ToRadians(double degrees)
+		public static float ToRadians(float degrees)
 		{
-			return degrees * Math.PI / 180;
+			return (float)(degrees * Math.PI / 180f);
 		}
-		public static double ToDegrees(double radians)
+		public static float ToDegrees(float radians)
 		{
-			return radians * 180 / Math.PI;
+			return (float)(radians * 180f / Math.PI);
 		}
 	}
 }
