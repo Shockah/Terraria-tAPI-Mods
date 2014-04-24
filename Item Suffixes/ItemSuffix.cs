@@ -49,11 +49,7 @@ namespace Shockah.ItemSuffixes
 			Func<Item, bool> f;
 
 			//Jungle set
-			f = (item) => { return item.type >= 228 && item.type <= 230; };
-			blacklistMelee.Add(f); blacklistRanged.Add(f);
-
-			//Ancient Cobalt set
-			f = (item) => { return item.type >= 960 && item.type <= 962; };
+			f = (item) => { return (item.type >= 228 && item.type <= 230) || (item.type >= 960 && item.type <= 962); };
 			blacklistMelee.Add(f); blacklistRanged.Add(f);
 
 			//Meteor set
@@ -61,11 +57,11 @@ namespace Shockah.ItemSuffixes
 			blacklistMelee.Add(f); blacklistRanged.Add(f);
 
 			//Necro set
-			f = (item) => { return item.type >= 151 && item.type <= 153; };
+			f = (item) => { return (item.type >= 151 && item.type <= 153) || item.type == 959; };
 			blacklistMelee.Add(f); blacklistMagic.Add(f);
 
 			//Shadow set
-			f = (item) => { return item.type >= 100 && item.type <= 102; };
+			f = (item) => { return (item.type >= 100 && item.type <= 102) || (item.type >= 956 && item.type <= 958); };
 			blacklistRanged.Add(f); blacklistMagic.Add(f);
 
 			//Molten set
@@ -119,6 +115,10 @@ namespace Shockah.ItemSuffixes
 			//magic accessories
 			f = (item) => { return new List<int>(new int[] { 111, 223, 489, 555, 982, 1158, 1167, 1595, 1845, 1864 }).Contains(item.type); };
 			blacklistMelee.Add(f); blacklistRanged.Add(f);
+
+			//magic armor parts
+			f = (item) => { return new List<int>(new int[] { 238, 1282, 1283, 1284, 1285, 1286, 1287 }).Contains(item.type); };
+			blacklistMelee.Add(f); blacklistRanged.Add(f);
 		}
 
 		public static List<ItemSuffix> AllowedSuffixes(Item item)
@@ -127,9 +127,9 @@ namespace Shockah.ItemSuffixes
 			foreach (ItemSuffix suffix in list)
 			{
 				if (suffix.displayName == null) continue;
-				if (suffix.damageMelee != 0) foreach (Func<Item, bool> f in blacklistMelee) if (f(item)) goto L;
-				if (suffix.damageRanged != 0) foreach (Func<Item, bool> f in blacklistRanged) if (f(item)) goto L;
-				if (suffix.damageMagic != 0) foreach (Func<Item, bool> f in blacklistMagic) if (f(item)) goto L;
+				if (suffix.damageMelee != 0 || suffix.critMelee != 0) foreach (Func<Item, bool> f in blacklistMelee) if (f(item)) goto L;
+				if (suffix.damageRanged != 0 || suffix.critRanged != 0) foreach (Func<Item, bool> f in blacklistRanged) if (f(item)) goto L;
+				if (suffix.damageMagic != 0 || suffix.critMagic != 0) foreach (Func<Item, bool> f in blacklistMagic) if (f(item)) goto L;
 				if (suffix.defense != 0) foreach (Func<Item, bool> f in blacklistDefense) if (f(item)) goto L;
 				if (suffix.threat != 0) foreach (Func<Item, bool> f in blacklistThreat) if (f(item)) goto L;
 				ret.Add(suffix);
