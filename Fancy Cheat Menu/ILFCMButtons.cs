@@ -16,8 +16,8 @@ namespace Shockah.FCM
 		
 		public ILFCMButtons() : base(MBase.me.modName)
 		{
-			buttons.Add(new LittleButton("Items", MBase.me.textures["Images/ModuleItems.png"], () => { return Interface.current is InterfaceFCMItems; }, () => { new InterfaceFCMItems().Open(); }));
-			buttons.Add(new LittleButton("NPCs", MBase.me.textures["Images/ModuleNPCs.png"], () => { return Interface.current is InterfaceFCMNPCs; }, () => { new InterfaceFCMNPCs().Open(); }));
+			buttons.Add(new LittleButton("Items", MBase.me.textures["Images/ModuleItems.png"], () => { return Interface.current is InterfaceFCMItems; }, () => { InterfaceFCMItems.me.Open(); }));
+			buttons.Add(new LittleButton("NPCs", MBase.me.textures["Images/ModuleNPCs.png"], () => { return Interface.current is InterfaceFCMNPCs; }, () => { InterfaceFCMNPCs.me.Open(); }));
 			foreach (Action<List<LittleButton>> h in EventCreatingButtonList) h(buttons);
 		}
 
@@ -25,6 +25,12 @@ namespace Shockah.FCM
 		{
 			if (Main.netMode != 0) return;
 			if (!Main.playerInventory) return;
+
+			if (InterfaceFCMItems.me == null)
+			{
+				new InterfaceFCMItems();
+				new InterfaceFCMNPCs();
+			}
 
 			Vector2 pos = new Vector2(8, Main.screenHeight - 8);
 			foreach (LittleButton lb in buttons)

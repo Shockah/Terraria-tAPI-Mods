@@ -17,6 +17,7 @@ namespace Shockah.FCM
 		public const float FILTER_W = 140, FILTER_H = 25, FILTER_X_OFF = 4;
 		public const float SORT_TEXT_SCALE = .75f;
 
+		public static InterfaceFCMNPCs me = null;
 		public static NPC spawning = null;
 		public static Vector2? spawnPoint = null;
 		protected static List<NPC> defs = new List<NPC>();
@@ -49,6 +50,7 @@ namespace Shockah.FCM
 		protected readonly Sorter<NPC>
 			SID = new Sorter<NPC>("ID", (i1, i2) => { return i1.type.CompareTo(i2.type); }, (npc) => { return true; }),
 			SName = new Sorter<NPC>("Name", (i1, i2) => { return i1.displayName.CompareTo(i2.displayName); }, (npc) => { return true; }),
+			SLife = new Sorter<NPC>("LIfe", (i1, i2) => { return i1.lifeMax.CompareTo(i2.lifeMax); }, (npc) => { return true; }),
 			SDamage = new Sorter<NPC>("Damage", (i1, i2) => { return i1.damage.CompareTo(i2.damage); }, (npc) => { return npc.damage > 0; }),
 			SDefense = new Sorter<NPC>("Defense", (i1, i2) => { return i1.defense.CompareTo(i2.defense); }, (npc) => { return true; });
 
@@ -73,6 +75,8 @@ namespace Shockah.FCM
 
 		public InterfaceFCMNPCs()
 		{
+			me = this;
+
 			FOther.matches = (item) =>
 			{
 				foreach (Filter<NPC> filter in filters) if (!object.ReferenceEquals(FOther, filter) && filter.matches(item)) return false;
@@ -83,7 +87,7 @@ namespace Shockah.FCM
 					FFriendly, FTown, FBoss, FOther
 				}
 			);
-			sorters.AddRange(new Sorter<NPC>[] { SID, SName, SDamage, SDefense });
+			sorters.AddRange(new Sorter<NPC>[] { SID, SName, SLife, SDamage, SDefense });
 
 			slider = new ElSlider(
 				(scroll) => { if (Scroll != scroll) { Scroll = scroll; Refresh(false); } },
@@ -104,6 +108,7 @@ namespace Shockah.FCM
 		public override void OnOpen()
 		{
 			base.OnOpen();
+			if (!resetInterface) { resetInterface = true; return; }
 			foreach (Filter<NPC> filter in filters) filter.mode = null;
 			sorter = sorters[0];
 			reverseSort = false;
@@ -121,7 +126,7 @@ namespace Shockah.FCM
 			{
 				Main.localPlayer.mouseInterface = true;
 
-				float radius = (spawning.width + spawning.height) * (1f / 3f);
+				float radius = Math.Max((spawning.width + spawning.height) * (1f / 3f), 3f);
 				if (!spawnPoint.HasValue)
 				{
 					sb.DrawCircle(Main.mouse, radius, (int)Math.Max(16, radius / 2), Color.White);
@@ -184,10 +189,19 @@ namespace Shockah.FCM
 						spawning = null;
 					}
 
-					if (Main.mouseRight)
+					if (Main.mouseRight && Main.mouseRightRelease)
 					{
-						spawnPoint = null;
+						if (spawnPoint.HasValue)
+						{
+							spawnPoint = null;
+						}
+						else
+						{
+							spawning = null;
+						}
 					}
+
+					SDrawing.StringShadowed(sb, Main.fontMouseText, "" + count, Main.mouse - new Vector2(Main.fontMouseText.MeasureString("" + count).X / 2f, 24));
 				}
 
 				return;

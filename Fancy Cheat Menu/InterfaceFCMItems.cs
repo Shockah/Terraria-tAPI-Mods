@@ -15,7 +15,8 @@ namespace Shockah.FCM
 		public const int COLS = 8, ROWS = 5, OFF_X = BASE_OFF_X - 6, OFF_Y = BASE_OFF_Y - 6, POS_X = 20, POS_Y = 306;
 		public const float FILTER_W = 140, FILTER_H = 25, FILTER_X_OFF = 4;
 		public const float SORT_TEXT_SCALE = .75f;
-		
+
+		public static InterfaceFCMItems me = null;
 		protected static List<Item> defs = new List<Item>();
 
 		public static void Reset()
@@ -95,6 +96,8 @@ namespace Shockah.FCM
 
 		public InterfaceFCMItems()
 		{
+			me = this;
+			
 			FOther.matches = (item) =>
 			{
 				foreach (Filter<Item> filter in filters) if (!object.ReferenceEquals(FOther, filter) && filter.matches(item)) return false;
@@ -127,6 +130,7 @@ namespace Shockah.FCM
 		public override void OnOpen()
 		{
 			base.OnOpen();
+			if (!resetInterface) { resetInterface = true; return; }
 			foreach (Filter<Item> filter in filters) filter.mode = null;
 			sorter = sorters[0];
 			reverseSort = false;

@@ -7,6 +7,8 @@ namespace Shockah.FCM
 {
 	public class InterfaceFCMBase : Interface
 	{
+		public static bool resetInterface = true;
+
 		public string typing = null, filterText = null;
 
 		public override void OnOpen()

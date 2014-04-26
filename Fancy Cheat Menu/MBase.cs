@@ -25,8 +25,9 @@ namespace Shockah.FCM
 		{
 			if (!(Interface.current is InterfaceFCMNPCs) && InterfaceFCMNPCs.spawning != null)
 			{
+				InterfaceFCMBase.resetInterface = false;
 				InterfaceFCMNPCs.spawning = null;
-				new InterfaceFCMNPCs().Open();
+				InterfaceFCMNPCs.me.Open();
 			}
 		}
 	}
