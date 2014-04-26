@@ -97,9 +97,16 @@ namespace Shockah.FCM
 
 		public virtual void OnLeftClick(ref bool release)
 		{
-			Item item = gui.slotItem.MyItem;
-			item.netDefaults(item.netID);
-			item.Prefix(MyPrefix.name);
+			if (MyPrefix == null || gui.slotItem.MyItem.IsBlank()) return;
+			if (release)
+			{
+				if (gui.slotItem.MyItem.PreReforge())
+				{
+					gui.slotItem.MyItem.Prefix(MyPrefix.name);
+					Main.PlaySound(2, -1, -1, 37);
+				}
+				gui.slotItem.MyItem.PostReforge();
+			}
 		}
 		public virtual void OnRightClick(ref bool release)
 		{
