@@ -18,6 +18,7 @@ namespace Shockah.FCM
 		{
 			InterfaceFCMItems.Reset();
 			InterfaceFCMNPCs.Reset();
+			InterfaceFCMPrefixes.Reset();
 			SBase.EventSTooltipDraw += () => { return tip; };
 		}
 
