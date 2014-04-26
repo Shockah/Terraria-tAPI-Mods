@@ -49,6 +49,21 @@ namespace Shockah.ItemSuffixes
 			if (!CanGetSuffixes()) return;
 			SetRandomSuffix();
 		}
+		public override bool PreReforge()
+		{
+			MItem mitem = item.GetSubClass<MItem>();
+			if (mitem != null)
+			{
+				if (mitem.resetDamage != 0)
+				{
+					item.damage = mitem.resetDamage;
+					item.crit = mitem.resetCrit;
+				}
+				mitem.resetDamage = item.damage;
+				mitem.resetCrit = item.crit;
+			}
+			return true;
+		}
 
 		public override string OnAffixName(string currentName, string oldName)
 		{
