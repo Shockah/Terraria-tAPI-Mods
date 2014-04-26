@@ -42,7 +42,6 @@ namespace Shockah.FCM
 
 		protected readonly ElSlider slider;
 		protected readonly ElChooser<Sorter<Item>> sortingChooser;
-		public List<Item> filtered = new List<Item>();
 		protected ItemSlotFCM[] slots = new ItemSlotFCM[COLS * ROWS];
 		private int _Scroll = 0;
 		protected readonly Filter<Item>

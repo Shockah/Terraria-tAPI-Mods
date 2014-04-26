@@ -39,7 +39,6 @@ namespace Shockah.FCM
 
 		protected readonly ElSlider slider;
 		protected readonly ElChooser<Sorter<NPC>> sortingChooser;
-		public List<NPC> filtered = new List<NPC>();
 		protected NPCSlot[] slots = new NPCSlot[COLS * ROWS];
 		private int _Scroll = 0;
 		protected readonly Filter<NPC>

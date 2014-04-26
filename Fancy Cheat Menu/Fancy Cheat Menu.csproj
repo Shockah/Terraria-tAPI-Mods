@@ -67,12 +67,15 @@
     <Compile Include="InterfaceFCMBase.cs" />
     <Compile Include="InterfaceFCMItems.cs" />
     <Compile Include="InterfaceFCMNPCs.cs" />
+    <Compile Include="InterfaceFCMPrefixes.cs" />
     <Compile Include="ItemSlotFCM.cs" />
+    <Compile Include="ItemSlotPrefixFCM.cs" />
     <Compile Include="LittleButton.cs" />
     <Compile Include="MBase.cs" />
     <Compile Include="MInterface.cs" />
     <Compile Include="ElSlider.cs" />
     <Compile Include="NPCSlot.cs" />
+    <Compile Include="PrefixSlot.cs" />
     <Compile Include="Sorter.cs" />
   </ItemGroup>
   <ItemGroup>

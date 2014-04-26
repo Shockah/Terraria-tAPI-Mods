@@ -8,5 +8,6 @@ namespace Shockah.FCM
 		public readonly List<Sorter<T>> sorters = new List<Sorter<T>>();
 		public Sorter<T> sorter = null;
 		public bool reverseSort = false;
+		public List<T> filtered = new List<T>();
 	}
 }
