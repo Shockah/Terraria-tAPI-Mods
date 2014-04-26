@@ -23,7 +23,7 @@ namespace Shockah.ChestContents
 					float offset = OFFSETS_MIN + (OFFSETS_MAX - OFFSETS_MIN) * (1 - (1f * items.Count / Main.chest[ilcc.cId].item.Length));
 					float r = (float)(items.Count * offset / 2 / Math.PI);
 
-					float minR = offset / 2;
+					float minR = offset;
 					if (r < minR) r = minR;
 
 					float curR = r * fLen;
@@ -43,7 +43,7 @@ namespace Shockah.ChestContents
 					float offset = OFFSETS_MIN + (OFFSETS_MAX - OFFSETS_MIN) * (1 - (1f * firstc / Main.chest[ilcc.cId].item.Length));
 					float r = (float)(firstc * offset / 2 / Math.PI);
 
-					float minR = offset / 2;
+					float minR = offset;
 					if (r < minR) r = minR;
 
 					float curR = r * fLen;

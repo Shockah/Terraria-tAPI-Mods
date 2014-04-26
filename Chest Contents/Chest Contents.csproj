@@ -52,6 +52,7 @@
     <Compile Include="DisplayStyle.cs" />
     <Compile Include="ILChestContents.cs" />
     <Compile Include="MInterface.cs" />
+    <Compile Include="MPlayer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\ItemBackground.png" />

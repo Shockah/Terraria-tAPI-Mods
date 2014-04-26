@@ -60,7 +60,7 @@ namespace Shockah.ChestContents
 					{
 						Chest c = Main.chest[i];
 						if (c == null) continue;
-						if ((mtileX == c.x || mtileX == c.x+1) && (mtileY == c.y || mtileY == c.y+1))
+						if ((mtileX == c.x || mtileX == c.x+1) && (mtileY == c.y || mtileY == c.y+1) && Main.localPlayer.GetSubClass<MPlayer>().IsVisited(c))
 						{
 							Update(c.x, c.y, i);
 							break;
@@ -101,7 +101,7 @@ namespace Shockah.ChestContents
 					return;
 				}
 
-				DisplayStyle.OneCircle.Draw(sb, this, items);
+				DisplayStyle.TwoCircles.Draw(sb, this, items);
 			}
 		}
 
