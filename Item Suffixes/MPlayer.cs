@@ -61,6 +61,7 @@ namespace Shockah.ItemSuffixes
 
 							player.statDefense = mitem.suffix.BonusDefense(player.statDefense);
 							player.aggro = mitem.suffix.BonusThreat(player.aggro);
+							player.lifeRegen = mitem.suffix.BonusRegenHP(player.lifeRegen);
 						}
 					}
 				}

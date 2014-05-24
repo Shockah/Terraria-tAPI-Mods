@@ -73,14 +73,14 @@ namespace Shockah.ItemSuffixes
 			}
 			else
 			{
-				if (suffix != null)
+				if (suffix != null && suffix.displayName != null)
 				{
 					for (int j = 0; j < resetTooltip; j++) item.toolTips.RemoveAt(item.toolTips.Count - 1);
 					resetTooltip = 0;
 					suffix.AddTooltips(item);
+					return string.Format(suffix.format, currentName, suffix.displayName);
 				}
-				
-				return currentName + " " + suffix.displayName;
+				return currentName;
 			}
 		}
 	}

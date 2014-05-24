@@ -12,113 +12,90 @@ namespace Shockah.ItemSuffixes
 			blacklistRanged = new List<Func<Item, bool>>(),
 			blacklistMagic = new List<Func<Item, bool>>(),
 			blacklistDefense = new List<Func<Item, bool>>(),
-			blacklistThreat = new List<Func<Item, bool>>();
+			blacklistThreat = new List<Func<Item, bool>>(),
+			blacklistRegenHP = new List<Func<Item,bool>>();
 
 		static ItemSuffix()
 		{
 			new ItemSuffix(null);
 			
-			new ItemSuffix("of the Bear").Melee(1).Defense(1);
-			new ItemSuffix("of the Gorilla").Melee(1).Threat(1);
-			new ItemSuffix("of the Tiger").Melee(1, 1);
-			new ItemSuffix("of the Champion").Melee(2);
-			new ItemSuffix("of the Mercenary").Melee(0, 2);
-			new ItemSuffix("of the Ancestor").Melee(0, 1).Defense(1);
-			new ItemSuffix("of the Soldier").Melee(0, 1).Threat(1);
+			new ItemSuffix("Bear").Melee(1).Defense(1);
+			new ItemSuffix("Gorilla").Melee(1).Threat(1);
+			new ItemSuffix("Tiger").Melee(1, 1);
+			new ItemSuffix("Champion").Melee(2);
+			new ItemSuffix("Mercenary").Melee(0, 2);
+			new ItemSuffix("Ancestor").Melee(0, 1).Defense(1);
+			new ItemSuffix("Soldier").Melee(0, 1).Threat(1);
 
-			new ItemSuffix("of the Monkey").Ranged(1).Defense(1);
-			new ItemSuffix("of the Wolf").Ranged(1).Threat(1);
-			new ItemSuffix("of the Falcon").Ranged(1, 1);
-			new ItemSuffix("of the Hunt").Ranged(2);
-			new ItemSuffix("of the Marksman").Ranged(0, 2);
-			new ItemSuffix("of the Wild").Ranged(0, 1).Defense(1);
-			new ItemSuffix("of the Beast").Ranged(0, 1).Threat(1);
+			new ItemSuffix("Monkey").Ranged(1).Defense(1);
+			new ItemSuffix("Wolf").Ranged(1).Threat(1);
+			new ItemSuffix("Falcon").Ranged(1, 1);
+			new ItemSuffix("Hunt").Ranged(2);
+			new ItemSuffix("Marksman").Ranged(0, 2);
+			new ItemSuffix("Wild").Ranged(0, 1).Defense(1);
+			new ItemSuffix("Beast").Ranged(0, 1).Threat(1);
 
-			new ItemSuffix("of the Eagle").Magic(1).Defense(1);
-			new ItemSuffix("of the Whale").Magic(1).Threat(1);
-			new ItemSuffix("of the Owl").Magic(1, 1);
-			new ItemSuffix("of the Sorcerer").Magic(2);
-			new ItemSuffix("of the Nightmare").Magic(0, 2);
-			new ItemSuffix("of the Moon").Magic(0, 1).Defense(1);
-			new ItemSuffix("of the Sun").Magic(0, 1).Threat(1);
+			new ItemSuffix("Eagle").Magic(1).Defense(1);
+			new ItemSuffix("Whale").Magic(1).Threat(1);
+			new ItemSuffix("Owl").Magic(1, 1);
+			new ItemSuffix("Sorcerer").Magic(2);
+			new ItemSuffix("Nightmare").Magic(0, 2);
+			new ItemSuffix("Moon").Magic(0, 1).Defense(1);
+			new ItemSuffix("Sun").Magic(0, 1).Threat(1);
 
-			new ItemSuffix("of the Knight").Defense(2);
-			new ItemSuffix("of the Crusade").Threat(2);
-			new ItemSuffix("of the Squire").Defense(1).Threat(1);
+			new ItemSuffix("Knight").Defense(2);
+			new ItemSuffix("Crusade").Threat(2);
+			new ItemSuffix("Squire").Defense(1).Threat(1);
 
-			Func<Item, bool> f;
+			new ItemSuffix("Regeneration", "{0} of {1}").RegenHP(2);
+			new ItemSuffix("Boar").Melee(1).RegenHP(1);
+			new ItemSuffix("Bandit").Melee(0, 1).RegenHP(1);
+			new ItemSuffix("Marksmanship", "{0} of {1}").Ranged(1).RegenHP(1);
+			new ItemSuffix("Eluding", "{0} of {1}").Ranged(0, 1).RegenHP(1);
+			new ItemSuffix("Necromancer").Magic(1).RegenHP(1);
+			new ItemSuffix("Concentration", "{0} of {1}").Magic(0, 1).RegenHP(1);
+			new ItemSuffix("Paladin").Defense(1).RegenHP(1);
+			new ItemSuffix("Elder").Threat(1).RegenHP(1);
 
-			//Jungle set
-			f = (item) => { return (item.type >= 228 && item.type <= 230) || (item.type >= 960 && item.type <= 962); };
-			blacklistMelee.Add(f); blacklistRanged.Add(f);
+			Func<Item, bool>[] fs;
 
-			//Meteor set
-			f = (item) => { return item.type >= 123 && item.type <= 125; };
-			blacklistMelee.Add(f); blacklistRanged.Add(f);
+			//Melee
+			fs = new Func<Item, bool>[]{
+				(item) => { return (item.type >= 100 && item.type <= 102) || (item.type >= 956 && item.type <= 958); }, //Shadow set
+				(item) => { return item.type >= 231 && item.type <= 233; }, //Molten set
+				(item) => { return new List<int>(new int[] { 372, 1205, 377, 1210, 401, 1215, 559, 1001 }).Contains(item.type); }, //Cobalt / Palladium / Mythril / Orichalcum / Adamantite / Titanium / Hallowed / Chlorophyte set
+				(item) => { return item.type >= 1316 && item.type <= 1318; }, //Turtle set
+				(item) => { return new List<int>(new int[] { 211, 490, 536, 485, 897, 936, 1322, 1343 }).Contains(item.type); }, //accessories
+			};
+			foreach (Func<Item, bool> f in fs) { blacklistRanged.Add(f); blacklistMagic.Add(f); }
 
-			//Necro set
-			f = (item) => { return (item.type >= 151 && item.type <= 153) || item.type == 959; };
-			blacklistMelee.Add(f); blacklistMagic.Add(f);
+			//Ranged
+			fs = new Func<Item, bool>[]{
+				(item) => { return (item.type >= 151 && item.type <= 153) || item.type == 959; }, //Necro set
+				(item) => { return new List<int>(new int[] { 373, 1206, 378, 1211, 402, 1216, 553, 1002 }).Contains(item.type); }, //Cobalt / Palladium / Mythril / Orichalcum / Adamantite / Titanium / Hallowed / Chlorophyte set
+				(item) => { return item.type >= 1546 && item.type <= 1550; }, //Shroomite set
+				(item) => { return new List<int>(new int[] { 491, 1300, 1321, 1858 }).Contains(item.type); }, //accessories
+			};
+			foreach (Func<Item, bool> f in fs) { blacklistMelee.Add(f); blacklistMagic.Add(f); }
 
-			//Shadow set
-			f = (item) => { return (item.type >= 100 && item.type <= 102) || (item.type >= 956 && item.type <= 958); };
-			blacklistRanged.Add(f); blacklistMagic.Add(f);
+			//Magic
+			fs = new Func<Item, bool>[]{
+				(item) => { return (item.type >= 228 && item.type <= 230) || (item.type >= 960 && item.type <= 962); }, //Jungle set
+				(item) => { return item.type >= 123 && item.type <= 125; }, //Meteor set
+				(item) => { return new List<int>(new int[] { 371, 1207, 376, 1212, 400, 1217, 558, 1003 }).Contains(item.type); }, //Cobalt / Palladium / Mythril / Orichalcum / Adamantite / Titanium / Hallowed / Chlorophyte set
+				(item) => { return item.type >= 1832 && item.type <= 1834; }, //Spooky set
+				(item) => { return item.type >= 1159 && item.type <= 1161; }, //Tiki set
+				(item) => { return item.type >= 1503 && item.type <= 1505; }, //Spectre set
+				(item) => { return new List<int>(new int[] { 111, 223, 489, 555, 982, 1158, 1167, 1595, 1845, 1864 }).Contains(item.type); }, //accessories
+				(item) => { return new List<int>(new int[] { 238, 1282, 1283, 1284, 1285, 1286, 1287 }).Contains(item.type); }, //armor parts
+			};
+			foreach (Func<Item, bool> f in fs) { blacklistMelee.Add(f); blacklistRanged.Add(f); }
 
-			//Molten set
-			f = (item) => { return item.type >= 231 && item.type <= 233; };
-			blacklistRanged.Add(f); blacklistMagic.Add(f);
-
-			//Cobalt / Palladium / Mythril / Orichalcum / Adamantite / Titanium / Hallowed / Chlorophyte melee set
-			f = (item) => { return new List<int>(new int[] { 372, 1205, 377, 1210, 401, 1215, 559, 1001 }).Contains(item.type); };
-			blacklistRanged.Add(f); blacklistMagic.Add(f);
-
-			//Cobalt / Palladium / Mythril / Orichalcum / Adamantite / Titanium / Hallowed / Chlorophyte ranged set
-			f = (item) => { return new List<int>(new int[] { 373, 1206, 378, 1211, 402, 1216, 553, 1002 }).Contains(item.type); };
-			blacklistMelee.Add(f); blacklistMagic.Add(f);
-
-			//Cobalt / Palladium / Mythril / Orichalcum / Adamantite / Titanium / Hallowed / Chlorophyte magic set
-			f = (item) => { return new List<int>(new int[] { 371, 1207, 376, 1212, 400, 1217, 558, 1003 }).Contains(item.type); };
-			blacklistMelee.Add(f); blacklistMagic.Add(f);
-
-			//Spooky set
-			f = (item) => { return item.type >= 1832 && item.type <= 1834; };
-			blacklistMelee.Add(f); blacklistRanged.Add(f);
-
-			//Tiki set
-			f = (item) => { return item.type >= 1159 && item.type <= 1161; };
-			blacklistMelee.Add(f); blacklistRanged.Add(f);
-
-			//Frost set
-			f = (item) => { return item.type >= 684 && item.type <= 686; };
-			blacklistMagic.Add(f);
-
-			//Turtle set
-			f = (item) => { return item.type >= 1316 && item.type <= 1318; };
-			blacklistRanged.Add(f); blacklistMagic.Add(f);
-
-			//Shroomite set
-			f = (item) => { return item.type >= 1546 && item.type <= 1550; };
-			blacklistMelee.Add(f); blacklistMagic.Add(f);
-
-			//Spectre set
-			f = (item) => { return item.type >= 1503 && item.type <= 1505; };
-			blacklistMelee.Add(f); blacklistRanged.Add(f);
-
-			//melee accessories
-			f = (item) => { return new List<int>(new int[] { 211, 490, 536, 485, 897, 936, 1322, 1343 }).Contains(item.type); };
-			blacklistRanged.Add(f); blacklistMagic.Add(f);
-
-			//ranged accessories
-			f = (item) => { return new List<int>(new int[] { 491, 1300, 1321, 1858 }).Contains(item.type); };
-			blacklistMelee.Add(f); blacklistMagic.Add(f);
-
-			//magic accessories
-			f = (item) => { return new List<int>(new int[] { 111, 223, 489, 555, 982, 1158, 1167, 1595, 1845, 1864 }).Contains(item.type); };
-			blacklistMelee.Add(f); blacklistRanged.Add(f);
-
-			//magic armor parts
-			f = (item) => { return new List<int>(new int[] { 238, 1282, 1283, 1284, 1285, 1286, 1287 }).Contains(item.type); };
-			blacklistMelee.Add(f); blacklistRanged.Add(f);
+			//Melee + Ranged
+			fs = new Func<Item, bool>[]{
+				(item) => { return item.type >= 684 && item.type <= 686; }, //Frost set
+			};
+			foreach (Func<Item, bool> f in fs) { blacklistMagic.Add(f); }
 		}
 
 		public static List<ItemSuffix> AllowedSuffixes(Item item)
@@ -132,6 +109,7 @@ namespace Shockah.ItemSuffixes
 				if (suffix.damageMagic != 0 || suffix.critMagic != 0) foreach (Func<Item, bool> f in blacklistMagic) if (f(item)) goto L;
 				if (suffix.defense != 0) foreach (Func<Item, bool> f in blacklistDefense) if (f(item)) goto L;
 				if (suffix.threat != 0) foreach (Func<Item, bool> f in blacklistThreat) if (f(item)) goto L;
+				if (suffix.regenHP != 0) foreach (Func<Item, bool> f in blacklistRegenHP) if (f(item)) goto L;
 				ret.Add(suffix);
 				L: { }
 			}
@@ -163,17 +141,25 @@ namespace Shockah.ItemSuffixes
 		}
 
 		public readonly int id;
-		public readonly string displayName;
+		public readonly string displayName, format;
 
 		public int damageMelee, damageRanged, damageMagic;
 		public int critMelee, critRanged, critMagic;
-		public int defense, threat;
+		public int defense, threat, regenHP;
 
-		private ItemSuffix(string displayName)
+		private ItemSuffix(string displayName, string format = "{0} of the {1}")
 		{
 			id = list.Count;
 			this.displayName = displayName;
+			this.format = format;
 			list.Add(this);
+		}
+
+		public bool IsAllowed(Item item)
+		{
+			List<ItemSuffix> list = AllowedSuffixes(item);
+			foreach (ItemSuffix suffix in list) if (object.ReferenceEquals(suffix, this)) return true;
+			return false;
 		}
 
 		public ItemSuffix Melee(int damage, int crit = 0)
@@ -214,6 +200,11 @@ namespace Shockah.ItemSuffixes
 			this.threat = threat;
 			return this;
 		}
+		public ItemSuffix RegenHP(int regenHP)
+		{
+			this.regenHP = regenHP;
+			return this;
+		}
 
 		public int BonusDamageMelee(int initial) { return BonusMult(initial, damageMelee, 1, 1.05f); }
 		public int BonusDamageRanged(int initial) { return BonusMult(initial, damageRanged, 1, 1.05f); }
@@ -223,6 +214,7 @@ namespace Shockah.ItemSuffixes
 		public int BonusCritMagic(int initial) { return BonusMult(initial, critMagic, 2, 1.35f); }
 		public int BonusDefense(int initial) { return BonusMult(initial, defense, 1, 1.05f); }
 		public int BonusThreat(int initial) { return BonusMult(initial, threat, 125, 1.2f); }
+		public int BonusRegenHP(int initial) { return BonusMult(initial, regenHP, 2, 1.1f); }
 
 		public virtual void AddTooltips(Item item)
 		{
@@ -297,6 +289,13 @@ namespace Shockah.ItemSuffixes
 				if (threat > 0)
 				{
 					ttip = BonusPowerString(threat) + " increases the likeliness of enemies attacking you";
+					ttip = ("" + ttip[0]).ToUpper() + ttip.Substring(1);
+					item.toolTips.Add(ttip); mitem.resetTooltip++;
+				}
+
+				if (regenHP > 0)
+				{
+					ttip = BonusPowerString(regenHP) + " increases life regeneration rate";
 					ttip = ("" + ttip[0]).ToUpper() + ttip.Substring(1);
 					item.toolTips.Add(ttip); mitem.resetTooltip++;
 				}
