@@ -1,0 +1,9 @@
+{
+    "displayName": "Companion Bag",
+    "author": "Shockah",
+    "info": "",
+    "internalName": "Shockah.CompanionBag",
+	"modReferences": [
+		"Shockah.Base"
+	]
+}
