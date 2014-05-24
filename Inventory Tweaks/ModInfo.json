@@ -1,0 +1,9 @@
+{
+    "displayName": "Inventory Tweaks",
+    "author": "Shockah",
+    "info": "",
+    "internalName": "Shockah.InvTweaks",
+	"modReferences": [
+		"Shockah.Base"
+	]
+}
