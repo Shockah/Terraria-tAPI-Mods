@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chest Contents", "Chest Contents\Chest Contents.csproj", "{C0E2C4F8-8783-400F-8787-BC00CDFEA5CA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Item Ranks", "Item Ranks\Item Ranks.csproj", "{91673673-E9D8-4564-9DA2-2AEA11023A31}"
@@ -20,6 +22,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Item Suffixes", "Item Suffixes\Item Suffixes.csproj", "{B9A646AB-BF12-4BE3-884B-8CBE837190EC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Colored Item Slots", "Colored Item Slots\Colored Item Slots.csproj", "{C5575596-2960-4207-99D6-F5C670B7C0E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory Tweaks", "Inventory Tweaks\Inventory Tweaks.csproj", "{AF98C4F8-11DF-4C56-98C0-DFF01BB26E2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Companion Bag", "Companion Bag\Companion Bag.csproj", "{FEBE1B9B-D89F-4405-A6D9-89C7935AAD38}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Move Anything", "Move Anything\Move Anything.csproj", "{21A61F6B-0241-4E20-BED9-9D6E6699AA06}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge ItemSuffixes-FCM", "Bridge ItemSuffixes-FCM\Bridge ItemSuffixes-FCM.csproj", "{15080914-EB18-496A-ADF3-F513D23ADF13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +73,22 @@ Global
 		{C5575596-2960-4207-99D6-F5C670B7C0E2}.Debug|Any CPU.Build.0 = Release|Any CPU
 		{C5575596-2960-4207-99D6-F5C670B7C0E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5575596-2960-4207-99D6-F5C670B7C0E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF98C4F8-11DF-4C56-98C0-DFF01BB26E2A}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{AF98C4F8-11DF-4C56-98C0-DFF01BB26E2A}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{AF98C4F8-11DF-4C56-98C0-DFF01BB26E2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF98C4F8-11DF-4C56-98C0-DFF01BB26E2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEBE1B9B-D89F-4405-A6D9-89C7935AAD38}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{FEBE1B9B-D89F-4405-A6D9-89C7935AAD38}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{FEBE1B9B-D89F-4405-A6D9-89C7935AAD38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEBE1B9B-D89F-4405-A6D9-89C7935AAD38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21A61F6B-0241-4E20-BED9-9D6E6699AA06}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{21A61F6B-0241-4E20-BED9-9D6E6699AA06}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{21A61F6B-0241-4E20-BED9-9D6E6699AA06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21A61F6B-0241-4E20-BED9-9D6E6699AA06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15080914-EB18-496A-ADF3-F513D23ADF13}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{15080914-EB18-496A-ADF3-F513D23ADF13}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{15080914-EB18-496A-ADF3-F513D23ADF13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15080914-EB18-496A-ADF3-F513D23ADF13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
