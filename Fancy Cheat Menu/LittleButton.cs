@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Shockah.Base;
 using System;
 using TAPI;
 using Terraria;
@@ -23,12 +24,12 @@ namespace Shockah.FCM
 
 		public Vector2 Size { get { return tex.Size(); } }
 
-		public virtual void Draw(SpriteBatch sb, Vector2 pos)
+		public virtual void Draw(SFrame frame, SpriteBatch sb, Vector2 pos)
 		{
 			Color c = isPressed() ? Color.White : Color.Gray;
 			sb.Draw(tex, pos, c);
 
-			if (new Rectangle((int)pos.X, (int)pos.Y, (int)Size.X, (int)Size.Y).Contains(Main.mouseX, Main.mouseY))
+			if (!frame.dragging.HasValue && new Rectangle((int)pos.X, (int)pos.Y, (int)Size.X, (int)Size.Y).Contains(Main.mouseX, Main.mouseY))
 			{
 				Main.localPlayer.mouseInterface = true;
 				if (Main.mouseLeft && Main.mouseLeftRelease)

@@ -102,7 +102,14 @@ namespace Shockah.FCM
 			{
 				if (gui.slotItem.MyItem.PreReforge())
 				{
-					gui.slotItem.MyItem.Prefix(MyPrefix.name);
+					if (MyPrefix == null || MyPrefix.type == 0)
+					{
+						gui.slotItem.MyItem.netDefaults(gui.slotItem.MyItem.netID);
+					}
+					else
+					{
+						gui.slotItem.MyItem.Prefix(MyPrefix.name);
+					}
 					Main.PlaySound(2, -1, -1, 37);
 				}
 				gui.slotItem.MyItem.PostReforge();
@@ -127,7 +134,8 @@ namespace Shockah.FCM
 		}
 		public virtual void DrawSlotBackground(SpriteBatch sb)
 		{
-			Drawing.DrawBox(sb, pos.X, pos.Y, size.X, size.Y, Color.White * (IsPrefixActive() ? 1f : .5f));
+			if (IsPrefixActive()) Drawing.DrawBox(sb, pos.X, pos.Y, size.X, size.Y, Color.White);
+			else Drawing.DrawBox(sb, pos.X, pos.Y, size.X, size.Y);
 		}
 		public virtual void DrawSlotPrefix(SpriteBatch sb)
 		{
@@ -144,8 +152,8 @@ namespace Shockah.FCM
 
 		public bool IsPrefixActive()
 		{
-			if (MyPrefix == null) return false;
 			if (gui.slotItem.MyItem.IsBlank()) return false;
+			if ((MyPrefix == null || MyPrefix.type == 0) && (gui.slotItem.MyItem.prefix == null || gui.slotItem.MyItem.prefix.type == 0)) return true;
 			return gui.slotItem.MyItem.prefix == MyPrefix;
 		}
 	}

@@ -20,6 +20,7 @@ namespace Shockah.FCM
 			InterfaceFCMNPCs.Reset();
 			InterfaceFCMPrefixes.Reset();
 			SBase.EventSTooltipDraw += () => { return tip; };
+			SBase.EventMenuStateChange += (menu) => { if (!menu) new FrameFCMButtons().Create(); };
 		}
 
 		public override void PostGameDraw(SpriteBatch sb)

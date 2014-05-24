@@ -14,11 +14,6 @@ namespace Shockah.FCM
 		
 		public override void ModifyInterfaceLayerList(List<InterfaceLayer> list)
 		{
-			if (Main.hideUI) return;
-			if (LayerFCMButtons == null) LayerFCMButtons = new ILFCMButtons();
-			SBase.InsertAfter(list, (il) => { return il == InterfaceLayer.LayerInventory; }, LayerFCMButtons);
-
-			foreach (InterfaceLayer il in list) il.visible = true;
 			if (Interface.current is InterfaceFCMNPCs && InterfaceFCMNPCs.spawning != null)
 			{
 				foreach (InterfaceLayer il in list)
