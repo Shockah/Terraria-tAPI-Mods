@@ -1,4 +1,3 @@
-using Shockah.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +15,13 @@ namespace Shockah.ChestContents
 		
 		public override void ModifyInterfaceLayerList(List<InterfaceLayer> list)
 		{
-			if (Main.hideUI) return;
 			if (LayerChestContents == null)
 			{
 				LayerChestContents = new ILChestContents(modBase.modName);
 				ILChestContents.itemBack = modBase.textures["Images/ItemBackground.png"];
 			}
-			SBase.InsertAfter(list, (il) => { return il == InterfaceLayer.LayerMiniHPBars; }, LayerChestContents);
+			list.Insert(list.IndexOf(InterfaceLayer.LayerMouseText), LayerChestContents);
+			LayerChestContents.visible = !Main.hideUI;
 		}
 	}
 }
