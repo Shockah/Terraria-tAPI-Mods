@@ -1,0 +1,11 @@
+{
+    "displayName": "Bridge:",
+    "author": "Shockah",
+    "info": "Item Suffixes <-> Fancy Cheat Menu",
+    "internalName": "Shockah.Bridge.ItemSuffixes_FCM",
+	"modReferences": [
+		"Shockah.Base",
+		"Shockah.FCM",
+		"Shockah.ItemSuffixes"
+	]
+}

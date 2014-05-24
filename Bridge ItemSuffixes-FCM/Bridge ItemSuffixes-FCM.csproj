@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{15080914-EB18-496A-ADF3-F513D23ADF13}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Shockah.Bridge.ItemSuffixes_FCM</RootNamespace>
+    <AssemblyName>Shockah.Bridge.ItemSuffixes_FCM</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\.bin\</OutputPath>
+    <IntermediateOutputPath>..\.obj\</IntermediateOutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\Repo\git\tAPI\bin\Release\Microsoft.Xna.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\Repo\git\tAPI\bin\Release\Microsoft.Xna.Framework.Game.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\Repo\git\tAPI\bin\Release\Microsoft.Xna.Framework.Graphics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\Repo\git\tAPI\bin\Release\Microsoft.Xna.Framework.Xact.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="tAPI">
+      <HintPath>D:\Repo\git\tAPI\bin\Release\tAPI.exe</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ModInfo.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Fancy Cheat Menu\Fancy Cheat Menu.csproj">
+      <Project>{dbf4e2f5-ed07-4051-8258-5c37d2454929}</Project>
+      <Name>Fancy Cheat Menu</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Item Suffixes\Item Suffixes.csproj">
+      <Project>{b9a646ab-bf12-4be3-884b-8cbe837190ec}</Project>
+      <Name>Item Suffixes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\_ShockahBase\_ShockahBase.csproj">
+      <Project>{f3bb15ae-9643-451e-baf4-fd29cd42798b}</Project>
+      <Name>_ShockahBase</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="InterfaceFCMSuffixes.cs" />
+    <Compile Include="ItemSlotSuffixFCM.cs" />
+    <Compile Include="MBase.cs" />
+    <Compile Include="SuffixSlot.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FCMModuleSuffixes.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
