@@ -26,5 +26,14 @@ namespace Shockah.Base
 		{
 			return (float)(radians * 180f / Math.PI);
 		}
+
+		public static bool InRegion(Vector2 pos, Vector2 pos1, float w, float h)
+		{
+			return pos.X >= pos1.X && pos.Y >= pos1.Y && pos.X < pos1.X + w && pos.Y < pos1.Y + h;
+		}
+		public static bool InRegion(Vector2 pos, Vector2 pos1, Vector2 pos2)
+		{
+			return pos.X >= pos1.X && pos.Y >= pos1.Y && pos.X < pos2.X && pos.Y < pos2.Y;
+		}
 	}
 }

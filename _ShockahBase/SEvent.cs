@@ -17,6 +17,15 @@ namespace Shockah.Base
 			return this.GetEnumerator();
 		}
 
+		public void Add(T a)
+		{
+			handlers.Add(a);
+		}
+		public void Remove(T a)
+		{
+			handlers.Remove(a);
+		}
+
 		public static SEvent<T> operator +(SEvent<T> ev, T a)
 		{
 			ev.handlers.Add(a);
