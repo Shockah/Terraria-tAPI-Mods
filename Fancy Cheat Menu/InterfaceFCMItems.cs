@@ -63,7 +63,7 @@ namespace Shockah.FCM
 			FPaint = new Filter<Item>("Paint", Defs.items["Vanilla:Blue Paint"].GetTexture(), (item) => { return item.paint != 0; }),
 			FTile = new Filter<Item>("Tile", Defs.items["Vanilla:Stone Block"].GetTexture(), (item) => { return item.createTile != -1 || item.tileWand != -1 || item.name == "Xmas decorations"; }),
 			FWall = new Filter<Item>("Wall", Defs.items["Vanilla:Green Brick Wall"].GetTexture(), (item) => { return item.createWall != -1; }),
-			FPet = new Filter<Item>("Pet", Defs.items["Vanilla:Wisp in a Bottle"].GetTexture(), (item) => { return (item.shoot > 0 && Main.projPet[item.shoot]) || (item.buffType > 0 && (Main.vanityPet[item.buffType] || Main.lightPet[item.buffType])); }),
+			FPet = new Filter<Item>("Pet", Defs.items["Vanilla:Wisp in a Bottle"].GetTexture(), (item) => { return item.damage <= 0 && ((item.shoot > 0 && Main.projPet[item.shoot]) || (item.buffType > 0 && (Main.vanityPet[item.buffType] || Main.lightPet[item.buffType]))); }),
 			FOther = new Filter<Item>("Other", Defs.unloadedItem.GetTexture(), null);
 		protected readonly Sorter<Item>
 			SID = new Sorter<Item>("ID", (i1, i2) => { return i1.type.CompareTo(i2.type); }, (item) => { return true; }),
