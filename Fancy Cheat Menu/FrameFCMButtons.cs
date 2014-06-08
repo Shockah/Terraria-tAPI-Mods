@@ -24,7 +24,7 @@ namespace Shockah.FCM
 
 		protected List<LittleButton> buttons = new List<LittleButton>();
 
-		public FrameFCMButtons() : base(MBase.me, "Buttons", Anchor.BottomLeft, new Vector2(8, Main.screenHeight - 8)) { }
+		public FrameFCMButtons() : base(MBase.me, "Buttons", Anchor.BottomLeft, Anchor.BottomLeft, new Vector2(8, -8)) { }
 
 		protected override void OnCreate()
 		{
