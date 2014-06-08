@@ -10,7 +10,17 @@ namespace Shockah.FCM
 {
 	public class FrameFCMButtons : SFrame
 	{
-		public static SEvent<Action<List<LittleButton>>> EventCreatingButtonList = new SEvent<Action<List<LittleButton>>>();
+		public static SEvent<Action<List<LittleButton>>> EventCreatingButtonList;
+
+		static FrameFCMButtons()
+		{
+			Clear();
+		}
+
+		internal static void Clear()
+		{
+			EventCreatingButtonList = new SEvent<Action<List<LittleButton>>>();
+		}
 
 		protected List<LittleButton> buttons = new List<LittleButton>();
 
@@ -18,9 +28,9 @@ namespace Shockah.FCM
 
 		protected override void OnCreate()
 		{
-			buttons.Add(new LittleButton("Items", MBase.me.textures["Images/ModuleItems.png"], () => { return Interface.current is InterfaceFCMItems; }, () => { InterfaceFCMItems.me.Open(); }));
-			buttons.Add(new LittleButton("NPCs", MBase.me.textures["Images/ModuleNPCs.png"], () => { return Interface.current is InterfaceFCMNPCs; }, () => { InterfaceFCMNPCs.me.Open(); }));
-			buttons.Add(new LittleButton("Prefixes", MBase.me.textures["Images/ModulePrefixes.png"], () => { return Interface.current is InterfaceFCMPrefixes; }, () => { InterfaceFCMPrefixes.me.Open(); }));
+			buttons.Add(new LittleButton("Items", MBase.me.textures["Images/ModuleItems.png"], () => Interface.current is InterfaceFCMItems, () => InterfaceFCMItems.me.Open()));
+			buttons.Add(new LittleButton("NPCs", MBase.me.textures["Images/ModuleNPCs.png"], () => Interface.current is InterfaceFCMNPCs, () => InterfaceFCMNPCs.me.Open()));
+			buttons.Add(new LittleButton("Prefixes", MBase.me.textures["Images/ModulePrefixes.png"], () => Interface.current is InterfaceFCMPrefixes, () => InterfaceFCMPrefixes.me.Open()));
 			foreach (Action<List<LittleButton>> h in EventCreatingButtonList) h(buttons);
 
 			size.X = -4;

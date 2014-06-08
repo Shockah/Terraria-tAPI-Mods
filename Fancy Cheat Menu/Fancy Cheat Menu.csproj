@@ -46,7 +46,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="tAPI">
-      <HintPath>D:\Repo\git\tAPI\bin\Release\tAPI.exe</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Terraria\tAPI.exe</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

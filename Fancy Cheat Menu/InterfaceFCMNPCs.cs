@@ -42,16 +42,16 @@ namespace Shockah.FCM
 		protected NPCSlot[] slots = new NPCSlot[COLS * ROWS];
 		private int _Scroll = 0;
 		protected readonly Filter<NPC>
-			FFriendly = new Filter<NPC>("Friendly", Defs.items["Vanilla:Carrot"].GetTexture(), (npc) => { return npc.friendly || npc.damage <= 0; }),
-			FTown = new Filter<NPC>("Town", Defs.items["Vanilla:Guide Voodoo Doll"].GetTexture(), (npc) => { return npc.townNPC; }),
-			FBoss = new Filter<NPC>("Boss", Defs.items["Vanilla:Suspicious Looking Eye"].GetTexture(), (npc) => { return SBase.IsBoss(npc); }),
+			FFriendly = new Filter<NPC>("Friendly", Defs.items["Vanilla:Carrot"].GetTexture(), (npc) => npc.friendly || npc.damage <= 0),
+			FTown = new Filter<NPC>("Town", Defs.items["Vanilla:Guide Voodoo Doll"].GetTexture(), (npc) => npc.townNPC),
+			FBoss = new Filter<NPC>("Boss", Defs.items["Vanilla:Suspicious Looking Eye"].GetTexture(), (npc) => SBase.IsBoss(npc)),
 			FOther = new Filter<NPC>("Other", Defs.unloadedItem.GetTexture(), null);
 		protected readonly Sorter<NPC>
-			SID = new Sorter<NPC>("ID", (i1, i2) => { return i1.type.CompareTo(i2.type); }, (npc) => { return true; }),
-			SName = new Sorter<NPC>("Name", (i1, i2) => { return i1.displayName.CompareTo(i2.displayName); }, (npc) => { return true; }),
-			SLife = new Sorter<NPC>("LIfe", (i1, i2) => { return i1.lifeMax.CompareTo(i2.lifeMax); }, (npc) => { return true; }),
-			SDamage = new Sorter<NPC>("Damage", (i1, i2) => { return i1.damage.CompareTo(i2.damage); }, (npc) => { return npc.damage > 0; }),
-			SDefense = new Sorter<NPC>("Defense", (i1, i2) => { return i1.defense.CompareTo(i2.defense); }, (npc) => { return true; });
+			SID = new Sorter<NPC>("ID", (i1, i2) => { return i1.type.CompareTo(i2.type); }, (npc) => true),
+			SName = new Sorter<NPC>("Name", (i1, i2) => { return i1.displayName.CompareTo(i2.displayName); }, (npc) => true),
+			SLife = new Sorter<NPC>("LIfe", (i1, i2) => { return i1.lifeMax.CompareTo(i2.lifeMax); }, (npc) => true),
+			SDamage = new Sorter<NPC>("Damage", (i1, i2) => { return i1.damage.CompareTo(i2.damage); }, (npc) => npc.damage > 0),
+			SDefense = new Sorter<NPC>("Defense", (i1, i2) => { return i1.defense.CompareTo(i2.defense); }, (npc) => true);
 
 		protected int Scroll
 		{

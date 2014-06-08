@@ -37,8 +37,8 @@ namespace Shockah.FCM
 		internal ItemSlotPrefixFCM slotItem = null;
 		private int _Scroll = 0;
 		protected readonly Sorter<Prefix>
-			SID = new Sorter<Prefix>("ID", (i1, i2) => { return i1.type.CompareTo(i2.type); }, (npc) => { return true; }),
-			SName = new Sorter<Prefix>("Name", (i1, i2) => { return i1.displayName.CompareTo(i2.displayName); }, (npc) => { return true; });
+			SID = new Sorter<Prefix>("ID", (i1, i2) => { return i1.type.CompareTo(i2.type); }, (npc) => true),
+			SName = new Sorter<Prefix>("Name", (i1, i2) => { return i1.displayName.CompareTo(i2.displayName); }, (npc) => true);
 
 		protected int Scroll
 		{

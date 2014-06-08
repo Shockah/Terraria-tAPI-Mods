@@ -4,7 +4,7 @@ using TAPI;
 using Terraria;
 namespace Shockah.FCM
 {
-	public class MBase : ModBase
+	public class MBase : APIModBase
 	{
 		public static ModBase me { get; private set; }
 		public static STooltip tip = new STooltip();
@@ -21,6 +21,14 @@ namespace Shockah.FCM
 			InterfaceFCMPrefixes.Reset();
 			SBase.EventSTooltipDraw += () => { return tip; };
 			SBase.EventMenuStateChange += (menu) => { if (!menu) new FrameFCMButtons().Create(); };
+		}
+
+		public override void OnReload()
+		{
+			FrameFCMButtons.Clear();
+			InterfaceFCMItems.me = null;
+			InterfaceFCMNPCs.me = null;
+			InterfaceFCMPrefixes.me = null;
 		}
 
 		public override void PostGameDraw(SpriteBatch sb)
