@@ -1,4 +1,5 @@
-﻿using LitJson;
+﻿using C3.XNA;
+using LitJson;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -11,6 +12,41 @@ using Terraria;
 
 namespace Shockah.Base
 {
+	public static class SFrameAnchorExtensions
+	{
+		public static Vector2 Origin(this SFrame.Anchor anchor)
+		{
+			switch (anchor)
+			{
+				case SFrame.Anchor.Top: return new Vector2(Main.screenWidth / 2, 0);
+				case SFrame.Anchor.TopRight: return new Vector2(Main.screenWidth, 0);
+				case SFrame.Anchor.Left: return new Vector2(0, Main.screenHeight / 2);
+				case SFrame.Anchor.Center: return new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
+				case SFrame.Anchor.Right: return new Vector2(Main.screenWidth, Main.screenHeight / 2);
+				case SFrame.Anchor.BottomLeft: return new Vector2(0, Main.screenHeight);
+				case SFrame.Anchor.Bottom: return new Vector2(Main.screenWidth / 2, Main.screenHeight);
+				case SFrame.Anchor.BottomRight: return new Vector2(Main.screenWidth, Main.screenHeight);
+				default: return new Vector2(0, 0);
+			}
+		}
+
+		public static Vector2 ParentAnchorDrawPoint(this SFrame.Anchor anchor)
+		{
+			switch (anchor)
+			{
+				case SFrame.Anchor.Top: return new Vector2(Main.screenWidth / 2, 24);
+				case SFrame.Anchor.TopRight: return new Vector2(Main.screenWidth - 24, 24);
+				case SFrame.Anchor.Left: return new Vector2(24, Main.screenHeight / 2);
+				case SFrame.Anchor.Center: return new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
+				case SFrame.Anchor.Right: return new Vector2(Main.screenWidth - 24, Main.screenHeight / 2);
+				case SFrame.Anchor.BottomLeft: return new Vector2(24, Main.screenHeight - 24);
+				case SFrame.Anchor.Bottom: return new Vector2(Main.screenWidth / 2, Main.screenHeight - 24);
+				case SFrame.Anchor.BottomRight: return new Vector2(Main.screenWidth - 24, Main.screenHeight - 24);
+				default: return new Vector2(24, 24);
+			}
+		}
+	}
+	
 	public class SFrame
 	{
 		public enum Anchor
@@ -69,6 +105,7 @@ namespace Shockah.Base
 		public static List<SFrame> frames;
 		private static List<SFrame> framesAdd, framesRemove;
 		public static SFrame actionOn;
+		public static bool parentAnchorMode;
 
 		static SFrame()
 		{
@@ -82,6 +119,7 @@ namespace Shockah.Base
 			framesAdd = new List<SFrame>();
 			framesRemove = new List<SFrame>();
 			actionOn = null;
+			parentAnchorMode = false;
 		}
 
 		public static void SaveAll()
@@ -123,17 +161,24 @@ namespace Shockah.Base
 					bool allLocked = true;
 					foreach (SFrame sf in frames) if (!sf.locked) allLocked = false;
 					foreach (SFrame sf in frames) sf.locked = !allLocked;
+					parentAnchorMode = false;
 					Main.PlaySound(22, -1, -1, 1);
+				}
+				if (Main.mouseRight && Main.mouseRightRelease)
+				{
+					parentAnchorMode = !parentAnchorMode;
 				}
 			}
 		}
 		public static void RenderAll(SpriteBatch sb)
 		{
 			foreach (SFrame sf in frames) sf.Render(sb);
+			foreach (SFrame sf in frames) sf.Render2(sb);
+			foreach (SFrame sf in frames) sf.Render3(sb);
 
 			if (!Main.hideUI && Main.playerInventory && frames.Count != 0)
 			{
-				sb.Draw(Main.HBLockTexture[frames[0].locked ? 0 : 1], new Vector2(8, Main.screenHeight - 8), null, Color.White, 0f, Main.HBLockTexture[0].Size() / 2, 1f, SpriteEffects.None, 0f);
+				sb.Draw(Main.HBLockTexture[frames[0].locked ? 0 : 1], new Vector2(8, Main.screenHeight - 8), null, parentAnchorMode ? Color.Red : Color.White, 0f, Main.HBLockTexture[0].Size() / 2, 1f, SpriteEffects.None, 0f);
 			}
 		}
 		
@@ -144,16 +189,17 @@ namespace Shockah.Base
 		public Vector2? dragging = null;
 		public Vector2? resizingMouse = null;
 		public Anchor? resizing = null;
-		public Anchor anchor = Anchor.TopLeft;
+		public Anchor anchor = Anchor.TopLeft, parentAnchor = Anchor.TopLeft;
 		public Resizable resizable;
 
-		public SFrame(ModBase modBase, string tag, Anchor defaultAnchor = Anchor.TopLeft, Vector2 defaultPos = default(Vector2), Vector2 defaultSize = default(Vector2)) : this(modBase, tag, defaultAnchor, defaultPos, defaultSize, Resizable.NewNot()) { }
-		public SFrame(ModBase modBase, string tag, Anchor defaultAnchor, Vector2 defaultPos, Vector2 defaultSize, Resizable resizable)
+		public SFrame(ModBase modBase, string tag, Anchor parentAnchor = Anchor.TopLeft, Anchor defaultAnchor = Anchor.TopLeft, Vector2 defaultPos = default(Vector2), Vector2 defaultSize = default(Vector2)) : this(modBase, tag, parentAnchor, defaultAnchor, defaultPos, defaultSize, Resizable.NewNot()) { }
+		public SFrame(ModBase modBase, string tag, Anchor parentAnchor, Anchor defaultAnchor, Vector2 defaultPos, Vector2 defaultSize, Resizable resizable)
 		{
 			this.modBase = modBase;
 			this.tag = tag;
 			pos = defaultPos;
 			size = defaultSize;
+			this.parentAnchor = parentAnchor;
 			anchor = defaultAnchor;
 			this.resizable = resizable;
 		}
@@ -168,6 +214,7 @@ namespace Shockah.Base
 					JsonData j2 = j[tag];
 					pos = new Vector2((int)j2["pos"][0], (int)j2["pos"][1]);
 					size = new Vector2((int)j2["size"][0], (int)j2["size"][1]);
+					Anchor panchor2; if (Enum.TryParse((string)j2["parentAnchor"], out panchor2)) parentAnchor = panchor2;
 					Anchor anchor2; if (Enum.TryParse((string)j2["anchor"], out anchor2)) anchor = anchor2;
 					locked = (bool)j2["locked"];
 					OnLoad(j2);
@@ -189,6 +236,7 @@ namespace Shockah.Base
 				"pos", SBase.JsonArray((int)pos.X, (int)pos.Y),
 				"size", SBase.JsonArray((int)size.X, (int)size.Y),
 				"locked", locked,
+				"parentAnchor", Enum.GetName(typeof(Anchor), parentAnchor),
 				"anchor", Enum.GetName(typeof(Anchor), anchor)
 			);
 			OnSave(j[tag]);
@@ -238,7 +286,17 @@ namespace Shockah.Base
 							}
 							else if (Main.mouseRight && Main.mouseRightRelease)
 							{
-								anchor = (Anchor)(((int)anchor + 1) % 9);
+								if (parentAnchorMode)
+								{
+									Vector2 paOrigin = parentAnchor.Origin();
+									parentAnchor = (Anchor)(((int)parentAnchor + 1) % 9);
+									pos += paOrigin;
+									pos -= parentAnchor.Origin();
+								}
+								else
+								{
+									anchor = (Anchor)(((int)anchor + 1) % 9);
+								}
 								Main.PlaySound(22, -1, -1, 1);
 							}
 						}
@@ -342,9 +400,8 @@ namespace Shockah.Base
 
 			if (Main.playerInventory && ShouldRenderFrame()) Drawing.DrawBox(sb, p1.X - 12, p1.Y - 12, p2.X - p1.X + 24, p2.Y - p1.Y + 24);
 			OnRender(sb);
-			if (!locked && Main.playerInventory)
+			if (!locked && Main.playerInventory && !parentAnchorMode)
 			{
-				sb.Draw(Main.HBLockTexture[locked ? 0 : 1], FrameLockPos(), null, Color.White, 0f, Main.HBLockTexture[0].Size() / 2, 1f, SpriteEffects.None, 0f);
 				Texture2D texResizer = MBase.me.textures["Resizer.png"];
 				bool corners = size.X >= 32 && size.Y >= 32;
 				if (resizable.AnchorResizable(anchor, Anchor.TopLeft) && corners) sb.Draw(texResizer, p1, null, Color.White, Math2.ToRadians(-45f), texResizer.Size() / 2, 1f, SpriteEffects.None, 0f);
@@ -357,12 +414,45 @@ namespace Shockah.Base
 				if (resizable.AnchorResizable(anchor, Anchor.BottomRight) && corners) sb.Draw(texResizer, p2, null, Color.White, Math2.ToRadians(135f), texResizer.Size() / 2, 1f, SpriteEffects.None, 0f);
 			}
 		}
+		public void Render2(SpriteBatch sb)
+		{
+			if (Main.hideUI || !IsVisible()) return;
+			if (!locked && Main.playerInventory && parentAnchorMode)
+			{
+				sb.DrawCircle(parentAnchor.ParentAnchorDrawPoint(), 12f, 16, Color.Red);
+				sb.DrawCircle(parentAnchor.ParentAnchorDrawPoint(), 11f, 16, Color.Red);
+				sb.DrawCircle(parentAnchor.ParentAnchorDrawPoint(), 10f, 16, Color.Red);
+
+				sb.DrawCircle(FrameLockPos(), 12f, 16, Color.Red);
+				sb.DrawCircle(FrameLockPos(), 11f, 16, Color.Red);
+				sb.DrawCircle(FrameLockPos(), 10f, 16, Color.Red);
+
+				float angle = parentAnchor.ParentAnchorDrawPoint().Direction(FrameLockPos());
+				sb.DrawLine(parentAnchor.ParentAnchorDrawPoint() + Math2.LdirVector2(12, angle), FrameLockPos() - Math2.LdirVector2(12, angle), Color.Red);
+				if (parentAnchor != Anchor.Center)
+				{
+					float angle2 = parentAnchor.ParentAnchorDrawPoint().Direction(parentAnchor.Origin());
+					sb.DrawLine(parentAnchor.ParentAnchorDrawPoint() + Math2.LdirVector2(12, angle2), parentAnchor.Origin(), Color.Red);
+				}
+			}
+		}
+		public void Render3(SpriteBatch sb)
+		{
+			if (Main.hideUI || !IsVisible()) return;
+			if (!locked && Main.playerInventory)
+			{
+				sb.Draw(Main.HBLockTexture[locked ? 0 : 1], FrameLockPos(), null, parentAnchorMode ? Color.Red : Color.White, 0f, Main.HBLockTexture[0].Size() / 2, 1f, SpriteEffects.None, 0f);
+			}
+		}
 
 		public Vector2 FramePos1()
 		{
+			return FramePos1NoParent() + parentAnchor.Origin();
+		}
+		public Vector2 FramePos1NoParent()
+		{
 			switch (anchor)
 			{
-				case Anchor.TopLeft: return pos;
 				case Anchor.Top: return new Vector2(pos.X - size.X * .5f, pos.Y);
 				case Anchor.TopRight: return new Vector2(pos.X - size.X, pos.Y);
 				case Anchor.Left: return new Vector2(pos.X, pos.Y - size.Y * .5f);
@@ -371,14 +461,17 @@ namespace Shockah.Base
 				case Anchor.BottomLeft: return new Vector2(pos.X, pos.Y - size.Y);
 				case Anchor.Bottom: return new Vector2(pos.X - size.X * .5f, pos.Y - size.Y);
 				case Anchor.BottomRight: return new Vector2(pos.X - size.X, pos.Y - size.Y);
-				default: return default(Vector2);
+				default: return pos;
 			}
 		}
 		public Vector2 FramePos2()
 		{
+			return FramePos2NoParent() + parentAnchor.Origin();
+		}
+		public Vector2 FramePos2NoParent()
+		{
 			switch (anchor)
 			{
-				case Anchor.BottomRight: return pos;
 				case Anchor.Bottom: return new Vector2(pos.X + size.X * .5f, pos.Y);
 				case Anchor.BottomLeft: return new Vector2(pos.X + size.X, pos.Y);
 				case Anchor.Right: return new Vector2(pos.X, pos.Y + size.Y * .5f);
@@ -387,16 +480,16 @@ namespace Shockah.Base
 				case Anchor.TopRight: return new Vector2(pos.X, pos.Y + size.Y);
 				case Anchor.Top: return new Vector2(pos.X + size.X * .5f, pos.Y + size.Y);
 				case Anchor.TopLeft: return new Vector2(pos.X + size.X, pos.Y + size.Y);
-				default: return default(Vector2);
+				default: return pos;
 			}
 		}
 		public Vector2 FrameLockPos()
 		{
-			return pos;
+			return pos + parentAnchor.Origin();
 		}
 		public void ConvertToAnchor(Anchor anchor = Anchor.TopLeft)
 		{
-			pos = FramePos1();
+			pos = FramePos1NoParent();
 			this.anchor = Anchor.TopLeft;
 			if (anchor == Anchor.TopLeft) return;
 			switch (anchor)
