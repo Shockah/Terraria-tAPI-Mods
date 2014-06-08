@@ -4,7 +4,7 @@ using TAPI;
 
 namespace Shockah.ItemSuffixes
 {
-	public class MBase : ModBase
+	public class MBase : APIModBase
 	{
 		public static ModBase me = null;
 
