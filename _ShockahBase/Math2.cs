@@ -3,7 +3,7 @@ using System;
 
 namespace Shockah.Base
 {
-	public class Math2
+	public static class Math2
 	{
 		public static float LdirX(float dist, float angle)
 		{
@@ -34,6 +34,11 @@ namespace Shockah.Base
 		public static bool InRegion(Vector2 pos, Vector2 pos1, Vector2 pos2)
 		{
 			return pos.X >= pos1.X && pos.Y >= pos1.Y && pos.X < pos2.X && pos.Y < pos2.Y;
+		}
+
+		public static float Direction(this Vector2 v1, Vector2 v2)
+		{
+			return ToDegrees((float)Math.Atan2(v1.Y - v2.Y, v2.X - v1.X));
 		}
 	}
 }
