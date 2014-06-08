@@ -25,6 +25,10 @@ namespace Shockah.Base
 		{
 			handlers.Remove(a);
 		}
+		public void Clear()
+		{
+			handlers.Clear();
+		}
 
 		public static SEvent<T> operator +(SEvent<T> ev, T a)
 		{

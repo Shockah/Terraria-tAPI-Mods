@@ -3,7 +3,6 @@
     "author": "Shockah",
     "info": "Library used by all my mods.",
     "internalName": "Shockah.Base",
-	"warnOnReload": true,
 	"dllReferences": [
 		"C3.XNA.Primitives2D.dll"
 	]

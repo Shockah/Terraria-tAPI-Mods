@@ -9,13 +9,29 @@ namespace Shockah.Base
 {
 	public static class SBase
 	{
-		public static SEvent<Action<bool>> EventMenuStateChange = new SEvent<Action<bool>>();
-		public static SEvent<Action<Player, string, int, Item, Item>> EventInventoryChange = new SEvent<Action<Player, string, int, Item, Item>>();
-		public static SEvent<Action<STooltip, Rectangle>> EventPreSTooltipDraw = new SEvent<Action<STooltip, Rectangle>>();
-		public static SEvent<Func<STooltip>> EventSTooltipDraw = new SEvent<Func<STooltip>>();
-		public static SEvent<Func<NPC, bool>> EventIsBoss = new SEvent<Func<NPC, bool>>();
-		public static SEvent<Action<NPC, Item>> EventNPCLoot = new SEvent<Action<NPC, Item>>();
-		public static SEvent<Action<Point, Item>> EventTileLoot = new SEvent<Action<Point, Item>>();
+		public static SEvent<Action<bool>> EventMenuStateChange;
+		public static SEvent<Action<Player, string, int, Item, Item>> EventInventoryChange;
+		public static SEvent<Action<STooltip, Rectangle>> EventPreSTooltipDraw;
+		public static SEvent<Func<STooltip>> EventSTooltipDraw;
+		public static SEvent<Func<NPC, bool>> EventIsBoss;
+		public static SEvent<Action<NPC, Item>> EventNPCLoot;
+		public static SEvent<Action<Point, Item>> EventTileLoot;
+
+		static SBase()
+		{
+			Clear();
+		}
+
+		internal static void Clear()
+		{
+			EventMenuStateChange = new SEvent<Action<bool>>();
+			EventInventoryChange = new SEvent<Action<Player, string, int, Item, Item>>();
+			EventPreSTooltipDraw = new SEvent<Action<STooltip, Rectangle>>();
+			EventSTooltipDraw = new SEvent<Func<STooltip>>();
+			EventIsBoss = new SEvent<Func<NPC, bool>>();
+			EventNPCLoot = new SEvent<Action<NPC, Item>>();
+			EventTileLoot = new SEvent<Action<Point, Item>>();
+		}
 
 		public static void InsertAfter<T>(List<T> list, Func<T, bool> comparator, T add)
 		{

@@ -1,11 +1,12 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using TAPI;
 using Terraria;
 
 namespace Shockah.Base
 {
-	public class MBase : ModBase
+	public class MBase : APIModBase
 	{
 		internal static MBase me = null;
 		
@@ -14,6 +15,13 @@ namespace Shockah.Base
 		public override void OnLoad()
 		{
 			me = this;
+			SFrame.LoadAll();
+		}
+
+		public override void OnReload()
+		{
+			SBase.Clear();
+			SFrame.Clear();
 			SFrame.LoadAll();
 		}
 

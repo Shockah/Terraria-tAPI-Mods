@@ -65,10 +65,24 @@ namespace Shockah.Base
 			}
 		}
 		
-		internal static JsonData data = SBase.JsonObject();
-		public static List<SFrame> frames = new List<SFrame>();
-		private static List<SFrame> framesAdd = new List<SFrame>(), framesRemove = new List<SFrame>();
-		public static SFrame actionOn = null;
+		internal static JsonData data;
+		public static List<SFrame> frames;
+		private static List<SFrame> framesAdd, framesRemove;
+		public static SFrame actionOn;
+
+		static SFrame()
+		{
+			Clear();
+		}
+
+		internal static void Clear()
+		{
+			data = SBase.JsonObject();
+			frames = new List<SFrame>();
+			framesAdd = new List<SFrame>();
+			framesRemove = new List<SFrame>();
+			actionOn = null;
+		}
 
 		public static void SaveAll()
 		{
@@ -178,6 +192,7 @@ namespace Shockah.Base
 				"anchor", Enum.GetName(typeof(Anchor), anchor)
 			);
 			OnSave(j[tag]);
+			data[modBase.modName] = j;
 		}
 		public void Update()
 		{
