@@ -17,7 +17,7 @@ namespace Shockah.ChestContents
 		{
 			if (LayerChestContents == null)
 			{
-				LayerChestContents = new ILChestContents(modBase.modName);
+				LayerChestContents = new ILChestContents(modBase);
 				ILChestContents.itemBack = modBase.textures["Images/ItemBackground.png"];
 			}
 			list.Insert(list.IndexOf(InterfaceLayer.LayerMouseText), LayerChestContents);

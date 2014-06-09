@@ -29,9 +29,13 @@ namespace Shockah.ChestContents
 			if (item.color != default(Color)) sb.Draw(texItem, pos, null, item.GetColor(Color.White) * alpha, 0f, origin, iscale, SpriteEffects.None, 0f);
 		}
 
+		protected readonly ModBase modBase;
 		public int cX = -1, cY = -1, cId = -1, life = 0;
 
-		public ILChestContents(string name) : base(name) { }
+		public ILChestContents(ModBase modBase) : base(modBase.modName)
+		{
+			this.modBase = modBase;
+		}
 
 		protected override void OnDraw(SpriteBatch sb)
 		{
@@ -100,7 +104,15 @@ namespace Shockah.ChestContents
 					return;
 				}
 
-				DisplayStyle.TwoCircles.Draw(sb, this, items);
+				DisplayStyle style = null;
+				switch ((string)modBase.options["displayStyle"].Value)
+				{
+					case "One circle": style = DisplayStyle.OneCircle; break;
+					case "Two circles": style = DisplayStyle.TwoCircles; break;
+					case "Rectangle": style = DisplayStyle.Rect; break;
+					default: break;
+				}
+				if (style != null) style.Draw(sb, this, items);
 			}
 		}
 
