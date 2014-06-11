@@ -1,10 +1,10 @@
 {
     "displayName": "Item Suffixes",
     "author": "Shockah",
-    "info": "",
+    "info": "Adds suffixes to items, which work separately from prefixes.",
+	"version": "r2",
     "internalName": "Shockah.ItemSuffixes",
 	"modReferences": [
 		"Shockah.Base"
-	],
-	"includePDB": true
+	]
 }
