@@ -99,7 +99,7 @@ namespace Shockah.FCM.Standard
 			sortingChooser = new ElChooser<Sorter<NPC>>(
 				(item) => { reverseSort = object.ReferenceEquals(sorter, item) ? !reverseSort : false; sorter = item; Refresh(true); },
 				() => { return sorter; },
-				() => { return MBase.me.textures[reverseSort ? "Images/ArrowDecrease.png" : "Images/ArrowIncrease.png"]; }
+				() => { return Shockah.FCM.MBase.me.textures[reverseSort ? "Images/ArrowDecrease.png" : "Images/ArrowIncrease.png"]; }
 			);
 			foreach (Sorter<NPC> sorter2 in sorters) sortingChooser.Add(new Tuple<string, Sorter<NPC>>(sorter2.name, sorter2));
 		}
@@ -241,7 +241,7 @@ namespace Shockah.FCM.Standard
 				Filter<NPC> filter = filters[i];
 				Vector2 pos = new Vector2(POS_X + 32 + COLS * OFF_X * oldInventoryScale + (i / 10) * (filterW + FILTER_X_OFF * Main.inventoryScale), POS_Y + (i % 10) * filterH);
 				Drawing.DrawBox(sb, pos.X, pos.Y, filterW, filterH * Main.inventoryScale);
-				Texture2D tex = filter.mode == null ? filter.tex : (filter.mode.Value ? MBase.me.textures["Images/Tick.png"] : Main.cdTexture);
+				Texture2D tex = filter.mode == null ? filter.tex : (filter.mode.Value ? Shockah.FCM.MBase.me.textures["Images/Tick.png"] : Main.cdTexture);
 				if (tex != null)
 				{
 					float tscale = 1f;

@@ -76,7 +76,7 @@ namespace Shockah.FCM.Standard
 			sortingChooser = new ElChooser<Sorter<Prefix>>(
 				(item) => { reverseSort = object.ReferenceEquals(sorter, item) ? !reverseSort : false; sorter = item; Refresh(true); },
 				() => { return sorter; },
-				() => { return MBase.me.textures[reverseSort ? "Images/ArrowDecrease.png" : "Images/ArrowIncrease.png"]; }
+				() => { return Shockah.FCM.MBase.me.textures[reverseSort ? "Images/ArrowDecrease.png" : "Images/ArrowIncrease.png"]; }
 			);
 			foreach (Sorter<Prefix> sorter2 in sorters) sortingChooser.Add(new Tuple<string, Sorter<Prefix>>(sorter2.name, sorter2));
 

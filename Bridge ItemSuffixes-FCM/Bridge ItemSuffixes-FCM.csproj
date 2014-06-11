@@ -49,7 +49,7 @@
     <None Include="ModInfo.json" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Fancy Cheat Menu\FCM Base.csproj">
+    <ProjectReference Include="..\FCM Base\FCM Base.csproj">
       <Project>{dbf4e2f5-ed07-4051-8258-5c37d2454929}</Project>
       <Name>FCM Base</Name>
     </ProjectReference>

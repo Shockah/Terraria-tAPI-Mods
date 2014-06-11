@@ -121,7 +121,7 @@ namespace Shockah.FCM.Standard
 			sortingChooser = new ElChooser<Sorter<Item>>(
 				(item) => { reverseSort = object.ReferenceEquals(sorter, item) ? !reverseSort : false; sorter = item; Refresh(true); },
 				() => { return sorter; },
-				() => { return MBase.me.textures[reverseSort ? "Images/ArrowDecrease.png" : "Images/ArrowIncrease.png"]; }
+				() => { return Shockah.FCM.MBase.me.textures[reverseSort ? "Images/ArrowDecrease.png" : "Images/ArrowIncrease.png"]; }
 			);
 			foreach (Sorter<Item> sorter2 in sorters) sortingChooser.Add(new Tuple<string, Sorter<Item>>(sorter2.name, sorter2));
 		}
@@ -187,7 +187,7 @@ namespace Shockah.FCM.Standard
 				Filter<Item> filter = filters[i];
 				Vector2 pos = new Vector2(POS_X + 32 + COLS * OFF_X * Main.inventoryScale + (i / 10) * (filterW + FILTER_X_OFF * Main.inventoryScale), POS_Y + (i % 10) * filterH);
 				Drawing.DrawBox(sb, pos.X, pos.Y, filterW, filterH * Main.inventoryScale);
-				Texture2D tex = filter.mode == null ? filter.tex : (filter.mode.Value ? MBase.me.textures["Images/Tick.png"] : Main.cdTexture);
+				Texture2D tex = filter.mode == null ? filter.tex : (filter.mode.Value ? Shockah.FCM.MBase.me.textures["Images/Tick.png"] : Main.cdTexture);
 				float tscale = 1f;
 				if (tscale * tex.Width > filterH - 2f) tscale = (filterH - 2f) / tex.Width;
 				if (tscale * tex.Height > filterH - 2f) tscale = (filterH - 2f) / tex.Height;

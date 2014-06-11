@@ -50,9 +50,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ModInfo.json" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\_ShockahBase\_ShockahBase.csproj">
       <Project>{f3bb15ae-9643-451e-baf4-fd29cd42798b}</Project>
       <Name>_ShockahBase</Name>
@@ -61,33 +58,23 @@
   <ItemGroup>
     <Compile Include="El.cs" />
     <Compile Include="ElChooser.cs" />
+    <Compile Include="ElSlider.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="FrameFCMButtons.cs" />
     <Compile Include="InterfaceFCM.cs" />
     <Compile Include="InterfaceFCMBase.cs" />
-    <Compile Include="InterfaceFCMItems.cs" />
-    <Compile Include="InterfaceFCMNPCs.cs" />
-    <Compile Include="InterfaceFCMPrefixes.cs" />
-    <Compile Include="ItemSlotFCM.cs" />
-    <Compile Include="ItemSlotPrefixFCM.cs" />
     <Compile Include="LittleButton.cs" />
     <Compile Include="MBase.cs" />
     <Compile Include="MInterface.cs" />
-    <Compile Include="ElSlider.cs" />
-    <Compile Include="NPCSlot.cs" />
-    <Compile Include="PrefixSlot.cs" />
     <Compile Include="Sorter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="C3.XNA.Primitives2D.dll" />
+    <None Include="ModInfo.json" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Images\ArrowDecrease.png" />
     <Content Include="Images\ArrowIncrease.png" />
     <Content Include="Images\Tick.png" />
-    <Content Include="Images\ModuleBuffs.png" />
-    <Content Include="Images\ModuleItems.png" />
-    <Content Include="Images\ModuleMisc.png" />
-    <Content Include="Images\ModuleNPCs.png" />
-    <Content Include="Images\ModulePrefixes.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
