@@ -2,6 +2,7 @@
     "displayName": "Shockah's base",
     "author": "Shockah",
     "info": "Library used by all my mods.",
+	"version": "r2",
     "internalName": "Shockah.Base",
 	"dllReferences": [
 		"C3.XNA.Primitives2D.dll"
