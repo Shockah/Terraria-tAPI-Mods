@@ -1,0 +1,10 @@
+{
+    "displayName": "Fancy Cheat Menu - Base",
+    "author": "Shockah",
+    "info": "Cheat menu mod. 'nuff said.\nDoesn't do anything by itself - install some FCM module mods.",
+	"version": "r1",
+    "internalName": "Shockah.FCM",
+	"modReferences": [
+		"Shockah.Base"
+	]
+}
