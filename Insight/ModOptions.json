@@ -1,0 +1,28 @@
+﻿{
+	"options": [
+		{
+			"name": "displayStyle",
+			"displayName": "Display style",
+			"type": "List",
+			"list": [
+				"One circle",
+				"Two circles",
+				"Rectangle"
+			],
+			"default": 0
+		},
+		{
+            "name": "visitedOnly",
+            "displayName": "Visited only",
+            "type": "Boolean",
+			"sync": true,
+            "default": true
+        },
+		{
+            "name": "showStack",
+            "displayName": "Show stack",
+            "type": "Boolean",
+            "default": false
+        }
+	]
+}

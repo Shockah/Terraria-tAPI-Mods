@@ -1,0 +1,10 @@
+{
+    "displayName": "Insight",
+    "author": "Shockah",
+    "info": "Allows you to peek into chest contents without opening them.",
+	"version": "r1",
+    "internalName": "Shockah.Insight",
+	"modReferences": [
+		"Shockah.Base"
+	]
+}

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chest Contents", "Chest Contents\Chest Contents.csproj", "{C0E2C4F8-8783-400F-8787-BC00CDFEA5CA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Insight", "Insight\Insight.csproj", "{C0E2C4F8-8783-400F-8787-BC00CDFEA5CA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Item Ranks", "Item Ranks\Item Ranks.csproj", "{91673673-E9D8-4564-9DA2-2AEA11023A31}"
 EndProject

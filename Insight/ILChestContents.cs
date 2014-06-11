@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Shockah.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Text;
 using TAPI;
 using Terraria;
 
-namespace Shockah.ChestContents
+namespace Shockah.Insight
 {
 	public class ILChestContents : InterfaceLayer
 	{
@@ -27,6 +28,11 @@ namespace Shockah.ChestContents
 
 			sb.Draw(texItem, pos, null, item.GetAlpha(item.GetTextureColor()) * alpha, 0f, origin, iscale, SpriteEffects.None, 0f);
 			if (item.color != default(Color)) sb.Draw(texItem, pos, null, item.GetColor(Color.White) * alpha, 0f, origin, iscale, SpriteEffects.None, 0f);
+
+			if (item.stack > 1 && (bool)MBase.me.options["showStack"].Value)
+			{
+				SDrawing.StringShadowed(sb, Main.fontItemStack, "" + item.stack, new Vector2(pos.X - Main.fontItemStack.MeasureString("" + item.stack).X / 2, pos.Y + 8), Color.White * alpha, 1f);
+			}
 		}
 
 		protected readonly ModBase modBase;
@@ -83,21 +89,9 @@ namespace Shockah.ChestContents
 					return;
 				}
 
-				List<string> itemNames = new List<string>();
-				List<Item> items = new List<Item>();
-
-				for (int i = 0; i < c.item.Length; i++)
-				{
-					Item item = c.item[i];
-					if (item.IsBlank()) continue;
-
-					if (!itemNames.Contains(item.name))
-					{
-						itemNames.Add(item.name);
-						items.Add(item);
-					}
-				}
-				if (items.Count == 0)
+				ChestCache cache = Main.localPlayer.GetSubClass<MPlayer>().VisitedCache(c);
+				List<Item> items = cache == null ? null : cache.GetItems();
+				if (items == null || items.Count == 0)
 				{
 					life = 0;
 					cX = cY = cId = -1;

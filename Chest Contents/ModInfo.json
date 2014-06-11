@@ -1,9 +1,0 @@
-{
-    "displayName": "Chest Contents",
-    "author": "Shockah",
-    "info": "",
-    "internalName": "Shockah.ChestContents",
-	"modReferences": [
-		"Shockah.Base"
-	]
-}

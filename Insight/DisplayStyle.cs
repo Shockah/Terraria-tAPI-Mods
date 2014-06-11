@@ -8,7 +8,7 @@ using System.Text;
 using TAPI;
 using Terraria;
 
-namespace Shockah.ChestContents
+namespace Shockah.Insight
 {
 	public abstract class DisplayStyle
 	{
