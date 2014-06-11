@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_ShockahBase", "_ShockahBas
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Player 'n' World Preview", "Player 'n' World Preview\Player 'n' World Preview.csproj", "{ADCA4457-8145-419B-AD1C-93773AE03AD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fancy Cheat Menu", "Fancy Cheat Menu\Fancy Cheat Menu.csproj", "{DBF4E2F5-ED07-4051-8258-5C37D2454929}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FCM Base", "FCM Base\FCM Base.csproj", "{DBF4E2F5-ED07-4051-8258-5C37D2454929}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caverns of Time", "Caverns of Time\Caverns of Time.csproj", "{9258892D-5FF2-434A-BAE4-4222C9A70099}"
 EndProject
@@ -30,6 +30,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Move Anything", "Move Anything\Move Anything.csproj", "{21A61F6B-0241-4E20-BED9-9D6E6699AA06}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bridge ItemSuffixes-FCM", "Bridge ItemSuffixes-FCM\Bridge ItemSuffixes-FCM.csproj", "{15080914-EB18-496A-ADF3-F513D23ADF13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FCM Standard", "FCM Standard\FCM Standard.csproj", "{53B4956F-EF79-43A6-AF12-7EB789F99C17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,6 +91,10 @@ Global
 		{15080914-EB18-496A-ADF3-F513D23ADF13}.Debug|Any CPU.Build.0 = Release|Any CPU
 		{15080914-EB18-496A-ADF3-F513D23ADF13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15080914-EB18-496A-ADF3-F513D23ADF13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53B4956F-EF79-43A6-AF12-7EB789F99C17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53B4956F-EF79-43A6-AF12-7EB789F99C17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53B4956F-EF79-43A6-AF12-7EB789F99C17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53B4956F-EF79-43A6-AF12-7EB789F99C17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
