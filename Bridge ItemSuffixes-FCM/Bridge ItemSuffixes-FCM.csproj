@@ -49,9 +49,9 @@
     <None Include="ModInfo.json" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Fancy Cheat Menu\Fancy Cheat Menu.csproj">
+    <ProjectReference Include="..\Fancy Cheat Menu\FCM Base.csproj">
       <Project>{dbf4e2f5-ed07-4051-8258-5c37d2454929}</Project>
-      <Name>Fancy Cheat Menu</Name>
+      <Name>FCM Base</Name>
     </ProjectReference>
     <ProjectReference Include="..\Item Suffixes\Item Suffixes.csproj">
       <Project>{b9a646ab-bf12-4be3-884b-8cbe837190ec}</Project>

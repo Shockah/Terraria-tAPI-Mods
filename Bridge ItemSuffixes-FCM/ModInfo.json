@@ -1,7 +1,8 @@
 {
-    "displayName": "Bridge:",
+    "displayName": "Fancy Cheat Menu - Suffixes",
     "author": "Shockah",
-    "info": "Item Suffixes <-> Fancy Cheat Menu",
+    "info": "#f80;Suffixes#; module for Fancy Cheat Menu.",
+	"version": "r1",
     "internalName": "Shockah.Bridge.ItemSuffixes_FCM",
 	"modReferences": [
 		"Shockah.Base",
