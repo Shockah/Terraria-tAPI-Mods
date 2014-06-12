@@ -28,6 +28,7 @@ namespace Shockah.Insight
 		}
 		public ChestCache VisitedCache(Chest c)
 		{
+			if (c == null) return null;
 			if (!(bool)MBase.me.options["visitedOnly"].Value) MarkAsVisited(c);
 			if (!visited.ContainsKey(Main.worldID)) return null;
 			List<ChestCache> caches = visited[Main.worldID];

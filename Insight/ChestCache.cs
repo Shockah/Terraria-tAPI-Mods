@@ -46,7 +46,7 @@ namespace Shockah.Insight
 				{
 					Chest c = Main.chest[i];
 					if (c == null) continue;
-					if ((x == c.x || x == c.x + 1) && (y == c.y || y == c.y + 1) && Main.localPlayer.GetSubClass<MPlayer>().IsVisited(c))
+					if ((x == c.x || x == c.x + 1) && (y == c.y || y == c.y + 1) && (!(bool)MBase.me.options["visitedOnly"].Value || Main.localPlayer.GetSubClass<MPlayer>().IsVisited(c)))
 					{
 						chest = c;
 						return true;
