@@ -48,6 +48,7 @@
   <ItemGroup>
     <None Include="Item\FIRE.json" />
     <None Include="ModInfo.json" />
+    <None Include="ModOptions.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FIREInstance.cs" />
