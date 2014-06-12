@@ -9,6 +9,7 @@ namespace Shockah.FIRE
 
 		public override bool? UseItem(Player player)
 		{
+			if (MWorld.me.instances.Count >= (int)MWorld.me.modBase.options["maxInstances"].Value) return false;
 			MWorld.me.instances.Add(new FIREInstance((int)(Main.mouseX + Main.screenPosition.X) / 16, (int)(Main.mouseY + Main.screenPosition.Y) / 16));
 			return true;
 		}
