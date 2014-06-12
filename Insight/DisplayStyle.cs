@@ -71,6 +71,16 @@ namespace Shockah.Insight
 					int totalw = (int)((rw - 1) * OFFSETS + 40);
 					int totalh = (int)((rh - 1) * OFFSETS + 40);
 
+					int maxH = rh;
+					int maxW = items.Count >= rw ? rw : items.Count;
+
+					Func<Vector2, Vector2, float, Vector2> ease = (v1, v2, f) =>
+					{
+						return new Vector2(
+							v1.X + (v2.X - v1.X) * f,
+							v1.Y + (v2.Y - v1.Y) * f
+						);
+					};
 					for (int y = 0; y < rh; y++)
 					{
 						if (items.Count < rh * y) break;
@@ -79,8 +89,8 @@ namespace Shockah.Insight
 						int roww = (int)((inrow - 1) * OFFSETS + 40);
 						for (int xx = 0; xx < inrow; xx++)
 						{
-							Vector2 ipos = cpos - new Vector2(totalw / 2, totalh + OFFSETS / 2) + new Vector2(xx * OFFSETS + (totalw - roww) / 2, y * OFFSETS + (1f - alpha) * OFFSETS) + new Vector2(20, 20);
-							ILChestContents.DrawItem(sb, ipos, items[xx + y * rw], alpha);
+							Vector2 ipos = cpos - new Vector2(totalw / 2, totalh + OFFSETS / 2) + new Vector2(xx * OFFSETS + (totalw - roww) / 2, y * OFFSETS) + new Vector2(20, 20);
+							ILChestContents.DrawItem(sb, ease(Main.mouse, ipos, alpha), items[xx + y * rw], alpha);
 						}
 					}
 				}
