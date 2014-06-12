@@ -71,14 +71,14 @@ namespace Shockah.Insight
 
 					foreach (Item item2 in items)
 					{
-						if (item.type == item2.type)
+						if (item.netID == item2.netID)
 						{
 							item2.stack += item.stack;
 							goto L;
 						}
 					}
 
-					Item itemNew = new Item().SetDefaults(item.name);
+					Item itemNew = new Item().netDefaults(item.netID);
 					itemNew.stack = item.stack;
 					items.Add(itemNew);
 
