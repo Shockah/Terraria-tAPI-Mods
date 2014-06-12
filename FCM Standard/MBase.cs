@@ -7,6 +7,9 @@ namespace Shockah.FCM.Standard
 {
 	public class MBase : ModBase
 	{
+		public const int
+			MSG_SPAWN_NPCS = 1;
+		
 		public static ModBase me { get; private set; }
 		
 		public override void OnLoad()
@@ -39,6 +42,18 @@ namespace Shockah.FCM.Standard
 				InterfaceFCMBase.resetInterface = false;
 				InterfaceFCMNPCs.spawning = null;
 				InterfaceFCMNPCs.me.Open();
+			}
+		}
+
+		public override void NetReceive(int msgType, BinBuffer bb)
+		{
+			switch (msgType)
+			{
+				case MSG_SPAWN_NPCS:
+					if (Main.netMode != 2) return;
+					InterfaceFCMNPCs.SpawnNPCs(bb.ReadShort(), bb.ReadInt(), bb.ReadInt(), bb.ReadFloat(), bb.ReadUShort(), bb.ReadInt());
+					break;
+				default: break;
 			}
 		}
 	}

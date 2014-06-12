@@ -37,6 +37,47 @@ namespace Shockah.FCM.Standard
 			);
 		}
 
+		public static void SpawnNPCs(int netID, int x, int y, float radius, int count, int seed)
+		{
+			Random rand = new Random(seed);
+
+			List<NPC> list = new List<NPC>();
+			for (int i = 0; i < count; i++)
+			{
+				Vector2 pos = new Vector2(x, y) + Math2.LdirVector2((float)(rand.NextDouble() * radius), (float)(rand.NextDouble() * 360d));
+				int newNPC = NPC.NewNPC((int)pos.X, (int)pos.Y, netID);
+				if (newNPC >= 0 && newNPC < Main.npc.Length - 1) list.Add(Main.npc[newNPC]);
+			}
+
+			if (list.Count > 1)
+			{
+				Projectile[] cacheProjectiles = Main.projectile;
+				Main.projectile = new Projectile[Main.projectile.Length];
+				for (int i = 0; i < Main.projectile.Length; i++) Main.projectile[i] = new Projectile();
+
+				NPC[] cacheNPCs = Main.npc;
+				Main.npc = new NPC[Main.npc.Length];
+				for (int i = 0; i < Main.npc.Length; i++) Main.npc[i] = new NPC();
+
+				Dust[] cacheDust = Main.dust;
+				Main.dust = new Dust[Main.dust.Length];
+				for (int i = 0; i < Main.dust.Length; i++) Main.dust[i] = new Dust();
+
+				foreach (NPC npc in list)
+				{
+					Vector2 pos = npc.position;
+					int times = rand.Next(600);
+					for (int i = 0; i < times; i++) npc.UpdateNPC(npc.whoAmI);
+					npc.position = pos;
+					npc.oldPosition = pos;
+				}
+
+				Main.dust = cacheDust;
+				Main.npc = cacheNPCs;
+				Main.projectile = cacheProjectiles;
+			}
+		}
+
 		protected readonly ElSlider slider;
 		protected readonly ElChooser<Sorter<NPC>> sortingChooser;
 		protected NPCSlot[] slots = new NPCSlot[COLS * ROWS];
@@ -139,7 +180,8 @@ namespace Shockah.FCM.Standard
 					float fieldOne = (float)(Math.PI * Math.Pow(radius, 2));
 					float field = (float)(Math.PI * Math.Pow(radiusSpawner, 2));
 					float fieldMin = field + fieldOne * 4;
-					Random rand = new Random(BitConverter.ToInt32(BitConverter.GetBytes(spawnPoint.Value.X), 0) ^ BitConverter.ToInt32(BitConverter.GetBytes(spawnPoint.Value.Y), 0) ^ Main.mouseX ^ Main.mouseY);
+					int randSeed = BitConverter.ToInt32(BitConverter.GetBytes(spawnPoint.Value.X), 0) ^ BitConverter.ToInt32(BitConverter.GetBytes(spawnPoint.Value.Y), 0) ^ Main.mouseX ^ Main.mouseY;
+					Random rand = new Random(randSeed);
 
 					int count = (int)(fieldMin / (fieldOne * 4));
 					List<NPC> list = new List<NPC>();
@@ -147,7 +189,7 @@ namespace Shockah.FCM.Standard
 					{
 						Vector2 pos = spawnPoint.Value + Math2.LdirVector2((float)(rand.NextDouble() * radiusSpawner), (float)(rand.NextDouble() * 360d));
 						sb.DrawCircle(pos - Main.screenPosition, radius, (int)Math.Max(16, radius / 2), Color.White);
-						if (!Main.mouseLeft)
+						if (!Main.mouseLeft && Main.netMode != 1)
 						{
 							int newNPC = NPC.NewNPC((int)pos.X, (int)pos.Y, spawning.netID);
 							if (newNPC >= 0 && newNPC < Main.npc.Length - 1) list.Add(Main.npc[newNPC]);
@@ -184,6 +226,17 @@ namespace Shockah.FCM.Standard
 
 					if (!Main.mouseLeft)
 					{
+						if (Main.netMode == 1)
+						{
+							BinBuffer bb = new BinBuffer();
+							bb.Write((short)spawning.netID);
+							bb.Write((int)spawnPoint.Value.X);
+							bb.Write((int)spawnPoint.Value.Y);
+							bb.Write(radiusSpawner);
+							bb.Write((ushort)count);
+							bb.Write(randSeed);
+							NetMessage.SendModData(MBase.me, MBase.MSG_SPAWN_NPCS, -1, -1, bb);
+						}
 						spawnPoint = null;
 						spawning = null;
 					}

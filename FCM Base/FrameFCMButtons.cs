@@ -45,7 +45,6 @@ namespace Shockah.FCM
 
 		protected override void OnRender(SpriteBatch sb)
 		{
-			if (Main.netMode != 0) return;
 			if (!Main.playerInventory) return;
 
 			Vector2 pos = FramePos1();

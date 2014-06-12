@@ -66,13 +66,14 @@ namespace Shockah.FCM.Standard
 			FPet = new Filter<Item>("Pet", Defs.items["Vanilla:Wisp in a Bottle"].GetTexture(), (item) => item.damage <= 0 && ((item.shoot > 0 && Main.projPet[item.shoot]) || (item.buffType > 0 && (Main.vanityPet[item.buffType] || Main.lightPet[item.buffType])))),
 			FOther = new Filter<Item>("Other", Defs.unloadedItem.GetTexture(), null);
 		protected readonly Sorter<Item>
-			SID = new Sorter<Item>("ID", (i1, i2) => { return i1.type.CompareTo(i2.type); }, (item) => true),
-			SName = new Sorter<Item>("Name", (i1, i2) => { return i1.displayName.CompareTo(i2.displayName); }, (item) => true),
-			SValue = new Sorter<Item>("Value", (i1, i2) => { return i1.value.CompareTo(i2.value); }, (item) => item.value > 0),
-			SRarity = new Sorter<Item>("Rarity", (i1, i2) => { return i1.rare.CompareTo(i2.rare); }, (item) => true),
-			SDamage = new Sorter<Item>("Damage", (i1, i2) => { return i1.damage.CompareTo(i2.damage); }, (item) => item.damage > 0 && !item.notAmmo),
-			SMana = new Sorter<Item>("Mana", (i1, i2) => { return i1.mana.CompareTo(i2.mana); }, (item) => item.mana > 0),
-			SStack = new Sorter<Item>("Stack", (i1, i2) => { return i1.maxStack.CompareTo(i2.maxStack); }, (item) => true);
+			SID = new Sorter<Item>("ID", (i1, i2) => i1.type.CompareTo(i2.type), (item) => true),
+			SName = new Sorter<Item>("Name", (i1, i2) => i1.displayName.CompareTo(i2.displayName), (item) => true),
+			SValue = new Sorter<Item>("Value", (i1, i2) => i1.value.CompareTo(i2.value), (item) => item.value > 0),
+			SRarity = new Sorter<Item>("Rarity", (i1, i2) => i1.rare.CompareTo(i2.rare), (item) => true),
+			SDamage = new Sorter<Item>("Damage", (i1, i2) => i1.damage.CompareTo(i2.damage), (item) => item.damage > 0 && !item.notAmmo),
+			SMana = new Sorter<Item>("Mana", (i1, i2) => i1.mana.CompareTo(i2.mana), (item) => item.mana > 0),
+			SDefense = new Sorter<Item>("Defense", (i1, i2) => i1.defense.CompareTo(i2.defense), (item) => item.headSlot != -1 || item.bodySlot != -1 || item.legSlot != -1),
+			SStack = new Sorter<Item>("Stack", (i1, i2) => i1.maxStack.CompareTo(i2.maxStack), (item) => true);
 
 		protected int Scroll
 		{
@@ -108,7 +109,7 @@ namespace Shockah.FCM.Standard
 					FPickaxe, FAxe, FHammer, FConsumable, FDye, FPaint, FTile, FWall, FPet, FOther
 				}
 			);
-			sorters.AddRange(new Sorter<Item>[] { SID, SName, SValue, SRarity, SDamage, SMana, SStack });
+			sorters.AddRange(new Sorter<Item>[] { SID, SName, SValue, SRarity, SDamage, SMana, SDefense, SStack });
 
 			slider = new ElSlider(
 				(scroll) => { if (Scroll != scroll) { Scroll = scroll; Refresh(false); } },
