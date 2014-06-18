@@ -28,6 +28,11 @@ namespace Shockah.Base
 				ttip.Draw(sb, Main.mouse + new Vector2(10, 10));
 				ttip.Clear();
 			}
+			else if (!string.IsNullOrEmpty(SBase.tip))
+			{
+				API.main.MouseText(SBase.tip);
+				SBase.tip = null;
+			}
 		}
 	}
 }

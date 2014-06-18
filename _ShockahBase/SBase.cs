@@ -16,6 +16,7 @@ namespace Shockah.Base
 		public static SEvent<Func<NPC, bool>> EventIsBoss;
 		public static SEvent<Action<NPC, Item>> EventNPCLoot;
 		public static SEvent<Action<Point, Item>> EventTileLoot;
+		public static string tip = null;
 
 		static SBase()
 		{
