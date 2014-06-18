@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="InterfaceFCMItems.cs" />
+    <Compile Include="InterfaceFCMMisc.cs" />
     <Compile Include="InterfaceFCMNPCs.cs" />
     <Compile Include="InterfaceFCMPrefixes.cs" />
     <Compile Include="ItemSlotFCM.cs" />
@@ -80,6 +81,7 @@
     <Content Include="Images\ModuleMisc.png" />
     <Content Include="Images\ModuleNPCs.png" />
     <Content Include="Images\ModulePrefixes.png" />
+    <Content Include="Images\TimeSlider.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

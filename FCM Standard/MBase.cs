@@ -22,16 +22,19 @@ namespace Shockah.FCM.Standard
 			InterfaceFCMItems.Reset();
 			InterfaceFCMNPCs.Reset();
 			InterfaceFCMPrefixes.Reset();
+			InterfaceFCMMisc.Reset();
 
 			new InterfaceFCMItems();
 			new InterfaceFCMNPCs();
 			new InterfaceFCMPrefixes();
+			new InterfaceFCMMisc();
 
 			FrameFCMButtons.EventCreatingButtonList += (list) =>
 			{
 				list.Add(new LittleButton("Items", textures["Images/ModuleItems.png"], () => Interface.current is InterfaceFCMItems, () => InterfaceFCMItems.me.Open(), 0f));
 				list.Add(new LittleButton("NPCs", textures["Images/ModuleNPCs.png"], () => Interface.current is InterfaceFCMNPCs, () => InterfaceFCMNPCs.me.Open(), -1f));
 				list.Add(new LittleButton("Prefixes", textures["Images/ModulePrefixes.png"], () => Interface.current is InterfaceFCMPrefixes, () => InterfaceFCMPrefixes.me.Open(), -2f));
+				list.Add(new LittleButton("Misc", textures["Images/ModuleMisc.png"], () => Interface.current is InterfaceFCMMisc, () => InterfaceFCMMisc.me.Open(), -3f));
 			};
 		}
 

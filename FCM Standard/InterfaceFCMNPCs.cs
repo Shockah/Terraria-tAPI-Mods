@@ -37,7 +37,7 @@ namespace Shockah.FCM.Standard
 			);
 		}
 
-		public static void SpawnNPCs(int netID, int x, int y, float radius, int count, int seed)
+		public static void SpawnNPCs(int netID, int x, int y, float radius, int count, int seed, bool fakeUpdateNPCs = false)
 		{
 			Random rand = new Random(seed);
 
@@ -49,7 +49,7 @@ namespace Shockah.FCM.Standard
 				if (newNPC >= 0 && newNPC < Main.npc.Length - 1) list.Add(Main.npc[newNPC]);
 			}
 
-			if (list.Count > 1)
+			if (list.Count > 1 && fakeUpdateNPCs)
 			{
 				Projectile[] cacheProjectiles = Main.projectile;
 				Main.projectile = new Projectile[Main.projectile.Length];
