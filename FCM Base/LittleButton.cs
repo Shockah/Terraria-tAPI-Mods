@@ -34,6 +34,7 @@ namespace Shockah.FCM
 			if (!frame.dragging.HasValue && new Rectangle((int)pos.X, (int)pos.Y, (int)Size.X, (int)Size.Y).Contains(Main.mouseX, Main.mouseY))
 			{
 				Main.localPlayer.mouseInterface = true;
+				SBase.tip = name;
 				if (Main.mouseLeft && Main.mouseLeftRelease)
 				{
 					if (isPressed()) Interface.current.Close();
