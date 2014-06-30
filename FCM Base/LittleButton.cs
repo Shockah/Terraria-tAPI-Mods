@@ -12,10 +12,10 @@ namespace Shockah.FCM
 		public readonly string name;
 		public readonly Texture2D tex;
 		public readonly Func<bool> isPressed;
-		public readonly System.Action onClick;
+		public readonly Action onClick;
 		public readonly float priority;
 
-		public LittleButton(string name, Texture2D tex, Func<bool> isPressed, System.Action onClick, float priority = 0f)
+		public LittleButton(string name, Texture2D tex, Func<bool> isPressed, Action onClick, float priority = 0f)
 		{
 			this.name = name;
 			this.tex = tex;
@@ -30,6 +30,7 @@ namespace Shockah.FCM
 		{
 			Color c = isPressed() ? Color.White : Color.Gray;
 			sb.Draw(tex, pos, c);
+			if (!frame.locked) return;
 
 			if (!frame.dragging.HasValue && new Rectangle((int)pos.X, (int)pos.Y, (int)Size.X, (int)Size.Y).Contains(Main.mouseX, Main.mouseY))
 			{
