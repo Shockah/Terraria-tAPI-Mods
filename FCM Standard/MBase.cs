@@ -22,11 +22,13 @@ namespace Shockah.FCM.Standard
 			InterfaceFCMItems.Reset();
 			InterfaceFCMNPCs.Reset();
 			InterfaceFCMPrefixes.Reset();
+			InterfaceFCMBuffs.Reset();
 			InterfaceFCMMisc.Reset();
 
 			new InterfaceFCMItems();
 			new InterfaceFCMNPCs();
 			new InterfaceFCMPrefixes();
+			new InterfaceFCMBuffs();
 			new InterfaceFCMMisc();
 
 			FrameFCMButtons.EventCreatingButtonList += (list) =>
@@ -34,7 +36,8 @@ namespace Shockah.FCM.Standard
 				list.Add(new LittleButton("Items", textures["Images/ModuleItems.png"], () => Interface.current is InterfaceFCMItems, () => InterfaceFCMItems.me.Open(), 0f));
 				list.Add(new LittleButton("NPCs", textures["Images/ModuleNPCs.png"], () => Interface.current is InterfaceFCMNPCs, () => InterfaceFCMNPCs.me.Open(), -1f));
 				list.Add(new LittleButton("Prefixes", textures["Images/ModulePrefixes.png"], () => Interface.current is InterfaceFCMPrefixes, () => InterfaceFCMPrefixes.me.Open(), -2f));
-				list.Add(new LittleButton("Misc", textures["Images/ModuleMisc.png"], () => Interface.current is InterfaceFCMMisc, () => InterfaceFCMMisc.me.Open(), -3f));
+				list.Add(new LittleButton("Buffs", textures["Images/ModuleBuffs.png"], () => Interface.current is InterfaceFCMBuffs, () => InterfaceFCMBuffs.me.Open(), -3f));
+				list.Add(new LittleButton("Misc", textures["Images/ModuleMisc.png"], () => Interface.current is InterfaceFCMMisc, () => InterfaceFCMMisc.me.Open(), -4f));
 			};
 		}
 
@@ -58,6 +61,12 @@ namespace Shockah.FCM.Standard
 					break;
 				default: break;
 			}
+		}
+
+		public override bool TamperSend(BinBuffer bb, int msgId, int remoteClient, int ignoreClient, string text, int arg1, float arg2, float arg3, float arg4, float arg5)
+		{
+			if (msgId == 23 && InterfaceFCMNPCs.fakeUpdating) return false;
+			return true;
 		}
 	}
 }

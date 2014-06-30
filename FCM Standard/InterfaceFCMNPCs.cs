@@ -20,6 +20,7 @@ namespace Shockah.FCM.Standard
 		public static InterfaceFCMNPCs me = null;
 		public static NPC spawning = null;
 		public static Vector2? spawnPoint = null;
+		public static bool fakeUpdating = false;
 		protected static List<NPC> defs = new List<NPC>();
 
 		public static void Reset()
@@ -37,7 +38,7 @@ namespace Shockah.FCM.Standard
 			);
 		}
 
-		public static void SpawnNPCs(int netID, int x, int y, float radius, int count, int seed, bool fakeUpdateNPCs = false)
+		public static void SpawnNPCs(int netID, int x, int y, float radius, int count, int seed, bool fakeUpdateNPCs = true)
 		{
 			Random rand = new Random(seed);
 
@@ -46,11 +47,24 @@ namespace Shockah.FCM.Standard
 			{
 				Vector2 pos = new Vector2(x, y) + Math2.LdirVector2((float)(rand.NextDouble() * radius), (float)(rand.NextDouble() * 360d));
 				int newNPC = NPC.NewNPC((int)pos.X, (int)pos.Y, netID);
-				if (newNPC >= 0 && newNPC < Main.npc.Length - 1) list.Add(Main.npc[newNPC]);
+				if (newNPC >= 0 && newNPC < Main.npc.Length - 1)
+				{
+					NPC npcInst = Main.npc[newNPC];
+					if (SBase.RequiresAttaching(npcInst))
+					{
+						npcInst.ai[0] = (int)(pos.X / 16);
+						npcInst.ai[1] = (int)(pos.Y / 16);
+						npcInst.netUpdate = true;
+					}
+					if (netID == 70) continue;
+					list.Add(npcInst);
+				}
 			}
 
 			if (list.Count > 1 && fakeUpdateNPCs)
 			{
+				fakeUpdating = true;
+				
 				Projectile[] cacheProjectiles = Main.projectile;
 				Main.projectile = new Projectile[Main.projectile.Length];
 				for (int i = 0; i < Main.projectile.Length; i++) Main.projectile[i] = new Projectile();
@@ -75,6 +89,9 @@ namespace Shockah.FCM.Standard
 				Main.dust = cacheDust;
 				Main.npc = cacheNPCs;
 				Main.projectile = cacheProjectiles;
+
+				fakeUpdating = false;
+				if (Main.netMode == 2) foreach (NPC npc in list) NetMessage.SendData(23, -1, -1, "", npc.whoAmI);
 			}
 		}
 
@@ -189,39 +206,6 @@ namespace Shockah.FCM.Standard
 					{
 						Vector2 pos = spawnPoint.Value + Math2.LdirVector2((float)(rand.NextDouble() * radiusSpawner), (float)(rand.NextDouble() * 360d));
 						sb.DrawCircle(pos - Main.screenPosition, radius, (int)Math.Max(16, radius / 2), Color.White);
-						if (!Main.mouseLeft && Main.netMode != 1)
-						{
-							int newNPC = NPC.NewNPC((int)pos.X, (int)pos.Y, spawning.netID);
-							if (newNPC >= 0 && newNPC < Main.npc.Length - 1) list.Add(Main.npc[newNPC]);
-						}
-					}
-
-					if (list.Count > 1)
-					{
-						Projectile[] cacheProjectiles = Main.projectile;
-						Main.projectile = new Projectile[Main.projectile.Length];
-						for (int i = 0; i < Main.projectile.Length; i++) Main.projectile[i] = new Projectile();
-
-						NPC[] cacheNPCs = Main.npc;
-						Main.npc = new NPC[Main.npc.Length];
-						for (int i = 0; i < Main.npc.Length; i++) Main.npc[i] = new NPC();
-
-						Dust[] cacheDust = Main.dust;
-						Main.dust = new Dust[Main.dust.Length];
-						for (int i = 0; i < Main.dust.Length; i++) Main.dust[i] = new Dust();
-						
-						foreach (NPC npc in list)
-						{
-							Vector2 pos = npc.position;
-							int times = rand.Next(600);
-							for (int i = 0; i < times; i++) npc.UpdateNPC(npc.whoAmI);
-							npc.position = pos;
-							npc.oldPosition = pos;
-						}
-
-						Main.dust = cacheDust;
-						Main.npc = cacheNPCs;
-						Main.projectile = cacheProjectiles;
 					}
 
 					if (!Main.mouseLeft)
@@ -236,6 +220,10 @@ namespace Shockah.FCM.Standard
 							bb.Write((ushort)count);
 							bb.Write(randSeed);
 							NetMessage.SendModData(MBase.me, MBase.MSG_SPAWN_NPCS, -1, -1, bb);
+						}
+						else
+						{
+							SpawnNPCs(spawning.netID, (int)spawnPoint.Value.X, (int)spawnPoint.Value.Y, radiusSpawner, count, randSeed);
 						}
 						spawnPoint = null;
 						spawning = null;
@@ -349,7 +337,7 @@ namespace Shockah.FCM.Standard
 				if (!sorter.allow(def)) continue;
 				foreach (Filter<NPC> filter in filters) if (filter.mode != null) if (filter.mode == !filter.matches(def)) goto L;
 				filtered.Add(def);
-			L: { }
+				L: { }
 			}
 			filtered.Sort(sorter);
 			if (reverseSort) filtered.Reverse();

@@ -7,22 +7,22 @@ using Terraria;
 
 namespace Shockah.FCM.Standard
 {
-	public class PrefixSlot : El
+	public class BuffSlot : El
 	{
 		public Vector2 pos = new Vector2(), size = new Vector2();
 		public float scale = .85f, alpha = 1f;
-		public readonly InterfaceFCMPrefixes gui;
+		public readonly InterfaceFCMBuffs gui;
 		public readonly int index;
-		public Prefix prefix = null;
+		public BuffDef def = null;
 
-		public PrefixSlot(InterfaceFCMPrefixes gui, int index, Vector2 size)
+		public BuffSlot(InterfaceFCMBuffs gui, int index, Vector2 size)
 		{
 			this.gui = gui;
 			this.index = index;
 			this.size = size;
 		}
 
-		public Prefix MyPrefix
+		public BuffDef MyBuffDef
 		{
 			get
 			{
@@ -84,10 +84,7 @@ namespace Shockah.FCM.Standard
 				if (Main.mouseLeft) OnLeftClick(ref Main.mouseLeftRelease);
 				else if (Main.mouseRight) OnRightClick(ref Main.mouseRightRelease);
 
-				if (MyPrefix != null && MyPrefix.type > 0)
-				{
-					
-				}
+				if (MyBuffDef != null) SBase.tip = Main.buffTip[MyBuffDef.type];
 			}
 		}
 		public virtual bool IsMouseOnSlot()
@@ -97,31 +94,28 @@ namespace Shockah.FCM.Standard
 
 		public virtual void OnLeftClick(ref bool release)
 		{
-			if (MyPrefix == null || gui.slotItem.MyItem.IsBlank()) return;
+			if (MyBuffDef == null) return;
 			if (release)
 			{
-				if (gui.slotItem.MyItem.PreReforge())
-				{
-					if (MyPrefix == null || MyPrefix.type == 0)
-					{
-						gui.slotItem.MyItem.prefix = Prefix.None;
-						gui.slotItem.MyItem.ResetStats();
-					}
-					else
-					{
-						gui.slotItem.MyItem.Prefix(MyPrefix.name);
-					}
-					Main.PlaySound(2, -1, -1, 37);
-				}
-				gui.slotItem.MyItem.PostReforge();
+				Main.localPlayer.AddBuff(MyBuffDef.type, (InterfaceFCMBuffs.me.buffM * 60 + InterfaceFCMBuffs.me.buffS) * 60);
+				Main.PlaySound(2, -1, -1, 37);
 			}
 		}
 		public virtual void OnRightClick(ref bool release)
 		{
-
+			if (MyBuffDef == null) return;
+			if (release)
+			{
+				int slot = Main.localPlayer.HasBuff(MyBuffDef.type);
+				if (slot >= 0)
+				{
+					Main.localPlayer.DelBuff(slot);
+					Main.PlaySound(2, -1, -1, 37);
+				}
+			}
 		}
 
-		public Prefix ShouldHold()
+		public BuffDef ShouldHold()
 		{
 			if (index >= 0 && index < gui.filtered.Count) return gui.filtered[index];
 			return null;
@@ -131,17 +125,26 @@ namespace Shockah.FCM.Standard
 		{
 			if (!IsActive()) return;
 			DrawSlotBackground(sb);
-			DrawSlotPrefix(sb);
+			DrawSlotBuff(sb);
 		}
 		public virtual void DrawSlotBackground(SpriteBatch sb)
 		{
-			if (IsPrefixActive()) Drawing.DrawBox(sb, pos.X, pos.Y, size.X, size.Y, Color.White);
+			if (IsBuffActive()) Drawing.DrawBox(sb, pos.X, pos.Y, size.X, size.Y, Color.White);
 			else Drawing.DrawBox(sb, pos.X, pos.Y, size.X, size.Y);
 		}
-		public virtual void DrawSlotPrefix(SpriteBatch sb)
+		public virtual void DrawSlotBuff(SpriteBatch sb)
 		{
-			if (MyPrefix == null) return;
-			SDrawing.StringShadowed(sb, Main.fontMouseText, InterfaceFCMPrefixes.defsNames[InterfaceFCMPrefixes.defs.IndexOf(MyPrefix)], pos + new Vector2(6, 6), Item.GetRarityColor(MyPrefix.tier), .75f);
+			if (MyBuffDef == null) return;
+
+			Texture2D tex = Main.buffTexture[MyBuffDef.type];
+			float iscale = 1f;
+			if (tex.Width > InterfaceFCMBuffs.SLOT_H - 8 || tex.Height > InterfaceFCMBuffs.SLOT_H - 8) iscale = tex.Width > tex.Height ? (InterfaceFCMBuffs.SLOT_H - 8) / tex.Width : (InterfaceFCMBuffs.SLOT_H - 8) / tex.Height;
+
+			sb.Draw(tex, pos + new Vector2(InterfaceFCMBuffs.SLOT_H / 2, InterfaceFCMBuffs.SLOT_H / 2), null, Color.White, 0f, tex.Size() / 2, iscale, SpriteEffects.None, 0f);
+			Vector2 measure = Main.fontMouseText.MeasureString(MyBuffDef.noModName);
+			float tscale = .75f;
+			if (measure.X * .75f > InterfaceFCMBuffs.SLOT_W - InterfaceFCMBuffs.SLOT_H - 6) tscale = (InterfaceFCMBuffs.SLOT_W - InterfaceFCMBuffs.SLOT_H - 6) / measure.X;
+			SDrawing.StringShadowed(sb, Main.fontMouseText, MyBuffDef.noModName, pos + new Vector2(InterfaceFCMBuffs.SLOT_H, InterfaceFCMBuffs.SLOT_H / 2 + 2), Color.White, tscale, new Vector2(0, measure.Y / 2));
 		}
 
 		public bool Draw(SpriteBatch sb, bool draw, bool update)
@@ -151,11 +154,9 @@ namespace Shockah.FCM.Standard
 			return false;
 		}
 
-		public bool IsPrefixActive()
+		public bool IsBuffActive()
 		{
-			if (gui.slotItem.MyItem.IsBlank()) return false;
-			if ((MyPrefix == null || MyPrefix.type == 0) && (gui.slotItem.MyItem.prefix == null || gui.slotItem.MyItem.prefix.type == 0)) return true;
-			return gui.slotItem.MyItem.prefix == MyPrefix;
+			return MyBuffDef != null && Main.localPlayer.HasBuff(MyBuffDef.type) >= 0;
 		}
 	}
 }
