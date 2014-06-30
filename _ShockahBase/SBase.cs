@@ -13,10 +13,12 @@ namespace Shockah.Base
 		public static SEvent<Action<Player, string, int, Item, Item>> EventInventoryChange;
 		public static SEvent<Action<STooltip, Rectangle>> EventPreSTooltipDraw;
 		public static SEvent<Func<STooltip>> EventSTooltipDraw;
-		public static SEvent<Func<NPC, bool>> EventIsBoss;
+		public static SEvent<Func<NPC, bool>> EventIsBoss, EventRequiresAttaching;
 		public static SEvent<Action<NPC, Item>> EventNPCLoot;
 		public static SEvent<Action<Point, Item>> EventTileLoot;
 		public static string tip = null;
+
+		internal static List<int> noTimerBuffs = new List<int>(new int[] {19, 27, 28, 34, 37, 38, 40, 41, 42, 43, 45, 49, 60, 62, 64, 67, 68, 81, 82, 83, 90});
 
 		static SBase()
 		{
@@ -30,6 +32,7 @@ namespace Shockah.Base
 			EventPreSTooltipDraw = new SEvent<Action<STooltip, Rectangle>>();
 			EventSTooltipDraw = new SEvent<Func<STooltip>>();
 			EventIsBoss = new SEvent<Func<NPC, bool>>();
+			EventRequiresAttaching = new SEvent<Func<NPC, bool>>();
 			EventNPCLoot = new SEvent<Action<NPC, Item>>();
 			EventTileLoot = new SEvent<Action<Point, Item>>();
 		}
@@ -57,6 +60,21 @@ namespace Shockah.Base
 			if (npc.type >= 13 && npc.type <= 15) return true; //Eater of Worlds
 			if (npc.type >= 134 && npc.type <= 136) return true; //The Destroyer
 			return false;
+		}
+		public static bool RequiresAttaching(NPC npc)
+		{
+			foreach (Func<NPC, bool> h in EventRequiresAttaching) if (h(npc)) return true;
+			if (npc.type == 43 || npc.type == 56 || npc.type == 101 || npc.type == 175 || npc.type == 259 || npc.type == 260) return true;
+			return false;
+		}
+
+		public static bool BuffHasTimer(int type)
+		{
+			if (Defs.buffNoTimer[type]) return false;
+			if (Main.vanityPet[type] || Main.lightPet[type]) return false;
+			if (noTimerBuffs.Contains(type)) return false;
+			if (!Main.localPlayer.honeyWet && type == 48) return true;
+			return true;
 		}
 
         public static bool PutItem(ref Item item, Item[] items)
