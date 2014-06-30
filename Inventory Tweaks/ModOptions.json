@@ -1,0 +1,16 @@
+﻿{
+	"options": [
+		{
+			"name": "colorRarity",
+			"displayName": "Color by rarity",
+			"type": "Boolean",
+			"default": true
+		},
+		{
+            "name": "bindShiftMove",
+            "displayName": "Shift-move items",
+            "type": "Boolean",
+            "default": true
+        }
+	]
+}

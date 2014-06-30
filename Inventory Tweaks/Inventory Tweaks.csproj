@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ModInfo.json" />
+    <None Include="ModOptions.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MInterface.cs" />
@@ -56,6 +57,10 @@
       <Project>{f3bb15ae-9643-451e-baf4-fd29cd42798b}</Project>
       <Name>_ShockahBase</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\ItemSlotCracked.png" />
+    <Content Include="Images\ItemSlotGlow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

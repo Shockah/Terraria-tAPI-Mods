@@ -1,7 +1,7 @@
 {
     "displayName": "Inventory Tweaks",
     "author": "Shockah",
-    "info": "",
+    "info": "Inventory enhancements:\n* item slots colored by rarity\n* shift-click items to move them from/into chests",
     "internalName": "Shockah.InvTweaks",
 	"modReferences": [
 		"Shockah.Base"
