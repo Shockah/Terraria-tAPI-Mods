@@ -28,6 +28,7 @@ namespace Shockah.FCM.Standard
 			defs.Clear();
 			foreach (KeyValuePair<string, NPC> kvp in Defs.npcs)
 			{
+				if (string.IsNullOrEmpty(kvp.Value.displayName) && string.IsNullOrEmpty(kvp.Value.displayName)) continue;
 				defs.Add(kvp.Value);
 			}
 			defs.Sort((i1, i2) =>
@@ -77,6 +78,9 @@ namespace Shockah.FCM.Standard
 				Main.dust = new Dust[Main.dust.Length];
 				for (int i = 0; i < Main.dust.Length; i++) Main.dust[i] = new Dust();
 
+				int tempLightCount = Lighting.tempLightCount;
+				Lighting.tempLightCount = 2000; //Lighting.maxTempLights (which is private)
+
 				foreach (NPC npc in list)
 				{
 					Vector2 pos = npc.position;
@@ -86,6 +90,7 @@ namespace Shockah.FCM.Standard
 					npc.oldPosition = pos;
 				}
 
+				Lighting.tempLightCount = tempLightCount;
 				Main.dust = cacheDust;
 				Main.npc = cacheNPCs;
 				Main.projectile = cacheProjectiles;
@@ -106,7 +111,11 @@ namespace Shockah.FCM.Standard
 			FOther = new Filter<NPC>("Other", Defs.unloadedItem.GetTexture(), null);
 		protected readonly Sorter<NPC>
 			SID = new Sorter<NPC>("ID", (i1, i2) => { return i1.type.CompareTo(i2.type); }, (npc) => true),
-			SName = new Sorter<NPC>("Name", (i1, i2) => { return i1.displayName.CompareTo(i2.displayName); }, (npc) => true),
+			SName = new Sorter<NPC>("Name", (i1, i2) => {
+				string s1 = string.IsNullOrEmpty(i1.displayName) ? i1.name : i1.displayName;
+				string s2 = string.IsNullOrEmpty(i2.displayName) ? i2.name : i2.displayName;
+				return s1.CompareTo(s2);
+			}, (npc) => true),
 			SLife = new Sorter<NPC>("LIfe", (i1, i2) => { return i1.lifeMax.CompareTo(i2.lifeMax); }, (npc) => true),
 			SDamage = new Sorter<NPC>("Damage", (i1, i2) => { return i1.damage.CompareTo(i2.damage); }, (npc) => npc.damage > 0),
 			SDefense = new Sorter<NPC>("Defense", (i1, i2) => { return i1.defense.CompareTo(i2.defense); }, (npc) => true);

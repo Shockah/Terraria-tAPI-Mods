@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Shockah.Base;
+using TAPI;
 using Terraria;
 
 namespace Shockah.FCM.Standard
@@ -85,7 +87,12 @@ namespace Shockah.FCM.Standard
 				if (MyNPC.type > 0)
 				{
 					bool isBoss = SBase.IsBoss(MyNPC);
-					Shockah.FCM.MBase.tip += new STooltip.Line(string.IsNullOrEmpty(MyNPC.displayName) ? MyNPC.name : MyNPC.displayName, (MyNPC.friendly || MyNPC.damage <= 0 ? "#0f0;Friendly#;" : "#f00;Hostile#;") + (MyNPC.townNPC ? ", #0f0;Town NPC#;" : "") + (isBoss ? ", #f00;Boss#;" : ""), Color.White, Color.White);
+					Shockah.FCM.MBase.tip += new STooltip.Line(
+						string.IsNullOrEmpty(MyNPC.displayName) ? MyNPC.name : MyNPC.displayName,
+						(MyNPC.friendly || MyNPC.damage <= 0 ? "#0f0;Friendly#;" : "#f00;Hostile#;") + (MyNPC.townNPC ? ", #0f0;Town NPC#;" : "") + (isBoss ? ", #f00;Boss#;" : ""),
+						Color.White, Color.White
+					);
+					if (SBase.IsUnsafeToSpawn(MyNPC)) Shockah.FCM.MBase.tip += new STooltip.Line("Unsafe to spawn", Color.Orange);
 
 					Shockah.FCM.MBase.tip += new STooltip.Line("" + MyNPC.lifeMax + " life");
 					if (MyNPC.damage > 0) Shockah.FCM.MBase.tip += new STooltip.Line("" + MyNPC.damage + " damage");
