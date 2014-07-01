@@ -73,16 +73,16 @@ namespace Shockah.Base
 			foreach (Line line in lines)
 			{
 				float h = Math.Max(line.scaleL, line.scaleR) * Main.fontMouseText.LineSpacing;
-				sizeL = Drawing.MeasureColorCodedString(Main.fontMouseText, line.textL) * line.scaleL;
-				sizeR = Drawing.MeasureColorCodedString(Main.fontMouseText, line.textR) * line.scaleR;
+				sizeL = SDrawing.MeasureColorCodedString(Main.fontMouseText, line.textL) * line.scaleL;
+				sizeR = SDrawing.MeasureColorCodedString(Main.fontMouseText, line.textR) * line.scaleR;
 				size.X = Math.Max(size.X, sizeL.X + sizeR.X + (sizeL.X != 0f && sizeR.X != 0f ? sideSeparator : 0f));
 				size.Y += Math.Max(sizeL.Y, sizeR.Y);
 				if (sb != null)
 				{
-					Drawing.DrawColorCodedStringShadow(sb, Main.fontMouseText, line.textL, pos, Color.Black, 0f, default(Vector2), 1f, -1f, 2);
-					Drawing.DrawColorCodedString(sb, Main.fontMouseText, line.textL, pos, line.colorL * (Main.mouseTextColor / 255f));
-					Drawing.DrawColorCodedStringShadow(sb, Main.fontMouseText, line.textR, pos + new Vector2(sizeCalc.X - sizeR.X, 0), Color.Black, 0f, default(Vector2), 1f, -1f, 2);
-					Drawing.DrawColorCodedString(sb, Main.fontMouseText, line.textR, pos + new Vector2(sizeCalc.X - sizeR.X, 0), line.colorR * (Main.mouseTextColor / 255f));
+					SDrawing.DrawColorCodedStringShadow(sb, Main.fontMouseText, line.textL, pos, Color.Black, 0f, default(Vector2), 1f, -1f, 2);
+					SDrawing.DrawColorCodedString(sb, Main.fontMouseText, line.textL, pos, line.colorL * (Main.mouseTextColor / 255f));
+					SDrawing.DrawColorCodedStringShadow(sb, Main.fontMouseText, line.textR, pos + new Vector2(sizeCalc.X - sizeR.X, 0), Color.Black, 0f, default(Vector2), 1f, -1f, 2);
+					SDrawing.DrawColorCodedString(sb, Main.fontMouseText, line.textR, pos + new Vector2(sizeCalc.X - sizeR.X, 0), line.colorR * (Main.mouseTextColor / 255f));
 				}
 				pos.Y += Math.Max(sizeL.Y, sizeR.Y);
 			}

@@ -13,7 +13,7 @@ namespace Shockah.Base
 		public static SEvent<Action<Player, string, int, Item, Item>> EventInventoryChange;
 		public static SEvent<Action<STooltip, Rectangle>> EventPreSTooltipDraw;
 		public static SEvent<Func<STooltip>> EventSTooltipDraw;
-		public static SEvent<Func<NPC, bool>> EventIsBoss, EventRequiresAttaching;
+		public static SEvent<Func<NPC, bool>> EventIsBoss, EventRequiresAttaching, EventUnsafeSpawn;
 		public static SEvent<Action<NPC, Item>> EventNPCLoot;
 		public static SEvent<Action<Point, Item>> EventTileLoot;
 		public static string tip = null;
@@ -33,6 +33,7 @@ namespace Shockah.Base
 			EventSTooltipDraw = new SEvent<Func<STooltip>>();
 			EventIsBoss = new SEvent<Func<NPC, bool>>();
 			EventRequiresAttaching = new SEvent<Func<NPC, bool>>();
+			EventUnsafeSpawn = new SEvent<Func<NPC, bool>>();
 			EventNPCLoot = new SEvent<Action<NPC, Item>>();
 			EventTileLoot = new SEvent<Action<Point, Item>>();
 		}
@@ -65,6 +66,12 @@ namespace Shockah.Base
 		{
 			foreach (Func<NPC, bool> h in EventRequiresAttaching) if (h(npc)) return true;
 			if (npc.type == 43 || npc.type == 56 || npc.type == 101 || npc.type == 175 || npc.type == 259 || npc.type == 260) return true;
+			return false;
+		}
+		public static bool IsUnsafeToSpawn(NPC npc)
+		{
+			foreach (Func<NPC, bool> h in EventUnsafeSpawn) if (h(npc)) return true;
+			if (npc.type == 263) return true;
 			return false;
 		}
 
