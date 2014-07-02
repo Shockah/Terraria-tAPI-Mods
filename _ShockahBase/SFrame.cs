@@ -186,7 +186,7 @@ namespace Shockah.Base
 		public readonly ModBase modBase;
 		public readonly string tag;
 		public Vector2 pos, size;
-		public bool locked = false;
+		public bool locked = true;
 		public Vector2? dragging = null;
 		public Vector2? resizingMouse = null;
 		public Anchor? resizing = null;
