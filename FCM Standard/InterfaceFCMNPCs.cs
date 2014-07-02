@@ -22,7 +22,6 @@ namespace Shockah.FCM.Standard
 		public static Vector2? spawnPoint = null;
 		public static bool fakeUpdating = false;
 		protected static List<NPC> defs = new List<NPC>();
-		internal static int[] triedLoading = new int[Main.maxNPCTypes + 1];
 
 		public static void Reset()
 		{
@@ -38,7 +37,6 @@ namespace Shockah.FCM.Standard
 					return i1.type.CompareTo(i2.type);
 				}
 			);
-			for (int i = 0; i < triedLoading.Length; i++) triedLoading[i] = 0;
 		}
 
 		public static void SpawnNPCs(int netID, int x, int y, float radius, int count, int seed, bool fakeUpdateNPCs = true)
