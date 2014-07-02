@@ -92,6 +92,16 @@ namespace Shockah.FCM.Standard
 			Refresh(true);
 		}
 
+		public override void OnClose()
+		{
+			base.OnClose();
+			if (!slotItem.MyItem.IsBlank())
+			{
+				Main.localPlayer.GetItem(Main.myPlayer, slotItem.MyItem.DeepClone());
+				slotItem.MyItem.SetDefaults(0);
+			}
+		}
+
 		public override void Draw(InterfaceLayer layer, SpriteBatch sb)
 		{
 			bool blocked = false;
