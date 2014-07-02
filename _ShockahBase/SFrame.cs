@@ -156,6 +156,7 @@ namespace Shockah.Base
 			if (!Main.hideUI && Main.playerInventory && frames.Count != 0 && Math2.InRegion(Main.mouse, new Vector2(0, Main.screenHeight - 16), new Vector2(16, Main.screenHeight)))
 			{
 				Main.localPlayer.mouseInterface = true;
+				SBase.tip = "Left click to (un)lock all frames\nRight click to switch anchor setting mode";
 				if (Main.mouseLeft && Main.mouseLeftRelease)
 				{
 					bool allLocked = true;
@@ -279,6 +280,7 @@ namespace Shockah.Base
 						if (Math2.InRegion(Main.mouse, FrameLockPos() - new Vector2(8, 8), FrameLockPos() + new Vector2(8, 8)))
 						{
 							Main.localPlayer.mouseInterface = true;
+							SBase.tip = "Left click to lock\nRight click to switch " + (parentAnchorMode ? "outer" : "inner") + " anchor";
 							if (Main.mouseLeft && Main.mouseLeftRelease)
 							{
 								locked = true;
@@ -353,6 +355,7 @@ namespace Shockah.Base
 									if (resizable.AnchorResizable(anchor, _anchor) && _corners && Math2.InRegion(Main.mouse, _p - new Vector2(8, 8), 16, 16))
 									{
 										Main.localPlayer.mouseInterface = true;
+										SBase.tip = "Drag to resize";
 										if (Main.mouseLeft)
 										{
 											resizing = _anchor;
