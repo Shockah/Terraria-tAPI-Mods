@@ -342,7 +342,11 @@ namespace Shockah.FCM.Standard
 			filtered.Clear();
 			foreach (NPC def in defs)
 			{
-				if ((typing != null || filterText != null) && def.displayName.ToLower().IndexOf((typing == null ? filterText : typing).ToLower()) == -1) continue;
+				if (typing != null || filterText != null)
+				{
+					string tocheck = string.IsNullOrEmpty(def.displayName) ? def.name : def.displayName;
+					if (tocheck.ToLower().IndexOf((typing == null ? filterText : typing).ToLower()) == -1) continue;
+				}
 				if (!sorter.allow(def)) continue;
 				foreach (Filter<NPC> filter in filters) if (filter.mode != null) if (filter.mode == !filter.matches(def)) goto L;
 				filtered.Add(def);
