@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Shockah.Base;
+using System.Threading;
 using TAPI;
 using Terraria;
 
@@ -136,8 +137,17 @@ namespace Shockah.FCM.Standard
 			if (MyNPC.type > 0)
 			{
 				float iscale = 1f;
-				if (MyNPC.type <= Main.maxNPCTypes) Main.LoadNPC(MyNPC.type);
-				Texture2D texNPC = Main.npcTexture[MyNPC.type];
+				if (MyNPC.type <= Main.maxNPCTypes && InterfaceFCMNPCs.triedLoading[MyNPC.type] == 0)
+				{
+					InterfaceFCMNPCs.triedLoading[MyNPC.type] = 1;
+					new Thread(new ThreadStart(() => {
+						Main.LoadNPC(MyNPC.type);
+						InterfaceFCMNPCs.triedLoading[MyNPC.type] = 2;
+					})).Start();
+				}
+				Texture2D texNPC = null;
+				if (MyNPC.type <= Main.maxNPCTypes) texNPC = InterfaceFCMNPCs.triedLoading[MyNPC.type] == 2 ? Main.npcTexture[MyNPC.type] : Main.confuseTexture;
+				else texNPC = Main.npcTexture[MyNPC.type];
 				Rectangle rect = new Rectangle(0, 0, texNPC.Width, texNPC.Height / Main.npcFrameCount[MyNPC.type]);
 				if (rect.Width > 40 || rect.Height > 40) iscale = rect.Width > rect.Height ? 40f / rect.Width : 40f / rect.Height;
 				iscale *= scale;
