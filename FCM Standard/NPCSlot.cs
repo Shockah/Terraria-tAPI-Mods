@@ -146,17 +146,9 @@ namespace Shockah.FCM.Standard
 					})).Start();
 				}
 				Texture2D texNPC = null;
-				Rectangle rect = new Rectangle();
-				if (MyNPC.type <= Main.maxNPCTypes)
-				{
-					texNPC = InterfaceFCMNPCs.triedLoading[MyNPC.type] == 2 ? Main.npcTexture[MyNPC.type] : Main.confuseTexture;
-					rect = new Rectangle(0, 0, texNPC.Width, InterfaceFCMNPCs.triedLoading[MyNPC.type] == 2 ? texNPC.Height / Main.npcFrameCount[MyNPC.type] : texNPC.Height);
-				}
-				else
-				{
-					texNPC = Main.npcTexture[MyNPC.type];
-					rect = new Rectangle(0, 0, texNPC.Width, texNPC.Height / Main.npcFrameCount[MyNPC.type]);
-				}
+				if (MyNPC.type <= Main.maxNPCTypes) texNPC = InterfaceFCMNPCs.triedLoading[MyNPC.type] == 2 ? Main.npcTexture[MyNPC.type] : Main.confuseTexture;
+				else texNPC = Main.npcTexture[MyNPC.type];
+				Rectangle rect = new Rectangle(0, 0, texNPC.Width, texNPC.Height / Main.npcFrameCount[MyNPC.type]);
 				if (rect.Width > 40 || rect.Height > 40) iscale = rect.Width > rect.Height ? 40f / rect.Width : 40f / rect.Height;
 				iscale *= scale;
 
