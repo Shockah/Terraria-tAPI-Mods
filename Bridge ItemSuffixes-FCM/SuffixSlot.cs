@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Shockah.Base;
 using Shockah.FCM;
 using System;
+using System.Text;
 using TAPI;
 using Terraria;
 
@@ -84,6 +85,45 @@ namespace Shockah.ItemSuffixes
 				Main.localPlayer.mouseInterface = true;
 				if (Main.mouseLeft) OnLeftClick(ref Main.mouseLeftRelease);
 				else if (Main.mouseRight) OnRightClick(ref Main.mouseRightRelease);
+
+				if (!gui.slotItem.MyItem.IsBlank())
+				{
+					BinBuffer bb = new BinBuffer();
+					gui.slotItem.MyItem.Write(bb);
+					bb.Pos = 0;
+					Item tempItem = new Item();
+					tempItem.Read(bb);
+
+					MItem mitem = tempItem.GetSubClass<MItem>();
+					if (mitem != null)
+					{
+						if (mitem.resetDamage != 0)
+						{
+							tempItem.damage = mitem.resetDamage;
+							tempItem.crit = mitem.resetCrit;
+						}
+						mitem.resetDamage = tempItem.damage;
+						mitem.resetCrit = tempItem.crit;
+						mitem.suffix = MySuffix;
+					}
+
+					Main.hoverItemName = tempItem.displayName;
+					if (tempItem.stack > 1) Main.hoverItemName += " (" + tempItem.stack + ")";
+					Main.toolTip = tempItem;
+				}
+				else if (MySuffix != null)
+				{
+					Item tempItem = new Item();
+					tempItem.SetDefaults("Vanilla:Wood");
+					MySuffix.AddTooltips(tempItem);
+					StringBuilder sb = new StringBuilder();
+					foreach (string tip in tempItem.toolTips)
+					{
+						if (sb.Length > 0) sb.Append("\n");
+						sb.Append(tip);
+					}
+					SBase.tip = sb.ToString();
+				}
 			}
 		}
 		public virtual bool IsMouseOnSlot()
