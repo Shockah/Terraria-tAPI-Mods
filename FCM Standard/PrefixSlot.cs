@@ -84,9 +84,31 @@ namespace Shockah.FCM.Standard
 				if (Main.mouseLeft) OnLeftClick(ref Main.mouseLeftRelease);
 				else if (Main.mouseRight) OnRightClick(ref Main.mouseRightRelease);
 
-				if (MyPrefix != null && MyPrefix.type > 0)
+				if (!gui.slotItem.MyItem.IsBlank())
 				{
-					
+					BinBuffer bb = new BinBuffer();
+					gui.slotItem.MyItem.Write(bb);
+					bb.Pos = 0;
+					Item tempItem = new Item();
+					tempItem.Read(bb);
+
+					if (tempItem.PreReforge())
+					{
+						if (MyPrefix != null && MyPrefix.type > 0)
+						{
+							tempItem.Prefix(MyPrefix.name);
+						}
+						else
+						{
+							tempItem.prefix = Prefix.None;
+							tempItem.ResetStats();
+						}
+					}
+					tempItem.PostReforge();
+
+					Main.hoverItemName = tempItem.displayName;
+					if (tempItem.stack > 1) Main.hoverItemName += " (" + tempItem.stack + ")";
+					Main.toolTip = tempItem;
 				}
 			}
 		}
