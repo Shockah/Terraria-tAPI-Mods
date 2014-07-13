@@ -53,6 +53,7 @@
     <None Include="ModInfo.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions.cs" />
     <Compile Include="IlPopupMenus.cs" />
     <Compile Include="ILFrames.cs" />
     <Compile Include="Math2.cs" />

@@ -55,7 +55,7 @@ namespace Shockah.Base
 
 		public virtual void Draw(SpriteBatch sb, Vector2 pos)
 		{
-			if (!Main.toolTip.item.IsBlank() || !string.IsNullOrEmpty(Main.buffString) || !string.IsNullOrEmpty(Main.drawingTooltip)) return;
+			//if (!Main.toolTip.item.IsBlank() || !string.IsNullOrEmpty(Main.buffString) || !string.IsNullOrEmpty(Main.drawingTooltip)) return;
 			if (lines.Count == 0) return;
 			Vector2 sizeCalc = ActualDraw(null, default(Vector2));
 			if (pos.X + sizeCalc.X > Main.screenWidth) pos.X = Main.screenWidth - sizeCalc.X;

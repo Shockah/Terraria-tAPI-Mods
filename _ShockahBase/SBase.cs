@@ -132,5 +132,15 @@ namespace Shockah.Base
 			if (obj is JsonData) return (JsonData)obj;
 			return new JsonData(obj);
 		}
+
+		public static BinBuffer CopyFurther(BinBuffer source)
+		{
+			int pos = source.Pos;
+			BinBuffer bb = new BinBuffer();
+			bb.Write(source);
+			bb.Pos = 0;
+			source.Pos = pos;
+			return bb;
+		}
 	}
 }

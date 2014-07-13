@@ -39,6 +39,11 @@ namespace Shockah.Base
 			sb.DrawString(font, text, pos, c, 0f, origin, scale, SpriteEffects.None, 0f);
 		}
 
+		public static string ToColorCode(Color c)
+		{
+			return "#" + c.ToHex(false).ToLower() + ";";
+		}
+
 		public static Vector2 DrawColorCodedString(SpriteBatch sb, SpriteFont font, string text, Vector2 pos, float maxW = -1f)
 		{
 			return DrawColorCodedString(sb, font, text, pos, Color.White, 0f, default(Vector2), 1f, maxW);

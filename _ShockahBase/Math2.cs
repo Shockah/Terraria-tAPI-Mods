@@ -5,6 +5,50 @@ namespace Shockah.Base
 {
 	public static class Math2
 	{
+		public static int Min(params int[] nums)
+		{
+			if (nums.Length == 0) throw new ArgumentException();
+			int min = nums[0];
+			for (int i = 1; i < nums.Length; i++) if (nums[i] < min) min = nums[i];
+			return min;
+		}
+		public static float Min(params float[] nums)
+		{
+			if (nums.Length == 0) throw new ArgumentException();
+			float min = nums[0];
+			for (int i = 1; i < nums.Length; i++) if (nums[i] < min) min = nums[i];
+			return min;
+		}
+		public static double Min(params double[] nums)
+		{
+			if (nums.Length == 0) throw new ArgumentException();
+			double min = nums[0];
+			for (int i = 1; i < nums.Length; i++) if (nums[i] < min) min = nums[i];
+			return min;
+		}
+
+		public static int Max(params int[] nums)
+		{
+			if (nums.Length == 0) throw new ArgumentException();
+			int max = nums[0];
+			for (int i = 1; i < nums.Length; i++) if (nums[i] > max) max = nums[i];
+			return max;
+		}
+		public static float Max(params float[] nums)
+		{
+			if (nums.Length == 0) throw new ArgumentException();
+			float max = nums[0];
+			for (int i = 1; i < nums.Length; i++) if (nums[i] > max) max = nums[i];
+			return max;
+		}
+		public static double Max(params double[] nums)
+		{
+			if (nums.Length == 0) throw new ArgumentException();
+			double max = nums[0];
+			for (int i = 1; i < nums.Length; i++) if (nums[i] > max) max = nums[i];
+			return max;
+		}
+		
 		public static float LdirX(float dist, float angle)
 		{
 			return (float)(-Math.Cos(ToRadians(angle + 180f)) * dist);
