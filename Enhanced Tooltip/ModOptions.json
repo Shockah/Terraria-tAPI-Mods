@@ -1,0 +1,172 @@
+﻿{
+	"options": [
+		{
+			"name": "itemNameStackFormat",
+			"displayName": "Item: Amount format",
+			"type": "List",
+			"list": [
+				"(100)",
+				"(100/999)",
+				"x100",
+				"x100/999"
+			],
+			"default": 2
+		},
+		{
+			"name": "itemNameStackColor",
+			"displayName": "Item: Amount coloring",
+			"type": "List",
+			"list": [
+				"White",
+				"Rarity",
+				"Stack"
+			],
+			"default": 0
+		},
+
+		{
+			"name": "itemDamageColor",
+			"displayName": "Item: Damage coloring",
+			"type": "List",
+			"list": [
+				"White",
+				"Viability"
+			],
+			"default": 1
+		},
+		{
+			"name": "itemCritColor",
+			"displayName": "Item: Crit chance coloring",
+			"type": "List",
+			"list": [
+				"White",
+				"Chance"
+			],
+			"default": 1
+		},
+		{
+			"name": "itemSpeedColor",
+			"displayName": "Item: Speed coloring",
+			"type": "List",
+			"list": [
+				"White",
+				"Speed"
+			],
+			"default": 1
+		},
+		{
+			"name": "itemSpeedDetails",
+			"displayName": "Item: Speed details",
+			"type": "Boolean",
+			"default": false
+		},
+		{
+			"name": "itemKnockbackColor",
+			"displayName": "Item: Knockback coloring",
+			"type": "List",
+			"list": [
+				"White",
+				"Knockback"
+			],
+			"default": 1
+		},
+		{
+			"name": "itemManaCostColor",
+			"displayName": "Item: Mana cost coloring",
+			"type": "List",
+			"list": [
+				"White",
+				"Blue",
+				"Mana cost",
+				"Max mana"
+			],
+			"default": 2
+		},
+		{
+			"name": "itemManaCostTypeColor",
+			"displayName": "Item: Mana cost coloring",
+			"type": "Boolean",
+			"default": true
+		},
+
+		{
+			"name": "itemWandItemColor",
+			"displayName": "Item: Color wand consumed item",
+			"type": "Boolean",
+			"default": true
+		},
+
+		{
+			"name": "itemDefenseColor",
+			"displayName": "Item: Defense coloring",
+			"type": "List",
+			"list": [
+				"White",
+				"Green/Red"
+			],
+			"default": 1
+		},
+
+		{
+			"name": "itemToolPowerColor",
+			"displayName": "Item: Tool power coloring",
+			"type": "List",
+			"list": [
+				"White",
+				"Green",
+				"Power"
+			],
+			"default": 2
+		},
+		{
+			"name": "itemToolRangeColor",
+			"displayName": "Item: Tool range coloring",
+			"type": "List",
+			"list": [
+				"White",
+				"Green/Red"
+			],
+			"default": 1
+		},
+
+		{
+			"name": "itemRestoreColor",
+			"displayName": "Item: Restore effect coloring",
+			"type": "Boolean",
+			"default": true
+		},
+		{
+			"name": "itemRestoreTypeColor",
+			"displayName": "Item: Restore type coloring",
+			"type": "Boolean",
+			"default": true
+		},
+		{
+			"name": "itemBuffDurationColor",
+			"displayName": "Item: Buff duration coloring",
+			"type": "List",
+			"list": [
+				"White",
+				"Green"
+			],
+			"default": 1
+		},
+
+		{
+			"name": "itemAlwaysDisplayPrice",
+			"displayName": "Item: Always display price",
+			"type": "Boolean",
+			"default": true
+		},
+		{
+			"name": "itemPriceStyle",
+			"displayName": "Item: Price style",
+			"type": "List",
+			"list": [
+				"One color",
+				"Multiple colors"
+			],
+			"default": 1
+		}
+	]
+}
