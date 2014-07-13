@@ -214,6 +214,54 @@ namespace Shockah.FCM.Standard
 			});
 
 
+			drawButton(new Vector2(POS_X + 400, POS_Y + 44), Main.localPlayer.GetSubClass<MPlayer>().cheatGod,
+			(value) =>
+			{
+				MPlayer m = Main.localPlayer.GetSubClass<MPlayer>();
+				m.cheatGod = value;
+				if (Main.netMode == 1)
+				{
+					BinBuffer bb = new BinBuffer();
+					bb.WriteX((byte)Main.myPlayer, (byte)1, (byte)Main.myPlayer, new BitsByte(m.cheatGod, m.cheatNoclip));
+					bb.Pos = 0;
+					NetMessage.SendModData(MBase.me, MBase.MSG_CHEAT, -1, -1, bb);
+				}
+			},
+			(value) => "Godmode: " + (value ? "On" : "Off"),
+			(pos, value) =>
+			{
+				Texture2D tex = Main.itemTexture[963];
+				float tscale = 1f;
+				if (tscale * tex.Width > 24f) tscale = 24f / tex.Width;
+				if (tscale * tex.Height > 24f) tscale = 24f / tex.Height;
+				sb.Draw(tex, pos + new Vector2(16, 16), null, value ? Color.Red : Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+			});
+
+			drawButton(new Vector2(POS_X + 400, POS_Y + 84), Main.localPlayer.GetSubClass<MPlayer>().cheatNoclip,
+			(value) =>
+			{
+				MPlayer m = Main.localPlayer.GetSubClass<MPlayer>();
+				m.cheatNoclip = value;
+				m.oldPos = Main.localPlayer.position;
+				if (Main.netMode == 1)
+				{
+					BinBuffer bb = new BinBuffer();
+					bb.WriteX((byte)Main.myPlayer, (byte)1, (byte)Main.myPlayer, new BitsByte(m.cheatGod, m.cheatNoclip));
+					bb.Pos = 0;
+					NetMessage.SendModData(MBase.me, MBase.MSG_CHEAT, -1, -1, bb);
+				}
+			},
+			(value) => "Noclip: " + (value ? "On" : "Off"),
+			(pos, value) =>
+			{
+				Texture2D tex = Main.ghostTexture;
+				float tscale = 1f;
+				if (tscale * tex.Width > 24f) tscale = 24f / tex.Width;
+				if (tscale * (tex.Height / 4) > 24f) tscale = 24f / (tex.Height / 4);
+				sb.Draw(tex, pos + new Vector2(16, 16), new Rectangle?(new Rectangle(0, 0, tex.Width, tex.Height / 4)), value ? Color.Red : Color.White, 0f, new Vector2(tex.Width / 2, tex.Height / 4 / 2), tscale, SpriteEffects.None, 0f);
+			});
+
+
 			drawSliderInt("PlayerLifeMax", "Max life", new Vector2(POS_X, POS_Y + 100), MBase.me.textures["Images/LifeMaxSlider.png"], Main.localPlayer.statLifeMax / 5, 1, 100,
 			(value) => { return "" + (value * 5); },
 			(value) => { Main.localPlayer.statLifeMax = value * 5; });

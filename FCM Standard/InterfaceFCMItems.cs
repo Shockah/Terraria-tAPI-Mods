@@ -18,6 +18,7 @@ namespace Shockah.FCM.Standard
 
 		public static InterfaceFCMItems me = null;
 		protected static List<Item> defs = new List<Item>();
+		public static bool displayIds = false;
 
 		public static void Reset()
 		{

@@ -70,6 +70,9 @@
     <Compile Include="ItemSlotPrefixFCM.cs" />
     <Compile Include="MBase.cs" />
     <Compile Include="MInterface.cs" />
+    <Compile Include="MItem.cs" />
+    <Compile Include="MPlayer.cs" />
+    <Compile Include="MWorld.cs" />
     <Compile Include="NPCSlot.cs" />
     <Compile Include="BuffSlot.cs" />
     <Compile Include="PrefixSlot.cs" />

@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Shockah.Base;
 using TAPI;
 using Terraria;
@@ -8,7 +9,8 @@ namespace Shockah.FCM.Standard
 	public class MBase : ModBase
 	{
 		public const int
-			MSG_SPAWN_NPCS = 1;
+			MSG_SPAWN_NPCS = 1,
+			MSG_CHEAT = 2;
 		
 		public static ModBase me { get; private set; }
 		
@@ -58,6 +60,26 @@ namespace Shockah.FCM.Standard
 				case MSG_SPAWN_NPCS:
 					if (Main.netMode != 2) return;
 					InterfaceFCMNPCs.SpawnNPCs(bb.ReadShort(), bb.ReadInt(), bb.ReadInt(), bb.ReadFloat(), bb.ReadUShort(), bb.ReadInt());
+					break;
+				case MSG_CHEAT:
+					int ignore = 0;
+					BinBuffer copybb = null;
+					if (Main.netMode == 2)
+					{
+						ignore = bb.ReadByte();
+						copybb = SBase.CopyFurther(bb);
+					}
+					
+					int count = bb.ReadByte();
+					while (count-- > 0)
+					{
+						int pid = bb.ReadByte();
+						BitsByte bbyte = bb.ReadByte();
+						MPlayer m = Main.player[pid].GetSubClass<MPlayer>();
+						if (m != null) bbyte.Retrieve(ref m.cheatGod, ref m.cheatNoclip);
+					}
+
+					if (Main.netMode == 2) NetMessage.SendModData(this, MSG_CHEAT, -1, ignore, copybb);
 					break;
 				default: break;
 			}

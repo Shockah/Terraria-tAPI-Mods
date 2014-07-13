@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Shockah.Base;
 using System;
 using TAPI;
@@ -84,7 +85,11 @@ namespace Shockah.FCM.Standard
 				if (Main.mouseLeft) OnLeftClick(ref Main.mouseLeftRelease);
 				else if (Main.mouseRight) OnRightClick(ref Main.mouseRightRelease);
 
-				if (MyBuffDef != null) SBase.tip = Main.buffTip[MyBuffDef.type];
+				if (MyBuffDef != null)
+				{
+					Shockah.FCM.MBase.tip += new STooltip.Line((Main.keyState.IsKeyDown(Keys.LeftControl) ? "[" + MyBuffDef.type + "] " : "") + MyBuffDef.noModName, Color.White);
+					Shockah.FCM.MBase.tip += new STooltip.Line(Main.buffTip[MyBuffDef.type], Color.White);
+				}
 			}
 		}
 		public virtual bool IsMouseOnSlot()

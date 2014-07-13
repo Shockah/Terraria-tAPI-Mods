@@ -15,6 +15,12 @@ namespace Shockah.FCM.Standard
 			this.gui = gui;
 		}
 
+		public override void Update()
+		{
+			if (!MyItem.IsBlank() && IsMouseOnItemSlot() && Main.keyState.IsKeyDown(Keys.LeftControl)) InterfaceFCMItems.displayIds = true;
+			base.Update();
+		}
+
 		public override bool AllowsItem(Item item)
 		{
 			return item.IsBlank() || (!this.item.IsBlank() && item.IsTheSameAs(this.item) || (this.item.IsBlank() && ShouldHold() != null && item.IsTheSameAs(ShouldHold())));

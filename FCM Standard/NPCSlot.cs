@@ -88,7 +88,7 @@ namespace Shockah.FCM.Standard
 				{
 					bool isBoss = SBase.IsBoss(MyNPC);
 					Shockah.FCM.MBase.tip += new STooltip.Line(
-						string.IsNullOrEmpty(MyNPC.displayName) ? MyNPC.name : MyNPC.displayName,
+						(Main.keyState.IsKeyDown(Keys.LeftControl) ? "[" + MyNPC.type + (MyNPC.netID != MyNPC.type ? "/" + MyNPC.netID : "") + "] " : "") + (string.IsNullOrEmpty(MyNPC.displayName) ? MyNPC.name : MyNPC.displayName),
 						(MyNPC.friendly || MyNPC.damage <= 0 ? "#0f0;Friendly#;" : "#f00;Hostile#;") + (MyNPC.townNPC ? ", #0f0;Town NPC#;" : "") + (isBoss ? ", #f00;Boss#;" : ""),
 						Color.White, Color.White
 					);
