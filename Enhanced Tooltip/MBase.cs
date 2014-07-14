@@ -52,6 +52,7 @@ namespace Shockah.ETooltip
 			if (API.main.mouseNPC > -1) return;
 			if (cursorText == null) return;
 
+			tip.scale = (float)options["ttipScale"].Value;
 			tip.alpha = null;
 			if ((bool)options["ttipBackground"].Value) tip.alpha = .785f;
 
@@ -413,9 +414,10 @@ namespace Shockah.ETooltip
 
 				if (item.toolTips != null)
 				{
+					float tipScale = (float)options["itemTipScale"].Value;
 					List<string> effective = new List<string>(item.toolTips);
 					if (item.allSubClasses.Length > 0) item.ModifyToolTip(player, effective);
-					foreach (string tt in effective) tip += new STooltip.Line(tt);
+					foreach (string tt in effective) tip += new STooltip.Line(tt, Color.White, tipScale);
 				}
 
 				if (item.buffTime > 0)
@@ -429,7 +431,7 @@ namespace Shockah.ETooltip
 					switch (style)
 					{
 						case "Vanilla": tip += new STooltip.Line(SDrawing.ToColorCode(buffDurationColor) + (item.buffTime > 60 ? item.buffTime / (60 * 60) : item.buffTime / 60) + " " + (item.buffTime > 60 * 60 ? "minute" : "second") + "#; duration"); break;
-						case "2 columns": tip += new STooltip.Line("Duration:", SDrawing.ToColorCode(buffDurationColor) + (item.buffTime > 60 ? item.buffTime / (60 * 60) : item.buffTime / 60) + " " + (item.buffTime > 60 * 60 ? "minutes" : "seconds")); break;
+						case "2 columns": tip += new STooltip.Line("Duration:", SDrawing.ToColorCode(buffDurationColor) + (item.buffTime > 60 ? item.buffTime / (60 * 60) : item.buffTime / 60) + " " + (item.buffTime > 60 * 60 ? "minute" : "second") + (item.buffTime >= (item.buffTime > 60 * 60 ? 2 * 60 * 60 : 2 * 60) ? "s" : "")); break;
 						default: break;
 					}
 				}

@@ -6,6 +6,14 @@
 			"type": "Boolean",
 			"default": true
 		},
+		{
+			"name": "ttipScale",
+			"displayName": "Main scale",
+			"type": "Float",
+			"minimum": 0.5,
+			"maximum": 1.5,
+			"default": 0.8
+		},
 		
 		{
 			"name": "itemStyle",
@@ -40,6 +48,15 @@
 				"Stack"
 			],
 			"default": 0
+		},
+
+		{
+			"name": "itemTipScale",
+			"displayName": "Item: Tip lines scale",
+			"type": "Float",
+			"minimum": 0.5,
+			"maximum": 1.5,
+			"default": 0.8
 		},
 
 		{
