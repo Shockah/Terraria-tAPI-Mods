@@ -52,11 +52,15 @@ namespace Shockah.ETooltip
 			if (API.main.mouseNPC > -1) return;
 			if (cursorText == null) return;
 
+			tip.alpha = null;
+			if ((bool)options["ttipBackground"].Value) tip.alpha = .785f;
+
 			Player player = Main.localPlayer;
 			Item item = Main.toolTip.item;
 			if (!item.IsBlank())
 			{
 				StringBuilder sb = null;
+				string style = (string)options["itemStyle"].Value;
 				
 				string stackText = null;
 				switch ((string)options["itemNameStackFormat"].Value)
@@ -74,7 +78,13 @@ namespace Shockah.ETooltip
 					case "Stack": float f = 1f * item.stack / item.maxStack; stackColor = DoubleLerp(Color.Red, Color.Yellow, Color.Lime, f); break;
 					default: break;
 				}
-				tip += new STooltip.Line(SDrawing.ToColorCode(item.GetRarityColor()) + item.AffixName() + (stackText == null ? "" : " " + SDrawing.ToColorCode(stackColor) + stackText));
+				switch (style)
+				{
+					case "Vanilla": tip += new STooltip.Line(SDrawing.ToColorCode(item.GetRarityColor()) + item.AffixName() + (stackText == null ? "" : " " + SDrawing.ToColorCode(stackColor) + stackText)); break;
+					case "2 columns": tip += new STooltip.Line(SDrawing.ToColorCode(item.GetRarityColor()) + item.AffixName(), stackText == null ? "" : SDrawing.ToColorCode(stackColor) + stackText); break;
+					default: break;
+				}
+				
 
 				if (item.damage > 0 && !item.notAmmo)
 				{
@@ -137,8 +147,12 @@ namespace Shockah.ETooltip
 							break;
 						default: break;
 					}
-
-					tip += new STooltip.Line(SDrawing.ToColorCode(damageColor) + (int)itemDamage + "#; " + sb + "damage");
+					switch (style)
+					{
+						case "Vanilla": tip += new STooltip.Line(SDrawing.ToColorCode(damageColor) + (int)itemDamage + "#; " + sb + "damage"); break;
+						case "2 columns": string s = sb.ToString(); if (!string.IsNullOrEmpty(s)) s = ("" + s[0]).ToUpper() + s.Substring(1); s = string.IsNullOrEmpty(s) ? "Damage" : s + "damage"; tip += new STooltip.Line(s + ":", SDrawing.ToColorCode(damageColor) + (int)itemDamage); break;
+						default: break;
+					}
 
 					if (!item.summon)
 					{
@@ -155,7 +169,12 @@ namespace Shockah.ETooltip
 								case "Chance": float f = itemCrit / 100f; critColor = DoubleLerp(Color.Red, Color.Yellow, Color.Lime, f); break;
 								default: break;
 							}
-							tip += new STooltip.Line(SDrawing.ToColorCode(critColor) + (int)itemCrit + "%#; critical strike chance");
+							switch (style)
+							{
+								case "Vanilla": tip += new STooltip.Line(SDrawing.ToColorCode(critColor) + (int)itemCrit + "%#; critical strike chance"); break;
+								case "2 columns": tip += new STooltip.Line("Critical strike chance:", SDrawing.ToColorCode(critColor) + (int)itemCrit + "%"); break;
+								default: break;
+							}
 						}
 					}
 
@@ -176,7 +195,12 @@ namespace Shockah.ETooltip
 							case "Speed": float f = 1f * Math.Min(item.useAnimation, 55) / 55; speedColor = DoubleLerp(Color.Lime, Color.Yellow, Color.Red, f); break;
 							default: break;
 						}
-						tip += new STooltip.Line(SDrawing.ToColorCode(speedColor) + speedText + ((bool)options["itemSpeedDetails"].Value ? " (" + item.useAnimation + "/60s)" : "") + "#; speed");
+						switch (style)
+						{
+							case "Vanilla": tip += new STooltip.Line(SDrawing.ToColorCode(speedColor) + speedText + ((bool)options["itemSpeedDetails"].Value ? " (" + item.useAnimation + "/60s)" : "") + "#; speed"); break;
+							case "2 columns": tip += new STooltip.Line("Speed:", SDrawing.ToColorCode(speedColor) + speedText.ToLower() + ((bool)options["itemSpeedDetails"].Value ? " (" + item.useAnimation + "/60s)" : "")); break;
+							default: break;
+						}
 					}
 
 					float knockback = item.knockBack;
@@ -200,7 +224,12 @@ namespace Shockah.ETooltip
 						case "Knockback": float f = Math.Min(knockback, 11f) / 11f; knockbackColor = DoubleLerp(Color.Red, Color.Yellow, Color.Lime, f); break;
 						default: break;
 					}
-					tip += new STooltip.Line(SDrawing.ToColorCode(knockbackColor) + knockbackText + "#; knockback");
+					switch (style)
+					{
+						case "Vanilla": tip += new STooltip.Line(SDrawing.ToColorCode(knockbackColor) + knockbackText + "#; knockback"); break;
+						case "2 columns": tip += new STooltip.Line("Knockback:", SDrawing.ToColorCode(knockbackColor) + knockbackText.ToLower()); break;
+						default: break;
+					}
 				}
 
 				if (item.headSlot > 0 || item.bodySlot > 0 || item.legSlot > 0 || item.accessory)
@@ -210,13 +239,23 @@ namespace Shockah.ETooltip
 					if (item.bodySlot > 0) { if (sb.Length != 0) sb.Append(", "); sb.Append("body"); }
 					if (item.legSlot > 0) { if (sb.Length != 0) sb.Append(", "); sb.Append("legs"); }
 					if (item.accessory) { if (sb.Length != 0) sb.Append(", "); sb.Append("accessory"); }
-					tip += new STooltip.Line("Equipable" + (item.vanity ? " vanity" : "") + ": " + sb);
+					switch (style)
+					{
+						case "Vanilla": tip += new STooltip.Line("Equipable" + (item.vanity ? " vanity" : "") + ": " + sb); break;
+						case "2 columns": tip += new STooltip.Line("Equipable" + (item.vanity ? " vanity" : "") + ":", sb.ToString()); break;
+						default: break;
+					}
 				}
 
 				if (item.tileWand > 0)
 				{
 					Item itemDef = Defs.items[Defs.itemNames[item.tileWand]];
-					tip += new STooltip.Line("Consumes " + SDrawing.ToColorCode((bool)options["itemWandItemColor"].Value ? itemDef.GetRarityColor() : Color.White) + itemDef.displayName);
+					switch (style)
+					{
+						case "Vanilla": tip += new STooltip.Line("Consumes " + SDrawing.ToColorCode((bool)options["itemWandItemColor"].Value ? itemDef.GetRarityColor() : Color.White) + itemDef.displayName); break;
+						case "2 columns": tip += new STooltip.Line("Consumes:", SDrawing.ToColorCode((bool)options["itemWandItemColor"].Value ? itemDef.GetRarityColor() : Color.White) + itemDef.displayName); break;
+						default: break;
+					}
 				}
 
 				if (item.defense != 0)
@@ -227,7 +266,12 @@ namespace Shockah.ETooltip
 						case "Green/Red": defenseColor = item.defense > 0 ? Color.Lime : Color.Red; break;
 						default: break;
 					}
-					tip += new STooltip.Line(SDrawing.ToColorCode(defenseColor) + item.defense + "#; defense");
+					switch (style)
+					{
+						case "Vanilla": tip += new STooltip.Line(SDrawing.ToColorCode(defenseColor) + item.defense + "#; defense"); break;
+						case "2 columns": tip += new STooltip.Line("Defense:", SDrawing.ToColorCode(defenseColor) + item.defense); break;
+						default: break;
+					}
 				}
 
 				if (item.pick > 0)
@@ -239,7 +283,12 @@ namespace Shockah.ETooltip
 						case "Power": float f = 1f * item.pick / maxPowerPick; toolPowerColor = DoubleLerp(Color.Red, Color.Yellow, Color.Lime, f); break;
 						default: break;
 					}
-					tip += new STooltip.Line(SDrawing.ToColorCode(toolPowerColor) + item.pick + "%#; pickaxe power");
+					switch (style)
+					{
+						case "Vanilla": tip += new STooltip.Line(SDrawing.ToColorCode(toolPowerColor) + item.pick + "%#; pickaxe power"); break;
+						case "2 columns": tip += new STooltip.Line("Pickaxe power:", SDrawing.ToColorCode(toolPowerColor) + item.pick + "%"); break;
+						default: break;
+					}
 				}
 				if (item.axe > 0)
 				{
@@ -250,7 +299,12 @@ namespace Shockah.ETooltip
 						case "Power": float f = 1f * item.axe / maxPowerAxe; toolPowerColor = DoubleLerp(Color.Red, Color.Yellow, Color.Lime, f); break;
 						default: break;
 					}
-					tip += new STooltip.Line(SDrawing.ToColorCode(toolPowerColor) + (item.axe * 5) + "%#; axe power");
+					switch (style)
+					{
+						case "Vanilla": tip += new STooltip.Line(SDrawing.ToColorCode(toolPowerColor) + (item.axe * 5) + "%#; axe power"); break;
+						case "2 columns": tip += new STooltip.Line("Axe power:", SDrawing.ToColorCode(toolPowerColor) + (item.axe * 5) + "%"); break;
+						default: break;
+					}
 				}
 				if (item.hammer > 0)
 				{
@@ -261,7 +315,12 @@ namespace Shockah.ETooltip
 						case "Power": float f = 1f * item.hammer / maxPowerHammer; toolPowerColor = DoubleLerp(Color.Red, Color.Yellow, Color.Lime, f); break;
 						default: break;
 					}
-					tip += new STooltip.Line(SDrawing.ToColorCode(toolPowerColor) + item.hammer + "%#; hammer power");
+					switch (style)
+					{
+						case "Vanilla": tip += new STooltip.Line(SDrawing.ToColorCode(toolPowerColor) + item.hammer + "%#; hammer power"); break;
+						case "2 columns": tip += new STooltip.Line("Hammer power:", SDrawing.ToColorCode(toolPowerColor) + item.hammer + "%"); break;
+						default: break;
+					}
 				}
 
 				if (item.tileBoost != 0)
@@ -272,18 +331,33 @@ namespace Shockah.ETooltip
 						case "Green/Red": toolRangeColor = item.tileBoost > 0 ? Color.Lime : Color.Red; break;
 						default: break;
 					}
-					tip += new STooltip.Line(SDrawing.ToColorCode(toolRangeColor) + (item.tileBoost > 0 ? "+" : "") + item.tileBoost + "#; range");
+					switch (style)
+					{
+						case "Vanilla": tip += new STooltip.Line(SDrawing.ToColorCode(toolRangeColor) + (item.tileBoost > 0 ? "+" : "") + item.tileBoost + "#; range"); break;
+						case "2 columns": tip += new STooltip.Line("Range:", SDrawing.ToColorCode(toolRangeColor) + (item.tileBoost > 0 ? "+" : "") + item.tileBoost); break;
+						default: break;
+					}
 				}
 
 				bool optToolRangeColorEffect = (bool)options["itemRestoreColor"].Value;
 				bool optToolRangeColorType = (bool)options["itemRestoreTypeColor"].Value;
 				if (item.healLife > 0)
 				{
-					tip += new STooltip.Line("Restores " + SDrawing.ToColorCode(optToolRangeColorEffect ? Color.Lime : Color.White) + item.healLife + SDrawing.ToColorCode(optToolRangeColorType ? Color.Red : Color.White) + " life");
+					switch (style)
+					{
+						case "Vanilla": tip += new STooltip.Line("Restores " + SDrawing.ToColorCode(optToolRangeColorEffect ? Color.Lime : Color.White) + item.healLife + SDrawing.ToColorCode(optToolRangeColorType ? Color.Red : Color.White) + " life"); break;
+						case "2 columns": tip += new STooltip.Line(SDrawing.ToColorCode(optToolRangeColorType ? Color.Red : Color.White) + "Life#; restore:", SDrawing.ToColorCode(optToolRangeColorEffect ? Color.Lime : Color.White) + item.healLife); break;
+						default: break;
+					}
 				}
 				if (item.healMana > 0)
 				{
-					tip += new STooltip.Line("Restores " + SDrawing.ToColorCode(optToolRangeColorEffect ? Color.Lime : Color.White) + item.healMana + SDrawing.ToColorCode(optToolRangeColorType ? Color.DeepSkyBlue : Color.White) + " mana");
+					switch (style)
+					{
+						case "Vanilla": tip += new STooltip.Line("Restores " + SDrawing.ToColorCode(optToolRangeColorEffect ? Color.Lime : Color.White) + item.healMana + SDrawing.ToColorCode(optToolRangeColorType ? Color.DeepSkyBlue : Color.White) + " mana"); break;
+						case "2 columns": tip += new STooltip.Line(SDrawing.ToColorCode(optToolRangeColorType ? Color.DeepSkyBlue : Color.White) + "Mana#; restore:", SDrawing.ToColorCode(optToolRangeColorEffect ? Color.Lime : Color.White) + item.healMana); break;
+						default: break;
+					}
 				}
 
 				if (item.mana > 0)
@@ -303,7 +377,12 @@ namespace Shockah.ETooltip
 								case "Max mana": f = 1f * itemMana / (player.statManaMax2 / 5); manaCostColor = DoubleLerp(Color.Lime, Color.Yellow, Color.Red, Math.Min(f, 1f)); break;
 								default: break;
 							}
-							tip += new STooltip.Line("Uses " + SDrawing.ToColorCode(manaCostColor) + itemMana + SDrawing.ToColorCode((bool)options["itemManaCostTypeColor"].Value ? Color.DeepSkyBlue : Color.White) + " mana");
+							switch (style)
+							{
+								case "Vanilla": tip += new STooltip.Line("Uses " + SDrawing.ToColorCode(manaCostColor) + itemMana + SDrawing.ToColorCode((bool)options["itemManaCostTypeColor"].Value ? Color.DeepSkyBlue : Color.White) + " mana"); break;
+								case "2 columns": tip += new STooltip.Line(SDrawing.ToColorCode((bool)options["itemManaCostTypeColor"].Value ? Color.DeepSkyBlue : Color.White) + "Mana#; cost:", SDrawing.ToColorCode(manaCostColor) + itemMana); break;
+								default: break;
+							}
 						}
 					}
 				}
@@ -317,9 +396,9 @@ namespace Shockah.ETooltip
 				}
 				else if (item.ammo > 0 && !item.notAmmo)
 				{
-					if (item.ammo == 1 || item.ammo == 323) tip += new STooltip.Line("Ammo: arrow");
-					else if (item.ammo == 14 || item.ammo == 311) tip += new STooltip.Line("Ammo: bullet");
-					else if (item.ammo == 771 || item.ammo == 246 || item.useAmmo == 312) tip += new STooltip.Line("Ammo: rocket");
+					if (item.ammo == 1 || item.ammo == 323) tip += new STooltip.Line("Ammo (arrow)");
+					else if (item.ammo == 14 || item.ammo == 311) tip += new STooltip.Line("Ammo (bullet)");
+					else if (item.ammo == 771 || item.ammo == 246 || item.useAmmo == 312) tip += new STooltip.Line("Ammo (rocket)");
 					else tip += new STooltip.Line("Ammo");
 				}
 				else if (item.consumable)
@@ -347,7 +426,12 @@ namespace Shockah.ETooltip
 						case "Green": buffDurationColor = Color.Lime; break;
 						default: break;
 					}
-					tip += new STooltip.Line(SDrawing.ToColorCode(buffDurationColor) + " " + (item.buffTime > 60 * 60 ? "minute" : "second") + "#; duration");
+					switch (style)
+					{
+						case "Vanilla": tip += new STooltip.Line(SDrawing.ToColorCode(buffDurationColor) + (item.buffTime > 60 ? item.buffTime / (60 * 60) : item.buffTime / 60) + " " + (item.buffTime > 60 * 60 ? "minute" : "second") + "#; duration"); break;
+						case "2 columns": tip += new STooltip.Line("Duration:", SDrawing.ToColorCode(buffDurationColor) + (item.buffTime > 60 ? item.buffTime / (60 * 60) : item.buffTime / 60) + " " + (item.buffTime > 60 * 60 ? "minutes" : "seconds")); break;
+						default: break;
+					}
 				}
 
 				if (!item.prefix.Equals(Prefix.None))
@@ -402,7 +486,12 @@ namespace Shockah.ETooltip
 								if (coinP + coinG > 0) { if (sb.Length != 0) sb.Append(" "); sb.Append("" + coinG + "g"); }
 								if (coinP + coinG + coinS > 0) { if (sb.Length != 0) sb.Append(" "); sb.Append("" + coinS + "s"); }
 								if (coinP + coinG + coinS + coinC > 0) { if (sb.Length != 0) sb.Append(" "); sb.Append("" + coinC + "c"); }
-								tip += new STooltip.Line((Main.toolTip.buy ? "Buy" : "Sell") + " price: " + SDrawing.ToColorCode(valueColor) + sb);
+								switch (style)
+								{
+									case "Vanilla": tip += new STooltip.Line((Main.toolTip.buy ? "Buy" : "Sell") + " price: " + SDrawing.ToColorCode(valueColor) + sb); break;
+									case "2 columns": tip += new STooltip.Line((Main.toolTip.buy ? "Buy" : "Sell") + " price:", SDrawing.ToColorCode(valueColor) + sb); break;
+									default: break;
+								}
 								break;
 							case "Multiple colors":
 								sb = new StringBuilder();
@@ -410,7 +499,12 @@ namespace Shockah.ETooltip
 								if (coinP + coinG > 0) { if (sb.Length != 0) sb.Append(" "); sb.Append(SDrawing.ToColorCode(COLOR_GOLD) + coinG + "g"); }
 								if (coinP + coinG + coinS > 0) { if (sb.Length != 0) sb.Append(" "); sb.Append(SDrawing.ToColorCode(COLOR_SILVER) + coinS + "s"); }
 								if (coinP + coinG + coinS + coinC > 0) { if (sb.Length != 0) sb.Append(" "); sb.Append(SDrawing.ToColorCode(COLOR_COPPER) + coinC + "c"); }
-								tip += new STooltip.Line((Main.toolTip.buy ? "Buy" : "Sell") + " price: " + sb);
+								switch (style)
+								{
+									case "Vanilla": tip += new STooltip.Line((Main.toolTip.buy ? "Buy" : "Sell") + " price: " + sb); break;
+									case "2 columns": tip += new STooltip.Line((Main.toolTip.buy ? "Buy" : "Sell") + " price:", sb.ToString()); break;
+									default: break;
+								}
 								break;
 							default: break;
 						}

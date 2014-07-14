@@ -1,6 +1,24 @@
 ﻿{
 	"options": [
 		{
+			"name": "ttipBackground",
+			"displayName": "Background",
+			"type": "Boolean",
+			"default": true
+		},
+		
+		{
+			"name": "itemStyle",
+			"displayName": "Item: Style",
+			"type": "List",
+			"list": [
+				"Vanilla",
+				"2 columns"
+			],
+			"default": 1
+		},
+		
+		{
 			"name": "itemNameStackFormat",
 			"displayName": "Item: Amount format",
 			"type": "List",
