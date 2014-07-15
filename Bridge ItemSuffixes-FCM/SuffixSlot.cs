@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Shockah.Base;
 using Shockah.FCM;
 using System;
+using System.Collections.Generic;
 using System.Text;
 using TAPI;
 using Terraria;
@@ -113,11 +114,9 @@ namespace Shockah.ItemSuffixes
 				}
 				else if (MySuffix != null)
 				{
-					Item tempItem = new Item();
-					tempItem.SetDefaults("Vanilla:Wood");
-					MySuffix.AddTooltips(tempItem);
+					List<string> ttips = MySuffix.AddTooltips();
 					StringBuilder sb = new StringBuilder();
-					foreach (string tip in tempItem.toolTips)
+					foreach (string tip in ttips)
 					{
 						if (sb.Length > 0) sb.Append("\n");
 						sb.Append(tip);
