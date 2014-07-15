@@ -53,6 +53,7 @@
     <Compile Include="MBase.cs" />
     <Compile Include="MItem.cs" />
     <Compile Include="MPlayer.cs" />
+    <Compile Include="MPrefix.cs" />
     <Compile Include="MWorld.cs" />
     <Compile Include="WGTApplyWorldItems.cs" />
   </ItemGroup>

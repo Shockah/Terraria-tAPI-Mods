@@ -60,9 +60,34 @@
     <None Include="ModOptions.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeItem\ModuleItemAmmo.cs" />
+    <Compile Include="CodeItem\ModuleItemAxe.cs" />
+    <Compile Include="CodeItem\ModuleItemBuffDuration.cs" />
+    <Compile Include="CodeItem\ModuleItemConsumable.cs" />
+    <Compile Include="CodeItem\ModuleItemCrit.cs" />
+    <Compile Include="CodeItem\ModuleItemDamage.cs" />
+    <Compile Include="CodeItem\ModuleItemDefense.cs" />
+    <Compile Include="CodeItem\ModuleItemEquipable.cs" />
+    <Compile Include="CodeItem\ModuleItemHammer.cs" />
+    <Compile Include="CodeItem\ModuleItemManaCost.cs" />
+    <Compile Include="CodeItem\ModuleItemMaterial.cs" />
+    <Compile Include="CodeItem\ModuleItemName.cs" />
+    <Compile Include="CodeItem\ModuleItemPickaxe.cs" />
+    <Compile Include="CodeItem\ModuleItemPlaceable.cs" />
+    <Compile Include="CodeItem\ModuleItemPrefix.cs" />
+    <Compile Include="CodeItem\ModuleItemPrice.cs" />
+    <Compile Include="CodeItem\ModuleItemRange.cs" />
+    <Compile Include="CodeItem\ModuleItemRestore.cs" />
+    <Compile Include="CodeItem\ModuleItemSetBonus.cs" />
+    <Compile Include="CodeItem\ModuleItemSpeed.cs" />
+    <Compile Include="CodeItem\ModuleItemKnockback.cs" />
+    <Compile Include="CodeItem\ModuleItemTipText.cs" />
+    <Compile Include="CodeItem\ModuleItemWand.cs" />
+    <Compile Include="ETipStyle.cs" />
     <Compile Include="ILPreTooltip.cs" />
     <Compile Include="MBase.cs" />
     <Compile Include="MInterface.cs" />
+    <Compile Include="Module.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
