@@ -60,19 +60,14 @@ namespace Shockah.Base
 		{
 			//if (!Main.toolTip.item.IsBlank() || !string.IsNullOrEmpty(Main.buffString) || !string.IsNullOrEmpty(Main.drawingTooltip)) return;
 			if (lines.Count == 0) return;
+			bool hasBg = background != new Color(0, 0, 0, 0) || alpha.HasValue;
 			Vector2 sizeCalc = ActualDraw(null, default(Vector2));
-			if (pos.X + sizeCalc.X > Main.screenWidth) pos.X = Main.screenWidth - sizeCalc.X;
-			if (pos.Y + sizeCalc.Y > Main.screenHeight) pos.Y = Main.screenHeight - sizeCalc.Y;
-			if (background != new Color(0, 0, 0, 0) || alpha.HasValue)
+			if (pos.X + sizeCalc.X > Main.screenWidth - (hasBg ? 6 : 2)) pos.X = Main.screenWidth - sizeCalc.X - (hasBg ? 6 : 2);
+			if (pos.Y + sizeCalc.Y > Main.screenHeight - (hasBg ? 6 : 0)) pos.Y = Main.screenHeight - sizeCalc.Y - (hasBg ? 6 : 0);
+			if (hasBg)
 			{
-				if (alpha.HasValue)
-				{
-					Drawing.DrawBox(sb, pos.X - 6, pos.Y - 6, sizeCalc.X + 12, sizeCalc.Y + 12, alpha.Value);
-				}
-				else
-				{
-					Drawing.DrawBox(sb, pos.X - 6, pos.Y - 6, sizeCalc.X + 12, sizeCalc.Y + 12, background);
-				}
+				if (alpha.HasValue) Drawing.DrawBox(sb, pos.X - 6, pos.Y - 6, sizeCalc.X + 12, sizeCalc.Y + 12, alpha.Value);
+				else Drawing.DrawBox(sb, pos.X - 6, pos.Y - 6, sizeCalc.X + 12, sizeCalc.Y + 12, background);
 			}
 			foreach (Action<STooltip, Rectangle> h in SBase.EventPreSTooltipDraw) h(this, new Rectangle((int)pos.X, (int)pos.Y, (int)sizeCalc.X, (int)sizeCalc.Y));
 			ActualDraw(sb, pos, sizeCalc);
