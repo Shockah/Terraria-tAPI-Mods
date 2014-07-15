@@ -58,6 +58,14 @@
 			"maximum": 1.5,
 			"default": 0.8
 		},
+		{
+			"name": "itemSetBonusScale",
+			"displayName": "Item: Set bonus scale",
+			"type": "Float",
+			"minimum": 0.5,
+			"maximum": 1.5,
+			"default": 0.8
+		},
 
 		{
 			"name": "itemDamageColor",
