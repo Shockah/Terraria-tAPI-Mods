@@ -15,7 +15,7 @@ namespace Shockah.ItemSuffixes
 
 		public uint myId;
 		public ItemSuffix suffix = ItemSuffix.list[0];
-		public int resetDamage = 0, resetCrit = 0, resetTooltip = 0;
+		public int resetDamage = 0, resetCrit = 0;
 		
 		public MItem(ModBase modBase, Item item) : base(modBase, item) { }
 
@@ -75,9 +75,6 @@ namespace Shockah.ItemSuffixes
 			{
 				if (suffix != null && suffix.displayName != null)
 				{
-					for (int j = 0; j < resetTooltip; j++) item.toolTips.RemoveAt(item.toolTips.Count - 1);
-					resetTooltip = 0;
-					suffix.AddTooltips(item);
 					return string.Format(suffix.format, currentName, suffix.displayName);
 				}
 				return currentName;

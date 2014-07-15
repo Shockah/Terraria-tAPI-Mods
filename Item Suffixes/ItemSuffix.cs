@@ -216,90 +216,89 @@ namespace Shockah.ItemSuffixes
 		public int BonusThreat(int initial) { return BonusMult(initial, threat, 125, 1.2f); }
 		public int BonusRegenHP(int initial) { return BonusMult(initial, regenHP, 2, 1.1f); }
 
-		public virtual void AddTooltips(Item item)
+		public virtual List<string> AddTooltips()
 		{
-			MItem mitem = item.GetSubClass<MItem>();
-			if (mitem != null)
+			List<string> ret = new List<string>();
+			string ttip;
+
+			if (damageMelee > 0 && damageMelee == damageRanged && damageMelee == damageMagic)
 			{
-				string ttip;
-
-				if (damageMelee > 0 && damageMelee == damageRanged && damageMelee == damageMagic)
+				ttip = BonusPowerString(damageMelee) + " increases damage";
+				ttip = ("" + ttip[0]).ToUpper() + ttip.Substring(1);
+				ret.Add(ttip);
+			}
+			else
+			{
+				if (damageMelee > 0)
 				{
-					ttip = BonusPowerString(damageMelee) + " increases damage";
+					ttip = BonusPowerString(damageMelee) + " increases melee damage";
 					ttip = ("" + ttip[0]).ToUpper() + ttip.Substring(1);
-					item.toolTips.Add(ttip); mitem.resetTooltip++;
+					ret.Add(ttip);
 				}
-				else
+				if (damageRanged > 0)
 				{
-					if (damageMelee > 0)
-					{
-						ttip = BonusPowerString(damageMelee) + " increases melee damage";
-						ttip = ("" + ttip[0]).ToUpper() + ttip.Substring(1);
-						item.toolTips.Add(ttip); mitem.resetTooltip++;
-					}
-					if (damageRanged > 0)
-					{
-						ttip = BonusPowerString(damageRanged) + " increases ranged damage";
-						ttip = ("" + ttip[0]).ToUpper() + ttip.Substring(1);
-						item.toolTips.Add(ttip); mitem.resetTooltip++;
-					}
-					if (damageMagic > 0)
-					{
-						ttip = BonusPowerString(damageMagic) + " increases magic damage";
-						ttip = ("" + ttip[0]).ToUpper() + ttip.Substring(1);
-						item.toolTips.Add(ttip); mitem.resetTooltip++;
-					}
-				}
-
-				if (critMelee > 0 && critMelee == critRanged && critMelee == critMagic)
-				{
-					ttip = BonusPowerString(critMelee) + " increases critical strike chance";
+					ttip = BonusPowerString(damageRanged) + " increases ranged damage";
 					ttip = ("" + ttip[0]).ToUpper() + ttip.Substring(1);
-					item.toolTips.Add(ttip); mitem.resetTooltip++;
+					ret.Add(ttip);
 				}
-				else
+				if (damageMagic > 0)
 				{
-					if (critMelee > 0)
-					{
-						ttip = BonusPowerString(critMelee) + " increases melee critical strike chance";
-						ttip = ("" + ttip[0]).ToUpper() + ttip.Substring(1);
-						item.toolTips.Add(ttip); mitem.resetTooltip++;
-					}
-					if (critRanged > 0)
-					{
-						ttip = BonusPowerString(critRanged) + " increases ranged critical strike chance";
-						ttip = ("" + ttip[0]).ToUpper() + ttip.Substring(1);
-						item.toolTips.Add(ttip); mitem.resetTooltip++;
-					}
-					if (critMagic > 0)
-					{
-						ttip = BonusPowerString(critMagic) + " increases magic critical strike chance";
-						ttip = ("" + ttip[0]).ToUpper() + ttip.Substring(1);
-						item.toolTips.Add(ttip); mitem.resetTooltip++;
-					}
-				}
-
-				if (defense > 0)
-				{
-					ttip = BonusPowerString(defense) + " increases defense";
+					ttip = BonusPowerString(damageMagic) + " increases magic damage";
 					ttip = ("" + ttip[0]).ToUpper() + ttip.Substring(1);
-					item.toolTips.Add(ttip); mitem.resetTooltip++;
-				}
-
-				if (threat > 0)
-				{
-					ttip = BonusPowerString(threat) + " increases the likeliness of enemies attacking you";
-					ttip = ("" + ttip[0]).ToUpper() + ttip.Substring(1);
-					item.toolTips.Add(ttip); mitem.resetTooltip++;
-				}
-
-				if (regenHP > 0)
-				{
-					ttip = BonusPowerString(regenHP) + " increases life regeneration rate";
-					ttip = ("" + ttip[0]).ToUpper() + ttip.Substring(1);
-					item.toolTips.Add(ttip); mitem.resetTooltip++;
+					ret.Add(ttip);
 				}
 			}
+
+			if (critMelee > 0 && critMelee == critRanged && critMelee == critMagic)
+			{
+				ttip = BonusPowerString(critMelee) + " increases critical strike chance";
+				ttip = ("" + ttip[0]).ToUpper() + ttip.Substring(1);
+				ret.Add(ttip);
+			}
+			else
+			{
+				if (critMelee > 0)
+				{
+					ttip = BonusPowerString(critMelee) + " increases melee critical strike chance";
+					ttip = ("" + ttip[0]).ToUpper() + ttip.Substring(1);
+					ret.Add(ttip);
+				}
+				if (critRanged > 0)
+				{
+					ttip = BonusPowerString(critRanged) + " increases ranged critical strike chance";
+					ttip = ("" + ttip[0]).ToUpper() + ttip.Substring(1);
+					ret.Add(ttip);
+				}
+				if (critMagic > 0)
+				{
+					ttip = BonusPowerString(critMagic) + " increases magic critical strike chance";
+					ttip = ("" + ttip[0]).ToUpper() + ttip.Substring(1);
+					ret.Add(ttip);
+				}
+			}
+
+			if (defense > 0)
+			{
+				ttip = BonusPowerString(defense) + " increases defense";
+				ttip = ("" + ttip[0]).ToUpper() + ttip.Substring(1);
+				ret.Add(ttip);
+			}
+
+			if (threat > 0)
+			{
+				ttip = BonusPowerString(threat) + " increases the likeliness of enemies attacking you";
+				ttip = ("" + ttip[0]).ToUpper() + ttip.Substring(1);
+				ret.Add(ttip);
+			}
+
+			if (regenHP > 0)
+			{
+				ttip = BonusPowerString(regenHP) + " increases life regeneration rate";
+				ttip = ("" + ttip[0]).ToUpper() + ttip.Substring(1);
+				ret.Add(ttip);
+			}
+
+			return ret;
 		}
 	}
 }
