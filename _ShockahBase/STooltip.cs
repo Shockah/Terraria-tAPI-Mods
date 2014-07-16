@@ -16,8 +16,10 @@ namespace Shockah.Base
 			public float scaleL, scaleR;
 
 			public Line(string text) : this(text, "", Color.White, Color.White, 1f, 1f) { }
+			public Line(string text, float scale) : this(text, "", Color.White, Color.White, scale, scale) { }
 			public Line(string text, Color c, float scale = 1f) : this(text, "", c, c, scale, scale) { }
 			public Line(string textL, string textR) : this(textL, textR, Color.White, Color.White, 1f, 1f) { }
+			public Line(string textL, string textR, float scale) : this(textL, textR, Color.White, Color.White, scale, scale) { }
 			public Line(string textL, string textR, float scaleL, float scaleR) : this(textL, textR, Color.White, Color.White, scaleL, scaleR) { }
 			public Line(string textL, string textR, Color colorL, Color colorR) : this(textL, textR, colorL, colorR, 1f, 1f) { }
 			public Line(string textL, string textR, Color colorL, Color colorR, float scaleL, float scaleR)
@@ -47,6 +49,18 @@ namespace Shockah.Base
 		public static STooltip operator +(STooltip tip, Line line)
 		{
 			tip.lines.Add(line);
+			return tip;
+		}
+		public static STooltip operator +(STooltip tip, string line)
+		{
+			tip.lines.Add(new Line(line));
+			return tip;
+		}
+		public static STooltip operator +(STooltip tip, string[] lineLR)
+		{
+			if (lineLR.Length == 1) tip.lines.Add(new Line(lineLR[0]));
+			else if (lineLR.Length == 2) tip.lines.Add(new Line(lineLR[0], lineLR[1]));
+			else throw new ArgumentException();
 			return tip;
 		}
 
