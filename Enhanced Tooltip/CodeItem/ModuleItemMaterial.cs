@@ -15,7 +15,7 @@ namespace Shockah.ETooltip.ModuleItem
 		{
 			if (item.material && !item.notMaterial)
 			{
-				tip += new STooltip.Line("Material");
+				tip += "Material";
 			}
 		}
 	}

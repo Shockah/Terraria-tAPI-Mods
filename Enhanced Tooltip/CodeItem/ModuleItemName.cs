@@ -31,8 +31,9 @@ namespace Shockah.ETooltip.ModuleItem
 				default: break;
 			}
 
-			if (style == ETipStyle.Vanilla) tip += new STooltip.Line(CText(item.GetRarityColor(), item.AffixName(), stackText == null ? "" : CText(" ", color, stackText)));
-			if (style == ETipStyle.TwoCols) tip += new STooltip.Line(CText(item.GetRarityColor(), item.AffixName()), CText(stackText == null ? "" : CText(color, stackText)));
+			float scale = (float)options["itemNameScale"].Value;
+			if (style == ETipStyle.Vanilla) tip += new STooltip.Line(CText(item.GetRarityColor(), item.AffixName(), stackText == null ? "" : CText(" ", color, stackText)), scale);
+			if (style == ETipStyle.TwoCols) tip += new STooltip.Line(CText(item.GetRarityColor(), item.AffixName()), CText(stackText == null ? "" : CText(color, stackText)), scale);
 		}
 	}
 }

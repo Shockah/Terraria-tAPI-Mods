@@ -20,7 +20,7 @@ namespace Shockah.ETooltip.ModuleItem
 			Player player = Main.localPlayer;
 			if (Main.toolTip.wornArmor && player.setBonus != "")
 			{
-				tip += new STooltip.Line("Set bonus: " + player.setBonus, Color.White, (float)options["itemSetBonusScale"].Value);
+				tip += new STooltip.Line("Set bonus: " + player.setBonus, (float)options["itemSetBonusScale"].Value);
 			}
 		}
 	}

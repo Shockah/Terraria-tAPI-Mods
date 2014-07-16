@@ -22,8 +22,8 @@ namespace Shockah.ETooltip.ModuleItem
 					default: break;
 				}
 
-				if (style == ETipStyle.Vanilla) tip += new STooltip.Line(CText(color, item.buffTime > 60 ? item.buffTime / (60 * 60) : item.buffTime / 60, " ", item.buffTime > 60 * 60 ? "minute" : "second", "#; duration"));
-				if (style == ETipStyle.TwoCols) tip += new STooltip.Line("Duration:", CText(color, item.buffTime > 60 ? item.buffTime / (60 * 60) : item.buffTime / 60, " ", item.buffTime > 60 * 60 ? "minute" : "second", item.buffTime >= (item.buffTime > 60 * 60 ? 2 * 60 * 60 : 2 * 60) ? "s" : ""));
+				if (style == ETipStyle.Vanilla) tip += CText(color, item.buffTime > 60 ? item.buffTime / (60 * 60) : item.buffTime / 60, " ", item.buffTime > 60 * 60 ? "minute" : "second", "#; duration");
+				if (style == ETipStyle.TwoCols) tip += new string[] { "Duration:", CText(color, item.buffTime > 60 ? item.buffTime / (60 * 60) : item.buffTime / 60, " ", item.buffTime > 60 * 60 ? "minute" : "second", item.buffTime >= (item.buffTime > 60 * 60 ? 2 * 60 * 60 : 2 * 60) ? "s" : "") };
 			}
 		}
 	}

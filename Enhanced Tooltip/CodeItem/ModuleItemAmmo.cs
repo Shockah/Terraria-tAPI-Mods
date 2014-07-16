@@ -15,10 +15,10 @@ namespace Shockah.ETooltip.ModuleItem
 		{
 			if (item.createWall <= 0 && item.createTile <= -1 && item.name != "Xmas decorations" && item.ammo > 0 && !item.notAmmo)
 			{
-				if (item.ammo == 1 || item.ammo == 323) tip += new STooltip.Line("Ammo (arrow)");
-				else if (item.ammo == 14 || item.ammo == 311) tip += new STooltip.Line("Ammo (bullet)");
-				else if (item.ammo == 771 || item.ammo == 246 || item.useAmmo == 312) tip += new STooltip.Line("Ammo (rocket)");
-				else tip += new STooltip.Line("Ammo");
+				if (item.ammo == 1 || item.ammo == 323) tip += "Ammo (arrow)";
+				else if (item.ammo == 14 || item.ammo == 311) tip += "Ammo (bullet)";
+				else if (item.ammo == 771 || item.ammo == 246 || item.useAmmo == 312) tip += "Ammo (rocket)";
+				else tip += "Ammo";
 			}
 		}
 	}

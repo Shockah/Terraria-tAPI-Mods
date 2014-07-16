@@ -21,7 +21,7 @@ namespace Shockah.ETooltip.ModuleItem
 			{
 				foreach (Tuple<string, bool> t in item.prefix.TooltipText(item))
 				{
-					tip += new STooltip.Line(CText(t.Item2 ? COLOR_POSITIVE : COLOR_NEGATIVE, t.Item1));
+					tip += CText(t.Item2 ? COLOR_POSITIVE : COLOR_NEGATIVE, t.Item1);
 				}
 			}
 		}

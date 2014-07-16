@@ -21,8 +21,8 @@ namespace Shockah.ETooltip.ModuleItem
 				if (item.legSlot > 0) { if (sb.Length != 0) sb.Append(", "); sb.Append("legs"); }
 				if (item.accessory) { if (sb.Length != 0) sb.Append(", "); sb.Append("accessory"); }
 
-				if (style == ETipStyle.Vanilla) tip += new STooltip.Line("Equipable" + (item.vanity ? " vanity" : "") + ": " + sb);
-				if (style == ETipStyle.TwoCols) tip += new STooltip.Line("Equipable" + (item.vanity ? " vanity" : "") + ":", sb.ToString());
+				if (style == ETipStyle.Vanilla) tip += "Equipable" + (item.vanity ? " vanity" : "") + ": " + sb;
+				if (style == ETipStyle.TwoCols) tip += new string[] { "Equipable" + (item.vanity ? " vanity" : "") + ":", sb.ToString() };
 			}
 		}
 	}

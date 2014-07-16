@@ -60,8 +60,8 @@ namespace Shockah.ETooltip.ModuleItem
 							if (coinP + coinG + coinS > 0) { if (sb.Length != 0) sb.Append(" "); sb.Append("" + coinS + "s"); }
 							if (coinP + coinG + coinS + coinC > 0) { if (sb.Length != 0) sb.Append(" "); sb.Append("" + coinC + "c"); }
 
-							if (style == ETipStyle.Vanilla) tip += new STooltip.Line(CText(Main.toolTip.buy ? "Buy" : "Sell", " price: ", color, sb));
-							if (style == ETipStyle.TwoCols) tip += new STooltip.Line((Main.toolTip.buy ? "Buy" : "Sell") + " price:", CText(color, sb));
+							if (style == ETipStyle.Vanilla) tip += CText(Main.toolTip.buy ? "Buy" : "Sell", " price: ", color, sb);
+							if (style == ETipStyle.TwoCols) tip += new string[] { (Main.toolTip.buy ? "Buy" : "Sell") + " price:", CText(color, sb) };
 							break;
 						case "Multiple colors":
 							if (coinP > 0) { if (sb.Length != 0) sb.Append(" "); sb.Append(SDrawing.ToColorCode(COLOR_PLATINUM) + coinP + "p"); }
@@ -69,8 +69,8 @@ namespace Shockah.ETooltip.ModuleItem
 							if (coinP + coinG + coinS > 0) { if (sb.Length != 0) sb.Append(" "); sb.Append(SDrawing.ToColorCode(COLOR_SILVER) + coinS + "s"); }
 							if (coinP + coinG + coinS + coinC > 0) { if (sb.Length != 0) sb.Append(" "); sb.Append(SDrawing.ToColorCode(COLOR_COPPER) + coinC + "c"); }
 
-							if (style == ETipStyle.Vanilla) tip += new STooltip.Line(CText(Main.toolTip.buy ? "Buy" : "Sell", " price: ", sb));
-							if (style == ETipStyle.TwoCols) tip += new STooltip.Line((Main.toolTip.buy ? "Buy" : "Sell") + " price:", sb.ToString());
+							if (style == ETipStyle.Vanilla) tip += CText(Main.toolTip.buy ? "Buy" : "Sell", " price: ", sb);
+							if (style == ETipStyle.TwoCols) tip += new string[] { (Main.toolTip.buy ? "Buy" : "Sell") + " price:", sb.ToString() };
 							break;
 						default: break;
 					}

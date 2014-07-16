@@ -22,8 +22,8 @@ namespace Shockah.ETooltip.ModuleItem
 					default: break;
 				}
 
-				if (style == ETipStyle.Vanilla) tip += new STooltip.Line(CText(color, item.defense, "#; defense"));
-				if (style == ETipStyle.TwoCols) tip += new STooltip.Line("Defense:", CText(color, item.defense));
+				if (style == ETipStyle.Vanilla) tip += CText(color, item.defense, "#; defense");
+				if (style == ETipStyle.TwoCols) tip += new string[] { "Defense:", CText(color, item.defense) };
 			}
 		}
 	}

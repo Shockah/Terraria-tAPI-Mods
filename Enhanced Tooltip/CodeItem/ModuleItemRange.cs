@@ -22,8 +22,8 @@ namespace Shockah.ETooltip.ModuleItem
 					default: break;
 				}
 
-				if (style == ETipStyle.Vanilla) tip += new STooltip.Line(CText(color, item.tileBoost > 0 ? "+" : "", item.tileBoost, "#; range"));
-				if (style == ETipStyle.TwoCols) tip += new STooltip.Line("Range:", CText(color, item.tileBoost > 0 ? "+" : "", item.tileBoost));
+				if (style == ETipStyle.Vanilla) tip += CText(color, item.tileBoost > 0 ? "+" : "", item.tileBoost, "#; range");
+				if (style == ETipStyle.TwoCols) tip += new string[] { "Range:", CText(color, item.tileBoost > 0 ? "+" : "", item.tileBoost) };
 			}
 		}
 	}

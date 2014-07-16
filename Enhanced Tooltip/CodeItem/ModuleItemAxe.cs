@@ -23,8 +23,8 @@ namespace Shockah.ETooltip.ModuleItem
 					default: break;
 				}
 
-				if (style == ETipStyle.Vanilla) tip += new STooltip.Line(CText(color, item.axe * 5, "%#; axe power"));
-				if (style == ETipStyle.TwoCols) tip += new STooltip.Line("Axe power:", CText(color, item.axe * 5, "%"));
+				if (style == ETipStyle.Vanilla) tip += CText(color, item.axe * 5, "%#; axe power");
+				if (style == ETipStyle.TwoCols) tip += new string[] { "Axe power:", CText(color, item.axe * 5, "%") };
 			}
 		}
 	}

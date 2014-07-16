@@ -17,13 +17,13 @@ namespace Shockah.ETooltip.ModuleItem
 			bool optToolRangeColorType = (bool)options["itemRestoreTypeColor"].Value;
 			if (item.healLife > 0)
 			{
-				if (style == ETipStyle.Vanilla) tip += new STooltip.Line(CText("Restores ", optToolRangeColorEffect ? Color.Lime : Color.White, item.healLife, optToolRangeColorType ? Color.Red : Color.White, " life"));
-				if (style == ETipStyle.TwoCols) tip += new STooltip.Line(CText(optToolRangeColorType ? Color.Red : Color.White, "Life#; restore:"), CText(optToolRangeColorEffect ? Color.Lime : Color.White, item.healLife));
+				if (style == ETipStyle.Vanilla) tip += CText("Restores ", optToolRangeColorEffect ? Color.Lime : Color.White, item.healLife, optToolRangeColorType ? Color.Red : Color.White, " life");
+				if (style == ETipStyle.TwoCols) tip += new string[] { CText(optToolRangeColorType ? Color.Red : Color.White, "Life#; restore:"), CText(optToolRangeColorEffect ? Color.Lime : Color.White, item.healLife) };
 			}
 			if (item.healMana > 0)
 			{
-				if (style == ETipStyle.Vanilla) tip += new STooltip.Line(CText("Restores ", optToolRangeColorEffect ? Color.Lime : Color.White, item.healMana, optToolRangeColorType ? Color.DeepSkyBlue : Color.White, " mana"));
-				if (style == ETipStyle.TwoCols) tip += new STooltip.Line(CText(optToolRangeColorType ? Color.DeepSkyBlue : Color.White, "Mana#; restore:"), CText(optToolRangeColorEffect ? Color.Lime : Color.White, item.healMana));
+				if (style == ETipStyle.Vanilla) tip += CText("Restores ", optToolRangeColorEffect ? Color.Lime : Color.White, item.healMana, optToolRangeColorType ? Color.DeepSkyBlue : Color.White, " mana");
+				if (style == ETipStyle.TwoCols) tip += new string[] { CText(optToolRangeColorType ? Color.DeepSkyBlue : Color.White, "Mana#; restore:"), CText(optToolRangeColorEffect ? Color.Lime : Color.White, item.healMana) };
 			}
 		}
 	}

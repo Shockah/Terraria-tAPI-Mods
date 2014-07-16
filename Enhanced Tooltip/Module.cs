@@ -1,10 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Shockah.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TAPI;
+using Terraria;
 
 namespace Shockah.ETooltip
 {
@@ -24,6 +26,14 @@ namespace Shockah.ETooltip
 				else sb.Append(args[i]);
 			}
 			return sb.ToString();
+		}
+
+		public static int BaseStats(OptionList options, bool valuesEqual)
+		{
+			string s = (string)options["itemBaseStats"].Value;
+			if (s == "Always") return valuesEqual ? 2 : 3;
+			else if (s == "Hold Alt") return Main.keyState.IsKeyDown(Keys.LeftAlt) ? 1 : 2;
+			return 2;
 		}
 		
 		public abstract void ModifyTip(ETipStyle style, OptionList options, STooltip tip, T t);

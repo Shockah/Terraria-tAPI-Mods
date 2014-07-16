@@ -15,7 +15,7 @@ namespace Shockah.ETooltip.ModuleItem
 		{
 			if (item.createWall <= 0 && item.createTile <= -1 && item.name != "Xmas decorations" && (item.ammo <= 0 || item.notAmmo) && item.consumable)
 			{
-				tip += new STooltip.Line("Consumable");
+				tip += "Consumable";
 			}
 		}
 	}

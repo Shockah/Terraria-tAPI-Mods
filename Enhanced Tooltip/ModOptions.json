@@ -25,7 +25,26 @@
 			],
 			"default": 1
 		},
+		{
+			"name": "itemBaseStats",
+			"displayName": "Item: Base stats",
+			"type": "List",
+			"list": [
+				"Off",
+				"Hold Alt",
+				"Always"
+			],
+			"default": 1
+		},
 		
+		{
+			"name": "itemNameScale",
+			"displayName": "Item name scale",
+			"type": "Float",
+			"minimum": 0.5,
+			"maximum": 1.5,
+			"default": 1.2
+		},
 		{
 			"name": "itemNameStackFormat",
 			"displayName": "Item: Amount format",
@@ -100,8 +119,15 @@
 		{
 			"name": "itemSpeedDetails",
 			"displayName": "Item: Speed details",
-			"type": "Boolean",
-			"default": false
+			"type": "List",
+			"list": [
+				"Text",
+				"Value",
+				"Value/60s",
+				"Text and value",
+				"Text and value/60s"
+			],
+			"default": 0
 		},
 		{
 			"name": "itemKnockbackColor",
@@ -112,6 +138,17 @@
 				"Knockback"
 			],
 			"default": 1
+		},
+		{
+			"name": "itemKnockbackDetails",
+			"displayName": "Item: Knockback details",
+			"type": "List",
+			"list": [
+				"Text",
+				"Value",
+				"Text and value"
+			],
+			"default": 0
 		},
 		{
 			"name": "itemManaCostColor",

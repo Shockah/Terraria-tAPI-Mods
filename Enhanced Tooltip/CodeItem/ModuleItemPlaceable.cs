@@ -17,7 +17,7 @@ namespace Shockah.ETooltip.ModuleItem
 			{
 				if (item.type != 213 && item.type != 832)
 				{
-					tip += new STooltip.Line("Can be placed");
+					tip += "Can be placed";
 				}
 			}
 		}
