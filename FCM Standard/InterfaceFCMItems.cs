@@ -43,38 +43,14 @@ namespace Shockah.FCM.Standard
 
 		protected readonly ElSlider slider;
 		protected readonly ElChooser<Sorter<Item>> sortingChooser;
+		protected readonly ElButton bSearch, bSearchBar;
 		protected ItemSlotFCM[] slots = new ItemSlotFCM[COLS * ROWS];
 		private int _Scroll = 0;
 		protected readonly Filter<Item>
-			FHead = new Filter<Item>("Head", Defs.items["Vanilla:Adamantite Helmet"].GetTexture(), (item) => item.headSlot != -1),
-			FBody = new Filter<Item>("Body", Defs.items["Vanilla:Hallowed Plate Mail"].GetTexture(), (item) => item.bodySlot != -1),
-			FLegs = new Filter<Item>("Legs", Defs.items["Vanilla:Titanium Leggings"].GetTexture(), (item) => item.legSlot != -1),
-			FVanity = new Filter<Item>("Vanity", Defs.items["Vanilla:Clown Shirt"].GetTexture(), (item) => item.vanity),
-			FMelee = new Filter<Item>("Melee", Defs.items["Vanilla:Terra Blade"].GetTexture(), (item) => item.damage > 0 && item.melee),
-			FRanged = new Filter<Item>("Ranged", Defs.items["Vanilla:S.D.M.G."].GetTexture(), (item) => item.damage > 0 && item.ranged && (item.ammo == 0)),
-			FAmmo = new Filter<Item>("Ammo", Defs.items["Vanilla:Chlorophyte Bullet"].GetTexture(), (item) => item.damage > 0 && item.ranged && item.ammo != 0 && !item.notAmmo),
-			FMagic = new Filter<Item>("Magic", Defs.items["Vanilla:Golden Shower"].GetTexture(), (item) => item.damage > 0 && item.magic),
-			FSummon = new Filter<Item>("Summon", Defs.items["Vanilla:Pygmy Staff"].GetTexture(), (item) => item.damage > 0 && item.summon),
-			FAccessory = new Filter<Item>("Accessory", Defs.items["Vanilla:Ankh Shield"].GetTexture(), (item) => item.accessory),
-			FPickaxe = new Filter<Item>("Pickaxe", Defs.items["Vanilla:Picksaw"].GetTexture(), (item) => item.pick > 0),
-			FAxe = new Filter<Item>("Axe", Defs.items["Vanilla:Spirit Hamaxe"].GetTexture(), (item) => item.axe > 0),
-			FHammer = new Filter<Item>("Hammer", Defs.items["Vanilla:Pwnhammer"].GetTexture(), (item) => item.hammer > 0),
-			FConsumable = new Filter<Item>("Consumable", Defs.items["Vanilla:Lesser Healing Potion"].GetTexture(), (item) => item.consumable && item.damage <= 0 && item.createTile == -1 && item.tileWand == -1 && item.createWall == -1 && item.ammo == 0 && item.name != "Xmas decorations"),
-			FDye = new Filter<Item>("Dye", Defs.items["Vanilla:Flame Dye"].GetTexture(), (item) => item.dye != 0),
-			FPaint = new Filter<Item>("Paint", Defs.items["Vanilla:Blue Paint"].GetTexture(), (item) => item.paint != 0),
-			FTile = new Filter<Item>("Tile", Defs.items["Vanilla:Stone Block"].GetTexture(), (item) => item.createTile != -1 || item.tileWand != -1 || item.name == "Xmas decorations"),
-			FWall = new Filter<Item>("Wall", Defs.items["Vanilla:Green Brick Wall"].GetTexture(), (item) => item.createWall != -1),
-			FPet = new Filter<Item>("Pet", Defs.items["Vanilla:Wisp in a Bottle"].GetTexture(), (item) => item.damage <= 0 && ((item.shoot > 0 && Main.projPet[item.shoot]) || (item.buffType > 0 && (Main.vanityPet[item.buffType] || Main.lightPet[item.buffType])))),
-			FOther = new Filter<Item>("Other", Defs.unloadedItem.GetTexture(), null);
+			FHead, FBody, FLegs, FVanity, FMelee, FRanged, FAmmo, FMagic, FSummon, FAccessory,
+			FPickaxe, FAxe, FHammer, FConsumable, FDye, FPaint, FTile, FWall, FPet, FOther;
 		protected readonly Sorter<Item>
-			SID = new Sorter<Item>("ID", (i1, i2) => i1.type.CompareTo(i2.type), (item) => true),
-			SName = new Sorter<Item>("Name", (i1, i2) => i1.displayName.CompareTo(i2.displayName), (item) => true),
-			SValue = new Sorter<Item>("Value", (i1, i2) => i1.value.CompareTo(i2.value), (item) => item.value > 0),
-			SRarity = new Sorter<Item>("Rarity", (i1, i2) => i1.rare.CompareTo(i2.rare), (item) => true),
-			SDamage = new Sorter<Item>("Damage", (i1, i2) => i1.damage.CompareTo(i2.damage), (item) => item.damage > 0 && !item.notAmmo),
-			SMana = new Sorter<Item>("Mana", (i1, i2) => i1.mana.CompareTo(i2.mana), (item) => item.mana > 0),
-			SDefense = new Sorter<Item>("Defense", (i1, i2) => i1.defense.CompareTo(i2.defense), (item) => item.headSlot != -1 || item.bodySlot != -1 || item.legSlot != -1),
-			SStack = new Sorter<Item>("Stack", (i1, i2) => i1.maxStack.CompareTo(i2.maxStack), (item) => true);
+			SID, SName, SValue, SValueStack, SRarity, SDamage, SMana, SPowerPick, SPowerAxe, SPowerHammer, SDefense, SStack;
 
 		protected int Scroll
 		{
@@ -98,6 +74,41 @@ namespace Shockah.FCM.Standard
 		public InterfaceFCMItems()
 		{
 			me = this;
+			if (Main.dedServ) return;
+
+			FHead = new Filter<Item>("Head", Defs.items["Vanilla:Adamantite Helmet"].GetTexture(), (item) => item.headSlot != -1);
+			FBody = new Filter<Item>("Body", Defs.items["Vanilla:Hallowed Plate Mail"].GetTexture(), (item) => item.bodySlot != -1);
+			FLegs = new Filter<Item>("Legs", Defs.items["Vanilla:Titanium Leggings"].GetTexture(), (item) => item.legSlot != -1);
+			FVanity = new Filter<Item>("Vanity", Defs.items["Vanilla:Clown Shirt"].GetTexture(), (item) => item.vanity);
+			FMelee = new Filter<Item>("Melee", Defs.items["Vanilla:Terra Blade"].GetTexture(), (item) => item.damage > 0 && item.melee);
+			FRanged = new Filter<Item>("Ranged", Defs.items["Vanilla:S.D.M.G."].GetTexture(), (item) => item.damage > 0 && item.ranged && (item.ammo == 0));
+			FAmmo = new Filter<Item>("Ammo", Defs.items["Vanilla:Chlorophyte Bullet"].GetTexture(), (item) => item.damage > 0 && item.ranged && item.ammo != 0 && !item.notAmmo);
+			FMagic = new Filter<Item>("Magic", Defs.items["Vanilla:Golden Shower"].GetTexture(), (item) => item.damage > 0 && item.magic);
+			FSummon = new Filter<Item>("Summon", Defs.items["Vanilla:Pygmy Staff"].GetTexture(), (item) => item.damage > 0 && item.summon);
+			FAccessory = new Filter<Item>("Accessory", Defs.items["Vanilla:Ankh Shield"].GetTexture(), (item) => item.accessory);
+			FPickaxe = new Filter<Item>("Pickaxe", Defs.items["Vanilla:Picksaw"].GetTexture(), (item) => item.pick > 0);
+			FAxe = new Filter<Item>("Axe", Defs.items["Vanilla:Spirit Hamaxe"].GetTexture(), (item) => item.axe > 0);
+			FHammer = new Filter<Item>("Hammer", Defs.items["Vanilla:Pwnhammer"].GetTexture(), (item) => item.hammer > 0);
+			FConsumable = new Filter<Item>("Consumable", Defs.items["Vanilla:Lesser Healing Potion"].GetTexture(), (item) => item.consumable && item.damage <= 0 && item.createTile == -1 && item.tileWand == -1 && item.createWall == -1 && item.ammo == 0 && item.name != "Xmas decorations");
+			FDye = new Filter<Item>("Dye", Defs.items["Vanilla:Flame Dye"].GetTexture(), (item) => item.dye != 0);
+			FPaint = new Filter<Item>("Paint", Defs.items["Vanilla:Blue Paint"].GetTexture(), (item) => item.paint != 0);
+			FTile = new Filter<Item>("Tile", Defs.items["Vanilla:Stone Block"].GetTexture(), (item) => item.createTile != -1 || item.tileWand != -1 || item.name == "Xmas decorations");
+			FWall = new Filter<Item>("Wall", Defs.items["Vanilla:Green Brick Wall"].GetTexture(), (item) => item.createWall != -1);
+			FPet = new Filter<Item>("Pet", Defs.items["Vanilla:Wisp in a Bottle"].GetTexture(), (item) => item.damage <= 0 && ((item.shoot > 0 && Main.projPet[item.shoot]) || (item.buffType > 0 && (Main.vanityPet[item.buffType] || Main.lightPet[item.buffType]))));
+			FOther = new Filter<Item>("Other", Defs.unloadedItem.GetTexture(), null);
+
+			SID = new Sorter<Item>("ID", (i1, i2) => i1.type.CompareTo(i2.type), (item) => true);
+			SName = new Sorter<Item>("Name", (i1, i2) => i1.displayName.CompareTo(i2.displayName), (item) => true);
+			SValue = new Sorter<Item>("Value", (i1, i2) => i1.value.CompareTo(i2.value), (item) => item.value > 0 && (item.type < 71 || item.type > 74));
+			SValueStack = new Sorter<Item>("Stack value", (i1, i2) => (i1.value * i1.maxStack).CompareTo(i2.value * i2.maxStack), (item) => item.value > 0 && (item.type < 71 || item.type > 74));
+			SRarity = new Sorter<Item>("Rarity", (i1, i2) => i1.rare.CompareTo(i2.rare), (item) => true);
+			SDamage = new Sorter<Item>("Damage", (i1, i2) => i1.damage.CompareTo(i2.damage), (item) => item.damage > 0 && !item.notAmmo);
+			SMana = new Sorter<Item>("Mana cost", (i1, i2) => i1.mana.CompareTo(i2.mana), (item) => item.mana > 0);
+			SPowerPick = new Sorter<Item>("Pickaxe %", (i1, i2) => i1.pick.CompareTo(i2.pick), (item) => item.pick > 0);
+			SPowerAxe = new Sorter<Item>("Axe %", (i1, i2) => i1.axe.CompareTo(i2.axe), (item) => item.axe > 0);
+			SPowerHammer = new Sorter<Item>("Hammer %", (i1, i2) => i1.hammer.CompareTo(i2.hammer), (item) => item.hammer > 0);
+			SDefense = new Sorter<Item>("Defense", (i1, i2) => i1.defense.CompareTo(i2.defense), (item) => item.headSlot != -1 || item.bodySlot != -1 || item.legSlot != -1);
+			SStack = new Sorter<Item>("Stack", (i1, i2) => i1.maxStack.CompareTo(i2.maxStack), (item) => true);
 			
 			FOther.matches = (item) =>
 			{
@@ -110,7 +121,7 @@ namespace Shockah.FCM.Standard
 					FPickaxe, FAxe, FHammer, FConsumable, FDye, FPaint, FTile, FWall, FPet, FOther
 				}
 			);
-			sorters.AddRange(new Sorter<Item>[] { SID, SName, SValue, SRarity, SDamage, SMana, SDefense, SStack });
+			sorters.AddRange(new Sorter<Item>[] { SID, SName, SValue, SValueStack, SRarity, SDamage, SMana, SPowerPick, SPowerAxe, SPowerHammer, SDefense, SStack });
 
 			slider = new ElSlider(
 				(scroll) => { if (Scroll != scroll) { Scroll = scroll; Refresh(false); } },
@@ -126,6 +137,47 @@ namespace Shockah.FCM.Standard
 				() => { return Shockah.FCM.MBase.me.textures[reverseSort ? "Images/ArrowDecrease.png" : "Images/ArrowIncrease.png"]; }
 			);
 			foreach (Sorter<Item> sorter2 in sorters) sortingChooser.Add(new Tuple<string, Sorter<Item>>(sorter2.name, sorter2));
+
+			bSearch = new ElButton(
+				(b, mb) =>
+				{
+					Main.GetInputText("");
+					if (typing == null) typing = "";
+					else
+					{
+						filterText = typing;
+						if (filterText == "") filterText = null;
+						typing = null;
+					}
+				},
+				(b, sb, mb) =>
+				{
+					Texture2D tex = Shockah.FCM.MBase.me.textures["Images/Arrow.png"];
+					float tscale = 1f;
+					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
+					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				}
+			);
+
+			bSearchBar = new ElButton(
+				(b, mb) =>
+				{
+					Main.GetInputText("");
+					if (typing == null) typing = "";
+					else
+					{
+						filterText = typing;
+						if (filterText == "") filterText = null;
+						typing = null;
+					}
+				},
+				(b, sb, mb) =>
+				{
+					if (typing == null && filterText == null) SDrawing.StringShadowed(sb, Main.fontMouseText, "Search...", new Vector2(b.pos.X + 8, b.pos.Y + 4), Color.White * .5f);
+					else SDrawing.StringShadowed(sb, Main.fontMouseText, typing == null ? filterText : typing + "|", new Vector2(b.pos.X + 8, b.pos.Y + 4));
+				}
+			);
 		}
 
 		public override void OnOpen()
@@ -143,6 +195,16 @@ namespace Shockah.FCM.Standard
 			bool blocked = false;
 			string oldTyping = typing;
 			base.Draw(layer, sb);
+
+			Main.inventoryScale = .75f;
+			bSearch.pos = new Vector2(POS_X - 12 + COLS * OFF_X * Main.inventoryScale, POS_Y + ROWS * OFF_Y * Main.inventoryScale + 4);
+			bSearch.size = new Vector2(32, 32);
+			blocked = bSearch.Draw(sb, false, !blocked) || blocked;
+
+			bSearchBar.pos = new Vector2(POS_X, POS_Y + ROWS * OFF_Y * Main.inventoryScale + 4);
+			bSearchBar.size = new Vector2(20 + COLS * OFF_X * Main.inventoryScale - 36, 32);
+			blocked = bSearchBar.Draw(sb, false, !blocked) || blocked;
+
 			if (oldTyping != typing) Refresh(true);
 			
 			if (Main.mouseItem.IsBlank())
@@ -165,7 +227,6 @@ namespace Shockah.FCM.Standard
 
 			SDrawing.StringShadowed(sb, Main.fontMouseText, (filtered.Count == defs.Count ? "Items" : "Matching items") + ": " + filtered.Count, new Vector2(POS_X, POS_Y - 26));
 
-			Main.inventoryScale = .75f;
 			for (int y = 0; y < ROWS; y++) for (int x = 0; x < COLS; x++)
 			{
 				slots[x + y * COLS].scale = Main.inventoryScale;
@@ -177,9 +238,9 @@ namespace Shockah.FCM.Standard
 			slider.size = new Vector2(16, ROWS * OFF_Y * Main.inventoryScale);
 			blocked = slider.Draw(sb, true, !blocked) || blocked;
 
-			SDrawing.StringShadowed(sb, Main.fontMouseText, "Sort:", new Vector2(POS_X + 16 + COLS * OFF_X * Main.inventoryScale, POS_Y - 26), Color.White, SORT_TEXT_SCALE);
-			sortingChooser.pos = new Vector2(POS_X + 48 + COLS * OFF_X * Main.inventoryScale, POS_Y - 30);
-			sortingChooser.size = new Vector2(72, 24);
+			SDrawing.StringShadowed(sb, Main.fontMouseText, "Sort:", new Vector2(POS_X - 8 + COLS * OFF_X * Main.inventoryScale, POS_Y - 22), Color.White, SORT_TEXT_SCALE);
+			sortingChooser.pos = new Vector2(POS_X + 24 + COLS * OFF_X * Main.inventoryScale, POS_Y - 26);
+			sortingChooser.size = new Vector2(96, 20);
 			blocked = sortingChooser.Draw(sb, false, !blocked) || blocked;
 
 			float filterW = FILTER_W * Main.inventoryScale;
@@ -215,14 +276,9 @@ namespace Shockah.FCM.Standard
 				}
 			}
 
+			bSearch.Draw(sb, true, false);
+			bSearchBar.Draw(sb, true, false);
 			sortingChooser.Draw(sb, true, false);
-
-			string text = typing == null ? filterText : typing + "|";
-			if (!string.IsNullOrEmpty(text))
-			{
-				Drawing.DrawBox(sb, POS_X, POS_Y + ROWS * OFF_Y * Main.inventoryScale + 4, 20 + COLS * OFF_X * Main.inventoryScale, 32);
-				SDrawing.StringShadowed(sb, Main.fontMouseText, text, new Vector2(POS_X + 8, POS_Y + ROWS * OFF_Y * Main.inventoryScale + 8));
-			}
 		}
 
 		public void Refresh(bool resetScroll)
