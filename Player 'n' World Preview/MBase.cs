@@ -51,6 +51,7 @@ namespace Shockah.PNWPreview
 		public override void OnLoad()
 		{
 			me = this;
+			if (Main.dedServ) return;
 			if (File.Exists(Main.WorldPath + "/" + modName + ".dat"))
 			{
 				BinBuffer bb = new BinBuffer(new BinBufferByte(File.ReadAllBytes(Main.WorldPath + "/" + modName + ".dat")));
@@ -567,6 +568,7 @@ namespace Shockah.PNWPreview
 
 		public override void OnUnload()
 		{
+			if (Main.dedServ) return;
 			Menu.menuPages["Player Select"].buttons.Remove(btnPlayer);
 			Menu.menuPages["World Select"].buttons.Remove(btnWorld);
 		}

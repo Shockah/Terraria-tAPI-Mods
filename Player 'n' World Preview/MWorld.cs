@@ -14,6 +14,7 @@ namespace Shockah.PNWPreview
 
 		public override void Initialize()
 		{
+			if (Main.dedServ) return;
 			if (MBase.Current.read) return;
 			Thread thread = new Thread(new ThreadStart(() =>
 				{
@@ -86,12 +87,14 @@ namespace Shockah.PNWPreview
 
 		public override void WorldGenModifyTaskList(List<WorldGenTask> list)
 		{
+			if (Main.dedServ) return;
 			if (TaskInfo == null) TaskInfo = new WGTInfo(modBase);
 			list.Add(TaskInfo);
 		}
 
 		public override void PostUpdate()
 		{
+			if (Main.dedServ) return;
 			WorldInfo wi = MBase.Current;
 			foreach (NPC npc in Main.npc)
 			{
