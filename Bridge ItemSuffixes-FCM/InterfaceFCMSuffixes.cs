@@ -37,8 +37,7 @@ namespace Shockah.ItemSuffixes
 		internal ItemSlotSuffixFCM slotItem = null;
 		private int _Scroll = 0;
 		protected readonly Sorter<ItemSuffix>
-			SID = new Sorter<ItemSuffix>("ID", (i1, i2) => { return i1.id.CompareTo(i2.id); }, (s) => true),
-			SName = new Sorter<ItemSuffix>("Name", (i1, i2) => { return i1.displayName.CompareTo(i2.displayName); }, (s) => true);
+			SID, SName;
 
 		protected int Scroll
 		{
@@ -62,6 +61,10 @@ namespace Shockah.ItemSuffixes
 		public InterfaceFCMSuffixes()
 		{
 			me = this;
+			if (Main.dedServ) return;
+
+			SID = new Sorter<ItemSuffix>("ID", (i1, i2) => { if (i1 == null || i1.displayName == null) return reverseSort ? 1 : -1; if (i2 == null || i2.displayName == null) return reverseSort ? -1 : 1; return i1.id.CompareTo(i2.id); }, (s) => true);
+			SName = new Sorter<ItemSuffix>("Name", (i1, i2) => { if (i1 == null || i1.displayName == null) return reverseSort ? 1 : -1; if (i2 == null || i2.displayName == null) return reverseSort ? -1 : 1; return i1.displayName.CompareTo(i2.displayName); }, (s) => true);
 
 			sorters.AddRange(new Sorter<ItemSuffix>[] { SID, SName });
 
