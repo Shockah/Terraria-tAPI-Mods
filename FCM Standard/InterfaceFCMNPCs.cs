@@ -102,23 +102,13 @@ namespace Shockah.FCM.Standard
 
 		protected readonly ElSlider slider;
 		protected readonly ElChooser<Sorter<NPC>> sortingChooser;
+		protected readonly ElButton bSearch, bSearchBar;
 		protected NPCSlot[] slots = new NPCSlot[COLS * ROWS];
 		private int _Scroll = 0;
 		protected readonly Filter<NPC>
-			FFriendly = new Filter<NPC>("Friendly", Defs.items["Vanilla:Carrot"].GetTexture(), (npc) => npc.friendly || npc.damage <= 0),
-			FTown = new Filter<NPC>("Town", Defs.items["Vanilla:Guide Voodoo Doll"].GetTexture(), (npc) => npc.townNPC),
-			FBoss = new Filter<NPC>("Boss", Defs.items["Vanilla:Suspicious Looking Eye"].GetTexture(), (npc) => SBase.IsBoss(npc)),
-			FOther = new Filter<NPC>("Other", Defs.unloadedItem.GetTexture(), null);
+			FFriendly, FTown, FBoss, FOther;
 		protected readonly Sorter<NPC>
-			SID = new Sorter<NPC>("ID", (i1, i2) => { return i1.type.CompareTo(i2.type); }, (npc) => true),
-			SName = new Sorter<NPC>("Name", (i1, i2) => {
-				string s1 = string.IsNullOrEmpty(i1.displayName) ? i1.name : i1.displayName;
-				string s2 = string.IsNullOrEmpty(i2.displayName) ? i2.name : i2.displayName;
-				return s1.CompareTo(s2);
-			}, (npc) => true),
-			SLife = new Sorter<NPC>("LIfe", (i1, i2) => { return i1.lifeMax.CompareTo(i2.lifeMax); }, (npc) => true),
-			SDamage = new Sorter<NPC>("Damage", (i1, i2) => { return i1.damage.CompareTo(i2.damage); }, (npc) => npc.damage > 0),
-			SDefense = new Sorter<NPC>("Defense", (i1, i2) => { return i1.defense.CompareTo(i2.defense); }, (npc) => true);
+			SID, SName, SLife, SDamage, SDefense;
 
 		protected int Scroll
 		{
@@ -142,6 +132,22 @@ namespace Shockah.FCM.Standard
 		public InterfaceFCMNPCs()
 		{
 			me = this;
+			if (Main.dedServ) return;
+
+			FFriendly = new Filter<NPC>("Friendly", Defs.items["Vanilla:Carrot"].GetTexture(), (npc) => npc.friendly || npc.damage <= 0);
+			FTown = new Filter<NPC>("Town", Defs.items["Vanilla:Guide Voodoo Doll"].GetTexture(), (npc) => npc.townNPC);
+			FBoss = new Filter<NPC>("Boss", Defs.items["Vanilla:Suspicious Looking Eye"].GetTexture(), (npc) => SBase.IsBoss(npc));
+			FOther = new Filter<NPC>("Other", Defs.unloadedItem.GetTexture(), null);
+
+			SID = new Sorter<NPC>("ID", (i1, i2) => { return i1.type.CompareTo(i2.type); }, (npc) => true);
+			SName = new Sorter<NPC>("Name", (i1, i2) => {
+				string s1 = string.IsNullOrEmpty(i1.displayName) ? i1.name : i1.displayName;
+				string s2 = string.IsNullOrEmpty(i2.displayName) ? i2.name : i2.displayName;
+				return s1.CompareTo(s2);
+			}, (npc) => true);
+			SLife = new Sorter<NPC>("LIfe", (i1, i2) => { return i1.lifeMax.CompareTo(i2.lifeMax); }, (npc) => true);
+			SDamage = new Sorter<NPC>("Damage", (i1, i2) => { return i1.damage.CompareTo(i2.damage); }, (npc) => npc.damage > 0);
+			SDefense = new Sorter<NPC>("Defense", (i1, i2) => { return i1.defense.CompareTo(i2.defense); }, (npc) => true);
 
 			FOther.matches = (item) =>
 			{
@@ -169,6 +175,55 @@ namespace Shockah.FCM.Standard
 				() => { return Shockah.FCM.MBase.me.textures[reverseSort ? "Images/ArrowDecrease.png" : "Images/ArrowIncrease.png"]; }
 			);
 			foreach (Sorter<NPC> sorter2 in sorters) sortingChooser.Add(new Tuple<string, Sorter<NPC>>(sorter2.name, sorter2));
+
+			bSearch = new ElButton(
+				(b, mb) =>
+				{
+					if (typing == null && filterText != null)
+					{
+						filterText = null;
+						Refresh(true);
+					}
+					else
+					{
+						Main.GetInputText("");
+						if (typing == null) typing = "";
+						else
+						{
+							filterText = typing;
+							if (filterText == "") filterText = null;
+							typing = null;
+						}
+					}
+				},
+				(b, sb, mb) =>
+				{
+					Texture2D tex = typing == null && filterText != null ? Main.cdTexture : Shockah.FCM.MBase.me.textures["Images/Arrow.png"];
+					float tscale = 1f;
+					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
+					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				}
+			);
+
+			bSearchBar = new ElButton(
+				(b, mb) =>
+				{
+					Main.GetInputText("");
+					if (typing == null) typing = "";
+					else
+					{
+						filterText = typing;
+						if (filterText == "") filterText = null;
+						typing = null;
+					}
+				},
+				(b, sb, mb) =>
+				{
+					if (typing == null && filterText == null) SDrawing.StringShadowed(sb, Main.fontMouseText, "Search...", new Vector2(b.pos.X + 8, b.pos.Y + 4), Color.White * .5f);
+					else SDrawing.StringShadowed(sb, Main.fontMouseText, typing == null ? filterText : typing + "|", new Vector2(b.pos.X + 8, b.pos.Y + 4));
+				}
+			);
 		}
 
 		public override void OnOpen()
@@ -186,6 +241,16 @@ namespace Shockah.FCM.Standard
 			bool blocked = false;
 			string oldTyping = typing;
 			base.Draw(layer, sb);
+
+			Main.inventoryScale = .75f;
+			bSearch.pos = new Vector2(POS_X + COLS * OFF_X - 12, POS_Y + ROWS * OFF_Y + 4);
+			bSearch.size = new Vector2(32, 32);
+			blocked = bSearch.Draw(sb, false, !blocked) || blocked;
+
+			bSearchBar.pos = new Vector2(POS_X, POS_Y + ROWS * OFF_Y + 4);
+			bSearchBar.size = new Vector2(COLS * OFF_X - 16, 32);
+			blocked = bSearchBar.Draw(sb, false, !blocked) || blocked;
+
 			if (oldTyping != typing) Refresh(true);
 
 			if (spawning != null)
@@ -277,9 +342,9 @@ namespace Shockah.FCM.Standard
 			slider.size = new Vector2(16, ROWS * OFF_Y * Main.inventoryScale);
 			blocked = slider.Draw(sb, true, !blocked) || blocked;
 
-			SDrawing.StringShadowed(sb, Main.fontMouseText, "Sort:", new Vector2(POS_X + 16 + COLS * OFF_X * Main.inventoryScale, POS_Y - 26), Color.White, SORT_TEXT_SCALE);
-			sortingChooser.pos = new Vector2(POS_X + 48 + COLS * OFF_X * Main.inventoryScale, POS_Y - 30);
-			sortingChooser.size = new Vector2(72, 24);
+			SDrawing.StringShadowed(sb, Main.fontMouseText, "Sort:", new Vector2(POS_X - 8 + COLS * OFF_X * Main.inventoryScale, POS_Y - 22), Color.White, SORT_TEXT_SCALE);
+			sortingChooser.pos = new Vector2(POS_X + 24 + COLS * OFF_X * Main.inventoryScale, POS_Y - 26);
+			sortingChooser.size = new Vector2(96, 20);
 			blocked = sortingChooser.Draw(sb, false, !blocked) || blocked;
 
 			float oldInventoryScale = Main.inventoryScale;
@@ -320,14 +385,9 @@ namespace Shockah.FCM.Standard
 				}
 			}
 
+			bSearch.Draw(sb, true, false);
+			bSearchBar.Draw(sb, true, false);
 			sortingChooser.Draw(sb, true, false);
-
-			string text = typing == null ? filterText : typing + "|";
-			if (!string.IsNullOrEmpty(text))
-			{
-				Drawing.DrawBox(sb, POS_X, POS_Y + ROWS * OFF_Y * oldInventoryScale + 4, 20 + COLS * OFF_X * oldInventoryScale, 32);
-				SDrawing.StringShadowed(sb, Main.fontMouseText, text, new Vector2(POS_X + 8, POS_Y + ROWS * OFF_Y * oldInventoryScale + 8));
-			}
 		}
 
 		public void Refresh(bool resetScroll)

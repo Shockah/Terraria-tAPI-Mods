@@ -141,18 +141,26 @@ namespace Shockah.FCM.Standard
 			bSearch = new ElButton(
 				(b, mb) =>
 				{
-					Main.GetInputText("");
-					if (typing == null) typing = "";
+					if (typing == null && filterText != null)
+					{
+						filterText = null;
+						Refresh(true);
+					}
 					else
 					{
-						filterText = typing;
-						if (filterText == "") filterText = null;
-						typing = null;
+						Main.GetInputText("");
+						if (typing == null) typing = "";
+						else
+						{
+							filterText = typing;
+							if (filterText == "") filterText = null;
+							typing = null;
+						}
 					}
 				},
 				(b, sb, mb) =>
 				{
-					Texture2D tex = Shockah.FCM.MBase.me.textures["Images/Arrow.png"];
+					Texture2D tex = typing == null && filterText != null ? Main.cdTexture : Shockah.FCM.MBase.me.textures["Images/Arrow.png"];
 					float tscale = 1f;
 					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
 					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);

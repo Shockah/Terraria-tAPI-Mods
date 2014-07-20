@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="El.cs" />
+    <Compile Include="ElButton.cs" />
     <Compile Include="ElChooser.cs" />
     <Compile Include="ElSlider.cs" />
     <Compile Include="Filter.cs" />
@@ -72,6 +73,7 @@
     <None Include="ModInfo.json" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\Arrow.png" />
     <Content Include="Images\ArrowDecrease.png" />
     <Content Include="Images\ArrowIncrease.png" />
     <Content Include="Images\Tick.png" />
