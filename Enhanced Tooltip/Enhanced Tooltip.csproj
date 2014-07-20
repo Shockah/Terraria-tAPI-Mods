@@ -84,6 +84,8 @@
     <Compile Include="CodeItem\ModuleItemTipText.cs" />
     <Compile Include="CodeItem\ModuleItemWand.cs" />
     <Compile Include="ETipStyle.cs" />
+    <Compile Include="ILPreBuffs.cs" />
+    <Compile Include="ILPreMouseOver.cs" />
     <Compile Include="ILPreTooltip.cs" />
     <Compile Include="MBase.cs" />
     <Compile Include="MInterface.cs" />

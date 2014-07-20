@@ -39,7 +39,7 @@
 		
 		{
 			"name": "itemNameScale",
-			"displayName": "Item name scale",
+			"displayName": "Item: Name scale",
 			"type": "Float",
 			"minimum": 0.5,
 			"maximum": 1.5,
@@ -247,6 +247,118 @@
 				"Multiple colors"
 			],
 			"default": 1
+		},
+
+		{
+			"name": "itemOwnerStyle",
+			"displayName": "Item: Owner style",
+			"type": "List",
+			"list": [
+				"Merge with name",
+				"Separate line"
+			],
+			"default": 1
+		},
+		{
+			"name": "itemOwnerColor",
+			"displayName": "Item: Owner coloring",
+			"type": "List",
+			"list": [
+				"White",
+				"Team"
+			],
+			"default": 1
+		},
+
+		{
+			"name": "npcStyle",
+			"displayName": "NPC: Style",
+			"type": "List",
+			"list": [
+				"1 line",
+				"Multiple lines"
+			],
+			"default": 0
+		},
+		{
+			"name": "npcHeaderScale",
+			"displayName": "NPC: Header scale",
+			"type": "Float",
+			"minimum": 0.5,
+			"maximum": 1.5,
+			"default": 1.2
+		},
+		{
+			"name": "npcLifeColor",
+			"displayName": "NPC: Life coloring",
+			"type": "List",
+			"list": [
+				"White",
+				"Life"
+			],
+			"default": 1
+		},
+
+		{
+			"name": "playerStyle",
+			"displayName": "Player: Style",
+			"type": "List",
+			"list": [
+				"1 line",
+				"Multiple lines"
+			],
+			"default": 0
+		},
+		{
+			"name": "playerHeaderScale",
+			"displayName": "Player: Header scale",
+			"type": "Float",
+			"minimum": 0.5,
+			"maximum": 1.5,
+			"default": 1.2
+		},
+		{
+			"name": "playerNameColor",
+			"displayName": "Player: Name coloring",
+			"type": "List",
+			"list": [
+				"White",
+				"Life",
+				"Team"
+			],
+			"default": 2
+		},
+		{
+			"name": "playerLifeColor",
+			"displayName": "Player: Life coloring",
+			"type": "List",
+			"list": [
+				"White",
+				"Life",
+				"Team"
+			],
+			"default": 1
+		},
+		{
+			"name": "playerPvpColor",
+			"displayName": "Player: PvP coloring",
+			"type": "List",
+			"list": [
+				"White",
+				"Red",
+				"Life",
+				"Team"
+			],
+			"default": 1
+		},
+
+		{
+			"name": "buffNameScale",
+			"displayName": "Buff: Name scale",
+			"type": "Float",
+			"minimum": 0.5,
+			"maximum": 1.5,
+			"default": 1.2
 		}
 	]
 }

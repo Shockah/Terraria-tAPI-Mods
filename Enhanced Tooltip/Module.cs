@@ -10,7 +10,7 @@ using Terraria;
 
 namespace Shockah.ETooltip
 {
-	public abstract class Module<T> where T : class
+	public abstract class Module<T>
 	{
 		public static Color DoubleLerp(Color c1, Color c2, Color c3, float f)
 		{
