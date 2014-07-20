@@ -169,7 +169,7 @@ namespace Shockah.ItemSuffixes
 		}
 		public virtual void DrawSlotBackground(SpriteBatch sb)
 		{
-			if (IsSuffixActive()) Drawing.DrawBox(sb, pos.X, pos.Y, size.X, size.Y, Color.White);
+			if (MySuffix != null && IsSuffixActive()) Drawing.DrawBox(sb, pos.X, pos.Y, size.X, size.Y, Color.White);
 			else Drawing.DrawBox(sb, pos.X, pos.Y, size.X, size.Y);
 		}
 		public virtual void DrawSlotSuffix(SpriteBatch sb)

@@ -157,7 +157,7 @@ namespace Shockah.FCM.Standard
 		}
 		public virtual void DrawSlotBackground(SpriteBatch sb)
 		{
-			if (IsPrefixActive()) Drawing.DrawBox(sb, pos.X, pos.Y, size.X, size.Y, Color.White);
+			if (MyPrefix != null && IsPrefixActive()) Drawing.DrawBox(sb, pos.X, pos.Y, size.X, size.Y, Color.White);
 			else Drawing.DrawBox(sb, pos.X, pos.Y, size.X, size.Y);
 		}
 		public virtual void DrawSlotPrefix(SpriteBatch sb)

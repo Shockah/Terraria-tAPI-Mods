@@ -38,8 +38,8 @@ namespace Shockah.FCM.Standard
 		internal ItemSlotPrefixFCM slotItem = null;
 		private int _Scroll = 0;
 		protected readonly Sorter<Prefix>
-			SID = new Sorter<Prefix>("ID", (i1, i2) => { return i1.type.CompareTo(i2.type); }, (npc) => true),
-			SName = new Sorter<Prefix>("Name", (i1, i2) => { return i1.displayName.CompareTo(i2.displayName); }, (npc) => true);
+			SID = new Sorter<Prefix>("ID", (i1, i2) => { return i1.type.CompareTo(i2.type); }, (p) => true),
+			SName = new Sorter<Prefix>("Name", (i1, i2) => { return i1.displayName.CompareTo(i2.displayName); }, (p) => true);
 
 		protected int Scroll
 		{
@@ -180,11 +180,11 @@ namespace Shockah.FCM.Standard
 
 			Main.inventoryScale = 1f;
 			for (int y = 0; y < ROWS; y++) for (int x = 0; x < COLS; x++)
-				{
-					slots[x + y * COLS].scale = Main.inventoryScale;
-					slots[x + y * COLS].UpdatePos(new Vector2(POS_X + x * offX, POS_Y + y * offY));
-					slots[x + y * COLS].Draw(sb, true, !blocked);
-				}
+			{
+				slots[x + y * COLS].scale = Main.inventoryScale;
+				slots[x + y * COLS].UpdatePos(new Vector2(POS_X + x * offX, POS_Y + y * offY));
+				slots[x + y * COLS].Draw(sb, true, !blocked);
+			}
 
 			slider.pos = new Vector2(POS_X + 4 + COLS * offX * Main.inventoryScale, POS_Y);
 			slider.size = new Vector2(16, ROWS * offY * Main.inventoryScale);

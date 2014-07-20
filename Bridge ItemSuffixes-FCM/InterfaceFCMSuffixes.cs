@@ -31,9 +31,14 @@ namespace Shockah.ItemSuffixes
 		}
 
 		protected readonly ElSlider slider;
+		protected readonly ElChooser<Sorter<ItemSuffix>> sortingChooser;
+		protected readonly ElButton bSearch, bSearchBar;
 		protected SuffixSlot[] slots = new SuffixSlot[COLS * ROWS];
 		internal ItemSlotSuffixFCM slotItem = null;
 		private int _Scroll = 0;
+		protected readonly Sorter<ItemSuffix>
+			SID = new Sorter<ItemSuffix>("ID", (i1, i2) => { return i1.id.CompareTo(i2.id); }, (s) => true),
+			SName = new Sorter<ItemSuffix>("Name", (i1, i2) => { return i1.displayName.CompareTo(i2.displayName); }, (s) => true);
 
 		protected int Scroll
 		{
@@ -58,11 +63,70 @@ namespace Shockah.ItemSuffixes
 		{
 			me = this;
 
+			sorters.AddRange(new Sorter<ItemSuffix>[] { SID, SName });
+
 			slider = new ElSlider(
 				(scroll) => { if (Scroll != scroll) { Scroll = scroll; Refresh(false); } },
 				() => { return Scroll; },
 				() => { return ROWS; },
 				() => { return (int)Math.Ceiling(1f * filtered.Count / COLS); }
+			);
+
+			sorter = sorters[0];
+			sortingChooser = new ElChooser<Sorter<ItemSuffix>>(
+				(item) => { reverseSort = object.ReferenceEquals(sorter, item) ? !reverseSort : false; sorter = item; Refresh(true); },
+				() => { return sorter; },
+				() => { return Shockah.FCM.MBase.me.textures[reverseSort ? "Images/ArrowDecrease.png" : "Images/ArrowIncrease.png"]; }
+			);
+			foreach (Sorter<ItemSuffix> sorter2 in sorters) sortingChooser.Add(new Tuple<string, Sorter<ItemSuffix>>(sorter2.name, sorter2));
+
+			bSearch = new ElButton(
+				(b, mb) =>
+				{
+					if (typing == null && filterText != null)
+					{
+						filterText = null;
+						Refresh(true);
+					}
+					else
+					{
+						Main.GetInputText("");
+						if (typing == null) typing = "";
+						else
+						{
+							filterText = typing;
+							if (filterText == "") filterText = null;
+							typing = null;
+						}
+					}
+				},
+				(b, sb, mb) =>
+				{
+					Texture2D tex = typing == null && filterText != null ? Main.cdTexture : Shockah.FCM.MBase.me.textures["Images/Arrow.png"];
+					float tscale = 1f;
+					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
+					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				}
+			);
+
+			bSearchBar = new ElButton(
+				(b, mb) =>
+				{
+					Main.GetInputText("");
+					if (typing == null) typing = "";
+					else
+					{
+						filterText = typing;
+						if (filterText == "") filterText = null;
+						typing = null;
+					}
+				},
+				(b, sb, mb) =>
+				{
+					if (typing == null && filterText == null) SDrawing.StringShadowed(sb, Main.fontMouseText, "Search...", new Vector2(b.pos.X + 8, b.pos.Y + 4), Color.White * .5f);
+					else SDrawing.StringShadowed(sb, Main.fontMouseText, typing == null ? filterText : typing + "|", new Vector2(b.pos.X + 8, b.pos.Y + 4));
+				}
 			);
 
 			slotItem = new ItemSlotSuffixFCM(this);
@@ -87,9 +151,21 @@ namespace Shockah.ItemSuffixes
 
 		public override void Draw(InterfaceLayer layer, SpriteBatch sb)
 		{
+			Main.inventoryScale = 1f;
+			int offX = (int)Math.Ceiling(SLOT_W * Main.inventoryScale), offY = (int)Math.Ceiling(SLOT_H * Main.inventoryScale);
+			
 			bool blocked = false;
 			string oldTyping = typing;
 			base.Draw(layer, sb);
+
+			bSearch.pos = new Vector2(POS_X + COLS * offX - 12, POS_Y + ROWS * offY + 4);
+			bSearch.size = new Vector2(32, 32);
+			blocked = bSearch.Draw(sb, false, !blocked) || blocked;
+
+			bSearchBar.pos = new Vector2(POS_X, POS_Y + ROWS * offY + 4);
+			bSearchBar.size = new Vector2(COLS * offX - 16, 32);
+			blocked = bSearchBar.Draw(sb, false, !blocked) || blocked;
+
 			if (oldTyping != typing) Refresh(true);
 
 			int scrollBy = (Main.mouseState.ScrollWheelValue - Main.oldMouseState.ScrollWheelValue) / 120;
@@ -100,13 +176,12 @@ namespace Shockah.ItemSuffixes
 			SDrawing.StringShadowed(sb, Main.fontMouseText, (filtered.Count == defs.Count ? "Suffixes" : "Matching suffixes") + ": " + filtered.Count, new Vector2(POS_X, POS_Y - 26));
 
 			Main.inventoryScale = 1f;
-			int offX = (int)Math.Ceiling(SLOT_W * Main.inventoryScale), offY = (int)Math.Ceiling(SLOT_H * Main.inventoryScale);
 			for (int y = 0; y < ROWS; y++) for (int x = 0; x < COLS; x++)
-				{
-					slots[x + y * COLS].scale = Main.inventoryScale;
-					slots[x + y * COLS].UpdatePos(new Vector2(POS_X + x * offX, POS_Y + y * offY));
-					slots[x + y * COLS].Draw(sb, true, !blocked);
-				}
+			{
+				slots[x + y * COLS].scale = Main.inventoryScale;
+				slots[x + y * COLS].UpdatePos(new Vector2(POS_X + x * offX, POS_Y + y * offY));
+				slots[x + y * COLS].Draw(sb, true, !blocked);
+			}
 
 			slider.pos = new Vector2(POS_X + 4 + COLS * offX * Main.inventoryScale, POS_Y);
 			slider.size = new Vector2(16, ROWS * offY * Main.inventoryScale);
@@ -116,15 +191,17 @@ namespace Shockah.ItemSuffixes
 			slotItem.UpdatePos(new Vector2(POS_X + COLS * offX * Main.inventoryScale + 32, POS_Y + ROWS * offY * Main.inventoryScale - 56));
 			slotItem.Draw(sb, true, !blocked);
 
+			SDrawing.StringShadowed(sb, Main.fontMouseText, "Sort:", new Vector2(POS_X - 8 + COLS * offX * Main.inventoryScale, POS_Y - 22), Color.White, SORT_TEXT_SCALE);
+			sortingChooser.pos = new Vector2(POS_X + 24 + COLS * offX * Main.inventoryScale, POS_Y - 26);
+			sortingChooser.size = new Vector2(96, 20);
+			blocked = sortingChooser.Draw(sb, false, !blocked) || blocked;
+
 			float oldInventoryScale = Main.inventoryScale;
 			Main.inventoryScale = .75f;
 
-			string text = typing == null ? filterText : typing + "|";
-			if (!string.IsNullOrEmpty(text))
-			{
-				Drawing.DrawBox(sb, POS_X, POS_Y + ROWS * offY * oldInventoryScale + 4, 20 + COLS * offX * oldInventoryScale, 32);
-				SDrawing.StringShadowed(sb, Main.fontMouseText, text, new Vector2(POS_X + 8, POS_Y + ROWS * offY * oldInventoryScale + 8));
-			}
+			bSearch.Draw(sb, true, false);
+			bSearchBar.Draw(sb, true, false);
+			sortingChooser.Draw(sb, true, false);
 		}
 
 		public void Refresh(bool resetScroll)
@@ -140,9 +217,12 @@ namespace Shockah.ItemSuffixes
 			foreach (ItemSuffix suffix in defs)
 			{
 				if ((typing != null || filterText != null) && (defsNames[defs.IndexOf(suffix)].ToLower().IndexOf((typing == null ? filterText : typing).ToLower()) == -1)) continue;
+				if (!sorter.allow(suffix)) continue;
 				if (!slotItem.MyItem.IsBlank() && !suffix.IsAllowed(slotItem.MyItem) && suffix.displayName != null) continue;
 				filtered.Add(suffix);
 			}
+			filtered.Sort(sorter);
+			if (reverseSort) filtered.Reverse();
 		}
 	}
 }
