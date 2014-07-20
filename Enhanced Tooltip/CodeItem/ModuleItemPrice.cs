@@ -20,6 +20,8 @@ namespace Shockah.ETooltip.ModuleItem
 
 		public override void ModifyTip(ETipStyle style, OptionList options, STooltip tip, Item item)
 		{
+			if (item.type >= 71 && item.type <= 74) return;
+			
 			if (Main.npcShop > 0 || ((bool)options["itemAlwaysDisplayPrice"].Value && item.value > 0))
 			{
 				StringBuilder sb = new StringBuilder();
