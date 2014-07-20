@@ -242,7 +242,6 @@ namespace Shockah.FCM.Standard
 			string oldTyping = typing;
 			base.Draw(layer, sb);
 
-			Main.inventoryScale = .75f;
 			bSearch.pos = new Vector2(POS_X + COLS * OFF_X - 12, POS_Y + ROWS * OFF_Y + 4);
 			bSearch.size = new Vector2(32, 32);
 			blocked = bSearch.Draw(sb, false, !blocked) || blocked;
