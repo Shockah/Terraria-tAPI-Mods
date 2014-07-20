@@ -4,6 +4,7 @@ using Shockah.Base;
 using Shockah.ETooltip.ModuleItem;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using TAPI;
 using Terraria;
@@ -18,10 +19,26 @@ namespace Shockah.ETooltip
 		public int maxPowerPick = 0, maxPowerAxe = 0, maxPowerHammer = 0, maxManaCost = 0;
 		public List<Module<Item>> modulesItems = new List<Module<Item>>();
 		public bool oneTooltip = false;
+
+		public static InterfaceLayer LayerPreTooltip = null, LayerPreMouseOver = null, LayerPreBuffs = null;
+		internal static InterfaceLayer CopyLayerMouseText, CopyLayerMouseOver, CopyLayerBuffs;
 		
 		public override void OnLoad()
 		{
 			me = this;
+
+			CopyLayerMouseText = InterfaceLayer.LayerMouseText;
+			CopyLayerMouseOver = InterfaceLayer.LayerMouseOver;
+			CopyLayerBuffs = InterfaceLayer.LayerBuffs;
+
+			LayerPreTooltip = new ILPreTooltip();
+			LayerPreMouseOver = new ILPreMouseOver();
+			LayerPreBuffs = new ILPreBuffs();
+
+			Type refType = typeof(InterfaceLayer);
+			refType.GetField("LayerMouseText", BindingFlags.Static | BindingFlags.Public).SetValue(null, LayerPreTooltip);
+			refType.GetField("LayerMouseOver", BindingFlags.Static | BindingFlags.Public).SetValue(null, LayerPreMouseOver);
+			refType.GetField("LayerBuffs", BindingFlags.Static | BindingFlags.Public).SetValue(null, LayerPreBuffs);
 
 			modulesItems.Add(new ModuleItemName());
 			modulesItems.Add(new ModuleItemDamage());
@@ -46,6 +63,14 @@ namespace Shockah.ETooltip
 			modulesItems.Add(new ModuleItemPrefix());
 			modulesItems.Add(new ModuleItemSetBonus());
 			modulesItems.Add(new ModuleItemPrice());
+		}
+
+		public override void OnUnload()
+		{
+			Type refType = typeof(InterfaceLayer);
+			refType.GetField("LayerMouseText", BindingFlags.Static | BindingFlags.Public).SetValue(null, CopyLayerMouseText);
+			refType.GetField("LayerMouseOver", BindingFlags.Static | BindingFlags.Public).SetValue(null, CopyLayerMouseOver);
+			refType.GetField("LayerBuffs", BindingFlags.Static | BindingFlags.Public).SetValue(null, CopyLayerBuffs);
 		}
 
 		public override void OnAllModsLoaded()

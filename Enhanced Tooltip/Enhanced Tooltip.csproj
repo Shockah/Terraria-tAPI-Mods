@@ -88,7 +88,6 @@
     <Compile Include="ILPreMouseOver.cs" />
     <Compile Include="ILPreTooltip.cs" />
     <Compile Include="MBase.cs" />
-    <Compile Include="MInterface.cs" />
     <Compile Include="Module.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
