@@ -38,8 +38,7 @@ namespace Shockah.FCM.Standard
 		internal ItemSlotPrefixFCM slotItem = null;
 		private int _Scroll = 0;
 		protected readonly Sorter<Prefix>
-			SID = new Sorter<Prefix>("ID", (i1, i2) => { return i1.type.CompareTo(i2.type); }, (p) => true),
-			SName = new Sorter<Prefix>("Name", (i1, i2) => { return i1.displayName.CompareTo(i2.displayName); }, (p) => true);
+			SID, SName;
 
 		protected int Scroll
 		{
@@ -63,6 +62,18 @@ namespace Shockah.FCM.Standard
 		public InterfaceFCMPrefixes()
 		{
 			me = this;
+			if (Main.dedServ) return;
+
+			SID = new Sorter<Prefix>("ID", (i1, i2) => { if (i1 == null || i1.type == 0) return reverseSort ? 1 : -1; if (i2 == null || i2.type == 0) return reverseSort ? -1 : 1; return i1.type.CompareTo(i2.type); }, (p) => true);
+			SName = new Sorter<Prefix>("Name",
+			(i1, i2) =>
+			{
+				if (i1 == null || i1.type == 0) return reverseSort ? 1 : -1;
+				if (i2 == null || i2.type == 0) return reverseSort ? -1 : 1;
+				string s1 = InterfaceFCMPrefixes.defsNames[InterfaceFCMPrefixes.defs.IndexOf(i1)];
+				string s2 = InterfaceFCMPrefixes.defsNames[InterfaceFCMPrefixes.defs.IndexOf(i2)];
+				return s1.CompareTo(s2);
+			}, (p) => p != null);
 
 			sorters.AddRange(new Sorter<Prefix>[] { SID, SName });
 
