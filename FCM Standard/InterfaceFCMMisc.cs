@@ -260,11 +260,11 @@ namespace Shockah.FCM.Standard
 			(value) => "Godmode: " + (value ? "On" : "Off"),
 			(pos, value) =>
 			{
-				Texture2D tex = Main.itemTexture[963];
+				Texture2D tex = Main.buffTexture[10];
 				float tscale = 1f;
 				if (tscale * tex.Width > 24f) tscale = 24f / tex.Width;
 				if (tscale * tex.Height > 24f) tscale = 24f / tex.Height;
-				sb.Draw(tex, pos + new Vector2(16, 16), null, value ? Color.Red : Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				sb.Draw(tex, pos + new Vector2(16, 16), null, Color.White * (value ? 1f : .5f), 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
 			});
 
 			drawButton(new Vector2(POS_X + 400, POS_Y + 84), Main.localPlayer.GetSubClass<MPlayer>().cheatNoclip,
@@ -281,14 +281,14 @@ namespace Shockah.FCM.Standard
 					NetMessage.SendModData(MBase.me, MBase.MSG_CHEAT, -1, -1, bb);
 				}
 			},
-			(value) => "Noclip: " + (value ? "On" : "Off"),
+			(value) => "Noclip: " + (value ? "On\nHold Shift to move faster" : "Off"),
 			(pos, value) =>
 			{
-				Texture2D tex = Main.ghostTexture;
+				Texture2D tex = Main.buffTexture[18];
 				float tscale = 1f;
 				if (tscale * tex.Width > 24f) tscale = 24f / tex.Width;
-				if (tscale * (tex.Height / 4) > 24f) tscale = 24f / (tex.Height / 4);
-				sb.Draw(tex, pos + new Vector2(16, 16), new Rectangle?(new Rectangle(0, 0, tex.Width, tex.Height / 4)), value ? Color.Red : Color.White, 0f, new Vector2(tex.Width / 2, tex.Height / 4 / 2), tscale, SpriteEffects.None, 0f);
+				if (tscale * tex.Height > 24f) tscale = 24f / tex.Height;
+				sb.Draw(tex, pos + new Vector2(16, 16), null, Color.White * (value ? 1f : .5f), 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
 			});
 
 
