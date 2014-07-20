@@ -15,10 +15,40 @@ namespace Shockah.FCM.Standard
 		public static readonly string[] MOON_PHASES = new string[] { "Full Moon", "Waning Gibbous", "Third Quarter", "Waning Crescent", "New Moon", "Waxing Crescent", "First Quarter", "Waxing Gibbous" };
 
 		public static InterfaceFCMMisc me = null;
+		public static int throttleTimeUpdate = 0;
+		public static bool timeUpdateSend = false;
 
 		public static void Reset()
 		{
-			
+			Main.dayRate = 1;
+			throttleTimeUpdate = 0;
+			timeUpdateSend = false;
+		}
+
+		public static void QueueTimeUpdate()
+		{
+			if (Main.netMode != 1) return;
+			if (throttleTimeUpdate > 0) return;
+			throttleTimeUpdate = 5;
+			timeUpdateSend = true;
+		}
+		public static void SendTimeUpdate(int player, int ignorePlayer)
+		{
+			SendTimeUpdate(player, ignorePlayer, Main.netMode == 1);
+		}
+		public static void SendTimeUpdate(int remote, int ignore, bool addMyId)
+		{
+			if (Main.netMode == 0) return;
+
+			BinBuffer bb = new BinBuffer();
+			if (addMyId) bb.Write((byte)Main.myPlayer);
+			bb.Write(Main.dayTime);
+			bb.Write((float)Main.time);
+			bb.Write((ushort)Main.dayRate);
+			bb.Write((byte)Main.moonPhase);
+			bb.Write(new BitsByte(Main.hardMode, Main.bloodMoon, Main.eclipse));
+			bb.Pos = 0;
+			NetMessage.SendModData(MBase.me, MBase.MSG_TIME, remote, ignore, bb);
 		}
 
 		public static void SetAbsoluteTime(int time)
@@ -175,19 +205,19 @@ namespace Shockah.FCM.Standard
 
 			drawSliderFloat("TimeSlider", "Current time", new Vector2(POS_X, POS_Y), MBase.me.textures["Images/TimeSlider.png"], 1f * FixAbsoluteTime(GetAbsoluteTime() - 43200) / 86400,
 			(ratio) => { return GetTimeText(false, GetAbsoluteTime()); },
-			(ratio) => { SetAbsoluteTime((int)(Math.Min(Math.Max(ratio, 0f), 1f) * 86400) - 43200); });
+			(ratio) => { SetAbsoluteTime((int)(Math.Min(Math.Max(ratio, 0f), 1f) * 86400) - 43200); QueueTimeUpdate(); });
 
 			drawSliderInt("MoonPhase", "Moon phase", new Vector2(POS_X + 200, POS_Y), API.main.colorBarTexture, Main.moonPhase, 0, 7,
 			(value) => { return MOON_PHASES[value]; },
-			(value) => { Main.moonPhase = value; });
+			(value) => { Main.moonPhase = value; QueueTimeUpdate(); });
 
 			drawSliderInt("TimeRateSlider", "Time rate", new Vector2(POS_X, POS_Y + 40), MBase.me.textures["Images/TimeRateSlider.png"], (int)Math.Ceiling(Math.Pow(Main.dayRate, 1f / 1.3545f)), 0, 50,
 			(value) => { return "" + (int)Math.Pow(value, 1.3545f); },
-			(value) => { Main.dayRate = (int)Math.Pow(value, 1.3545f); });
+			(value) => { Main.dayRate = (int)Math.Pow(value, 1.3545f); QueueTimeUpdate(); });
 
 			
 			drawButton(new Vector2(POS_X + 200, POS_Y + 44), Main.hardMode,
-			(value) => Main.hardMode = value,
+			(value) => { Main.hardMode = value; QueueTimeUpdate(); },
 			(value) => "Hardmode: " + (value ? "On" : "Off"),
 			(pos, value) => {
 				Texture2D tex = Main.itemTexture[value ? 544 : 43];
@@ -198,12 +228,12 @@ namespace Shockah.FCM.Standard
 			});
 
 			drawButton(new Vector2(POS_X + 240, POS_Y + 44), Main.bloodMoon,
-			(value) => Main.bloodMoon = value,
+			(value) => { Main.bloodMoon = value; QueueTimeUpdate(); },
 			(value) => "Blood Moon: " + (value ? "On" : "Off"),
 			(pos, value) => sb.Draw(Main.moonTexture[0], pos + new Vector2(16, 16), new Rectangle?(new Rectangle(0, 0, 50, 50)), value ? Color.Red : Color.White, 0f, new Vector2(25, 25), 24f / 50f, SpriteEffects.None, 0f));
 
 			drawButton(new Vector2(POS_X + 280, POS_Y + 44), Main.eclipse,
-			(value) => Main.eclipse = value,
+			(value) => { Main.eclipse = value; QueueTimeUpdate(); },
 			(value) => "Solar Eclipse: " + (value ? "On" : "Off"),
 			(pos, value) => {
 				Texture2D tex = value ? Main.sun3Texture : Main.sunTexture;

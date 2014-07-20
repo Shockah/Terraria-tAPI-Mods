@@ -10,7 +10,8 @@ namespace Shockah.FCM.Standard
 	{
 		public const int
 			MSG_SPAWN_NPCS = 1,
-			MSG_CHEAT = 2;
+			MSG_CHEAT = 2,
+			MSG_TIME = 3;
 		
 		public static ModBase me { get; private set; }
 		
@@ -45,16 +46,32 @@ namespace Shockah.FCM.Standard
 
 		public override void PostGameDraw(SpriteBatch sb)
 		{
-			if (!(Interface.current is InterfaceFCMNPCs) && InterfaceFCMNPCs.spawning != null)
+			if (!Main.gameMenu)
 			{
-				InterfaceFCMBase.resetInterface = false;
-				InterfaceFCMNPCs.spawning = null;
-				InterfaceFCMNPCs.me.Open();
+				if (!(Interface.current is InterfaceFCMNPCs) && InterfaceFCMNPCs.spawning != null)
+				{
+					InterfaceFCMBase.resetInterface = false;
+					InterfaceFCMNPCs.spawning = null;
+					InterfaceFCMNPCs.me.Open();
+				}
+
+				if (InterfaceFCMMisc.throttleTimeUpdate > 0)
+				{
+					InterfaceFCMMisc.throttleTimeUpdate--;
+					if (InterfaceFCMMisc.throttleTimeUpdate == 0 && InterfaceFCMMisc.timeUpdateSend)
+					{
+						InterfaceFCMMisc.timeUpdateSend = false;
+						InterfaceFCMMisc.SendTimeUpdate(-1, -1);
+					}
+				}
 			}
 		}
 
 		public override void NetReceive(int msgType, BinBuffer bb)
 		{
+			int ignore;
+			BinBuffer copybb;
+			
 			switch (msgType)
 			{
 				case MSG_SPAWN_NPCS:
@@ -62,8 +79,8 @@ namespace Shockah.FCM.Standard
 					InterfaceFCMNPCs.SpawnNPCs(bb.ReadShort(), bb.ReadInt(), bb.ReadInt(), bb.ReadFloat(), bb.ReadUShort(), bb.ReadInt());
 					break;
 				case MSG_CHEAT:
-					int ignore = 0;
-					BinBuffer copybb = null;
+					ignore = 0;
+					copybb = null;
 					if (Main.netMode == 2)
 					{
 						ignore = bb.ReadByte();
@@ -80,6 +97,23 @@ namespace Shockah.FCM.Standard
 					}
 
 					if (Main.netMode == 2) NetMessage.SendModData(this, MSG_CHEAT, -1, ignore, copybb);
+					break;
+				case MSG_TIME:
+					ignore = 0;
+					copybb = null;
+					if (Main.netMode == 2)
+					{
+						ignore = bb.ReadByte();
+						copybb = SBase.CopyFurther(bb);
+					}
+
+					Main.dayTime = bb.ReadBool();
+					Main.time = bb.ReadFloat();
+					Main.dayRate = bb.ReadUShort();
+					Main.moonPhase = bb.ReadByte();
+					((BitsByte)bb.ReadByte()).Retrieve(ref Main.hardMode, ref Main.bloodMoon, ref Main.eclipse);
+
+					if (Main.netMode == 2) NetMessage.SendModData(this, MSG_TIME, -1, ignore, copybb);
 					break;
 				default: break;
 			}
