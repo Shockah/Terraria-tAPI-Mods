@@ -2,9 +2,9 @@
     "displayName": "Player 'n' World Preview",
     "author": "Shockah",
     "info": "Displays a player preview in the player selection menu, and useful information about a world in the world selection menu.",
+	"version": "r1",
     "internalName": "Shockah.PNWPreview",
 	"modReferences": [
 		"Shockah.Base"
-	],
-	"includePDB": true
+	]
 }
