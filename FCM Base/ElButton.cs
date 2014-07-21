@@ -11,12 +11,14 @@ namespace Shockah.FCM
 		public Vector2 pos = default(Vector2), size = default(Vector2);
 		public readonly Action<ElButton, int> Clicked;
 		public readonly Action<ElButton, SpriteBatch, int> DrawCode;
+		public readonly Action<ElButton> Hover;
 		public bool dragging = false;
 
-		public ElButton(Action<ElButton, int> Clicked, Action<ElButton, SpriteBatch, int> DrawCode)
+		public ElButton(Action<ElButton, int> Clicked, Action<ElButton, SpriteBatch, int> DrawCode, Action<ElButton> Hover = null)
 		{
 			this.Clicked = Clicked;
 			this.DrawCode = DrawCode;
+			this.Hover = Hover;
 		}
 
 		public bool Draw(SpriteBatch sb, bool draw, bool update)
@@ -27,6 +29,7 @@ namespace Shockah.FCM
 				if (new Rectangle((int)pos.X, (int)pos.Y, (int)size.X, (int)size.Y).Contains(Main.mouse))
 				{
 					Main.localPlayer.mouseInterface = true;
+					if (Hover != null) Hover(this);
 					if (Main.mouseLeft)
 					{
 						if (Main.mouseLeftRelease) Clicked(this, 0);
