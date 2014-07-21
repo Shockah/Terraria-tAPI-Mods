@@ -49,7 +49,6 @@ namespace Shockah.ETooltip
 			}
 			else if (Main.hoverItemName != null && Main.hoverItemName != "" && Main.mouseItem.IsBlank() && !Main.toolTip.item.IsBlank())
 			{
-				Main.localPlayer.showItemIcon = false;
 				MBase.me.FillTooltip(Main.toolTip);
 			}
 		}

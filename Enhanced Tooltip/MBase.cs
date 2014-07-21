@@ -104,6 +104,7 @@ namespace Shockah.ETooltip
 			tip.alpha = null;
 			if ((bool)options["ttipBackground"].Value) tip.alpha = .785f;
 
+			Main.localPlayer.showItemIcon = false;
 			return !b;
 		}
 
