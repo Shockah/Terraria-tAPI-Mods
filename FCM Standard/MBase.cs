@@ -44,29 +44,6 @@ namespace Shockah.FCM.Standard
 			};
 		}
 
-		public override void PostGameDraw(SpriteBatch sb)
-		{
-			if (!Main.gameMenu)
-			{
-				if (!(Interface.current is InterfaceFCMNPCs) && InterfaceFCMNPCs.spawning != null)
-				{
-					InterfaceFCMBase.resetInterface = false;
-					InterfaceFCMNPCs.spawning = null;
-					InterfaceFCMNPCs.me.Open();
-				}
-
-				if (InterfaceFCMMisc.throttleTimeUpdate > 0)
-				{
-					InterfaceFCMMisc.throttleTimeUpdate--;
-					if (InterfaceFCMMisc.throttleTimeUpdate == 0 && InterfaceFCMMisc.timeUpdateSend)
-					{
-						InterfaceFCMMisc.timeUpdateSend = false;
-						InterfaceFCMMisc.SendTimeUpdate(-1, -1);
-					}
-				}
-			}
-		}
-
 		public override void NetReceive(int msgType, BinBuffer bb)
 		{
 			int ignore;
@@ -112,6 +89,12 @@ namespace Shockah.FCM.Standard
 					Main.dayRate = bb.ReadUShort();
 					Main.moonPhase = bb.ReadByte();
 					((BitsByte)bb.ReadByte()).Retrieve(ref Main.hardMode, ref Main.bloodMoon, ref Main.eclipse);
+
+					MWorld mw = (MWorld)modWorld;
+					mw.lockDayTime = null;
+					if (bb.ReadBool()) mw.lockDayTime = bb.ReadBool();
+					mw.lockDayTimeSave = bb.ReadBool();
+					mw.lockDayRate = bb.ReadBool() ? new int?(Main.dayRate) : null;
 
 					if (Main.netMode == 2) NetMessage.SendModData(this, MSG_TIME, -1, ignore, copybb);
 					break;

@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using Shockah.Base;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using TAPI;
 using Terraria;
 
@@ -11,7 +12,7 @@ namespace Shockah.FCM.Standard
 {
 	public class InterfaceFCMMisc : InterfaceFCMBase
 	{
-		public const int POS_X = 20, POS_Y = 280;
+		public const int POS_X = 20, POS_Y = 300;
 		public static readonly string[] MOON_PHASES = new string[] { "Full Moon", "Waning Gibbous", "Third Quarter", "Waning Crescent", "New Moon", "Waxing Crescent", "First Quarter", "Waxing Gibbous" };
 
 		public static InterfaceFCMMisc me = null;
@@ -20,7 +21,6 @@ namespace Shockah.FCM.Standard
 
 		public static void Reset()
 		{
-			Main.dayRate = 1;
 			throttleTimeUpdate = 0;
 			timeUpdateSend = false;
 		}
@@ -42,11 +42,19 @@ namespace Shockah.FCM.Standard
 
 			BinBuffer bb = new BinBuffer();
 			if (addMyId) bb.Write((byte)Main.myPlayer);
+
 			bb.Write(Main.dayTime);
 			bb.Write((float)Main.time);
 			bb.Write((ushort)Main.dayRate);
 			bb.Write((byte)Main.moonPhase);
 			bb.Write(new BitsByte(Main.hardMode, Main.bloodMoon, Main.eclipse));
+
+			MWorld mw = (MWorld)MBase.me.modWorld;
+			bb.Write(mw.lockDayTime.HasValue);
+			if (mw.lockDayTime.HasValue) bb.Write(mw.lockDayTime.Value);
+			bb.Write(mw.lockDayTimeSave);
+			bb.Write(mw.lockDayRate.HasValue);
+
 			bb.Pos = 0;
 			NetMessage.SendModData(MBase.me, MBase.MSG_TIME, remote, ignore, bb);
 		}
@@ -123,11 +131,244 @@ namespace Shockah.FCM.Standard
 			}
 		}
 
+		protected readonly ElButton
+			bLockDayTime, bLockDayTimeSave, bLockDayRate,
+			bHardmode, bBloodMoon, bEclipse,
+			bGodmode, bNoclip;
 		protected string dragging = null;
 
 		public InterfaceFCMMisc()
 		{
 			me = this;
+			if (Main.dedServ) return;
+
+			bLockDayTime = new ElButton(
+				(b, mb) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					bool newVal = mb == 0;
+					if (mw.lockDayTime.HasValue)
+					{
+						mw.lockDayTime = newVal == mw.lockDayTime.Value ? null : new bool?(newVal);
+					}
+					else
+					{
+						mw.lockDayTime = newVal;
+					}
+					if (!mw.lockDayTime.HasValue) mw.lockDayTimeSave = false;
+					QueueTimeUpdate();
+				},
+				(b, sb, mb) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					if (!mw.lockDayTime.HasValue) return;
+					
+					Texture2D tex = mw.lockDayTime.Value ? Main.sunTexture : Main.sun3Texture;
+					float tscale = 1f;
+					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
+					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				},
+				(b) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					StringBuilder sb = new StringBuilder();
+					sb.Append(mw.lockDayTime.HasValue ? (mw.lockDayTime.Value ? "Day-only" : "Night-only") : "No time limiter");
+					sb.Append("\nLeft click to " + (mw.lockDayTime.HasValue && mw.lockDayTime.Value ? "reset" : "set to day-only"));
+					sb.Append("\nRight click to " + (mw.lockDayTime.HasValue && !mw.lockDayTime.Value ? "reset" : "set to night-only"));
+					SBase.tip = sb.ToString();
+				}
+			);
+
+			bLockDayTimeSave = new ElButton(
+				(b, mb) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					mw.lockDayTimeSave = !mw.lockDayTimeSave;
+					QueueTimeUpdate();
+				},
+				(b, sb, mb) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					if (!mw.lockDayTimeSave) return;
+
+					Texture2D tex = Shockah.FCM.MBase.me.textures["Images/Tick.png"];
+					float tscale = 1f;
+					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
+					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				},
+				(b) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					StringBuilder sb = new StringBuilder();
+					sb.Append(mw.lockDayTimeSave ? "Save time limiter" : "Ignore time limiter when saving");
+					sb.Append("\nClick to toggle");
+					SBase.tip = sb.ToString();
+				}
+			);
+
+			bLockDayRate = new ElButton(
+				(b, mb) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					mw.lockDayRate = mw.lockDayRate.HasValue ? null : new int?(Main.dayRate);
+					QueueTimeUpdate();
+				},
+				(b, sb, mb) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					if (!mw.lockDayRate.HasValue) return;
+
+					Texture2D tex = Shockah.FCM.MBase.me.textures["Images/Tick.png"];
+					float tscale = 1f;
+					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
+					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				},
+				(b) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					StringBuilder sb = new StringBuilder();
+					sb.Append(mw.lockDayRate.HasValue ? "Save day rate" : "Ignore day rate when saving");
+					sb.Append("\nClick to toggle");
+					SBase.tip = sb.ToString();
+				}
+			);
+
+			bHardmode = new ElButton(
+				(b, mb) =>
+				{
+					Main.hardMode = !Main.hardMode;
+					QueueTimeUpdate();
+				},
+				(b, sb, mb) =>
+				{
+					Texture2D tex = Main.itemTexture[Main.hardMode ? 544 : 43];
+					float tscale = 1f;
+					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
+					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				},
+				(b) =>
+				{
+					StringBuilder sb = new StringBuilder();
+					sb.Append("Hardmode: " + (Main.hardMode ? "On" : "Off"));
+					sb.Append("\nClick to toggle");
+					SBase.tip = sb.ToString();
+				}
+			);
+
+			bBloodMoon = new ElButton(
+				(b, mb) =>
+				{
+					Main.bloodMoon = !Main.bloodMoon;
+					QueueTimeUpdate();
+				},
+				(b, sb, mb) =>
+				{
+					Texture2D tex = Main.moonTexture[0];
+					float tscale = 1f;
+					if (tex.Width * tscale > 24 - 4) tscale = (24 - 4) / (tex.Width * tscale);
+					if (tex.Height / 8 * tscale > 24 - 4) tscale = (24 - 4) / (tex.Height / 8 * tscale);
+					sb.Draw(tex, b.pos + b.size / 2, new Rectangle?(new Rectangle(0, 0, tex.Width, tex.Height / 8)), Main.bloodMoon ? Color.Red : Color.White, 0f, new Vector2(tex.Width / 2, tex.Height / 8 / 2), tscale, SpriteEffects.None, 0f);
+				},
+				(b) =>
+				{
+					StringBuilder sb = new StringBuilder();
+					sb.Append("Blood Moon: " + (Main.hardMode ? "On" : "Off"));
+					sb.Append("\nClick to toggle");
+					SBase.tip = sb.ToString();
+				}
+			);
+
+			bEclipse = new ElButton(
+				(b, mb) =>
+				{
+					Main.eclipse = !Main.eclipse;
+					QueueTimeUpdate();
+				},
+				(b, sb, mb) =>
+				{
+					Texture2D tex = Main.eclipse ? Main.sun3Texture : Main.sunTexture;
+					float tscale = 1f;
+					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
+					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				},
+				(b) =>
+				{
+					StringBuilder sb = new StringBuilder();
+					sb.Append("Solar Eclipse: " + (Main.hardMode ? "On" : "Off"));
+					sb.Append("\nClick to toggle");
+					SBase.tip = sb.ToString();
+				}
+			);
+
+			bGodmode = new ElButton(
+				(b, mb) =>
+				{
+					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
+					mp.cheatGod = !mp.cheatGod;
+					if (Main.netMode == 1)
+					{
+						BinBuffer bb = new BinBuffer();
+						bb.WriteX((byte)Main.myPlayer, (byte)1, (byte)Main.myPlayer, new BitsByte(mp.cheatGod, mp.cheatNoclip));
+						bb.Pos = 0;
+						NetMessage.SendModData(MBase.me, MBase.MSG_CHEAT, -1, -1, bb);
+					}
+				},
+				(b, sb, mb) =>
+				{
+					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
+					Texture2D tex = Main.buffTexture[10];
+					float tscale = 1f;
+					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
+					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White * (mp.cheatGod ? 1f : .5f), 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				},
+				(b) =>
+				{
+					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
+					StringBuilder sb = new StringBuilder();
+					sb.Append("Godmode: " + (mp.cheatGod ? "On" : "Off"));
+					sb.Append("\nClick to toggle");
+					SBase.tip = sb.ToString();
+				}
+			);
+
+			bNoclip = new ElButton(
+				(b, mb) =>
+				{
+					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
+					mp.cheatNoclip = !mp.cheatNoclip;
+					if (Main.netMode == 1)
+					{
+						BinBuffer bb = new BinBuffer();
+						bb.WriteX((byte)Main.myPlayer, (byte)1, (byte)Main.myPlayer, new BitsByte(mp.cheatGod, mp.cheatNoclip));
+						bb.Pos = 0;
+						NetMessage.SendModData(MBase.me, MBase.MSG_CHEAT, -1, -1, bb);
+					}
+				},
+				(b, sb, mb) =>
+				{
+					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
+					Texture2D tex = Main.buffTexture[18];
+					float tscale = 1f;
+					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
+					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White * (mp.cheatNoclip ? 1f : .5f), 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				},
+				(b) =>
+				{
+					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
+					StringBuilder sb = new StringBuilder();
+					sb.Append("Noclip: " + (mp.cheatNoclip ? "On" : "Off"));
+					if (mp.cheatNoclip) sb.Append("\nHold Shift to move faster");
+					sb.Append("\nClick to toggle");
+					SBase.tip = sb.ToString();
+				}
+			);
 		}
 
 		public override void OnOpen()
@@ -139,6 +380,8 @@ namespace Shockah.FCM.Standard
 		{
 			if (dragging != null) Main.localPlayer.mouseInterface = true;
 			base.Draw(layer, sb);
+			bool blocked = false;
+			MWorld mw = (MWorld)MBase.me.modWorld;
 
 			Action<string, string, Vector2, Texture2D, float, Func<float, string>, Action<float>> drawSliderFloat = (name, tip, pos, sliderTex, ratio, textBuilder, codeSet) =>
 			{
@@ -207,105 +450,62 @@ namespace Shockah.FCM.Standard
 			(ratio) => { return GetTimeText(false, GetAbsoluteTime()); },
 			(ratio) => { SetAbsoluteTime((int)(Math.Min(Math.Max(ratio, 0f), 1f) * 86400) - 43200); QueueTimeUpdate(); });
 
-			drawSliderInt("MoonPhase", "Moon phase", new Vector2(POS_X + 200, POS_Y), API.main.colorBarTexture, Main.moonPhase, 0, 7,
-			(value) => { return MOON_PHASES[value]; },
-			(value) => { Main.moonPhase = value; QueueTimeUpdate(); });
+			bLockDayTime.pos = new Vector2(POS_X + 186, POS_Y + 8);
+			bLockDayTime.size = new Vector2(24, 24);
+			blocked = bLockDayTime.Draw(sb, true, !blocked && dragging == null) || blocked;
+
+			if (mw.lockDayTime.HasValue)
+			{
+				bLockDayTimeSave.pos = new Vector2(POS_X + 214, POS_Y + 8);
+				bLockDayTimeSave.size = new Vector2(24, 24);
+				blocked = bLockDayTimeSave.Draw(sb, true, !blocked && dragging == null) || blocked;
+			}
 
 			drawSliderInt("TimeRateSlider", "Time rate", new Vector2(POS_X, POS_Y + 40), MBase.me.textures["Images/TimeRateSlider.png"], (int)Math.Ceiling(Math.Pow(Main.dayRate, 1f / 1.3545f)), 0, 50,
 			(value) => { return "" + (int)Math.Pow(value, 1.3545f); },
-			(value) => { Main.dayRate = (int)Math.Pow(value, 1.3545f); QueueTimeUpdate(); });
+			(value) => { Main.dayRate = (int)Math.Pow(value, 1.3545f); if (mw.lockDayRate.HasValue) mw.lockDayRate = Main.dayRate; QueueTimeUpdate(); });
 
-			
-			drawButton(new Vector2(POS_X + 200, POS_Y + 44), Main.hardMode,
-			(value) => { Main.hardMode = value; QueueTimeUpdate(); },
-			(value) => "Hardmode: " + (value ? "On" : "Off"),
-			(pos, value) => {
-				Texture2D tex = Main.itemTexture[value ? 544 : 43];
-				float tscale = 1f;
-				if (tscale * tex.Width > 24f) tscale = 24f / tex.Width;
-				if (tscale * tex.Height > 24f) tscale = 24f / tex.Height;
-				sb.Draw(tex, pos + new Vector2(16, 16), null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
-			});
+			bLockDayRate.pos = new Vector2(POS_X + 186, POS_Y + 48);
+			bLockDayRate.size = new Vector2(24, 24);
+			blocked = bLockDayRate.Draw(sb, true, !blocked && dragging == null) || blocked;
 
-			drawButton(new Vector2(POS_X + 240, POS_Y + 44), Main.bloodMoon,
-			(value) => { Main.bloodMoon = value; QueueTimeUpdate(); },
-			(value) => "Blood Moon: " + (value ? "On" : "Off"),
-			(pos, value) => sb.Draw(Main.moonTexture[0], pos + new Vector2(16, 16), new Rectangle?(new Rectangle(0, 0, 50, 50)), value ? Color.Red : Color.White, 0f, new Vector2(25, 25), 24f / 50f, SpriteEffects.None, 0f));
+			drawSliderInt("MoonPhase", "Moon phase", new Vector2(POS_X, POS_Y + 80), API.main.colorBarTexture, Main.moonPhase, 0, 8,
+			(value) => { return MOON_PHASES[value]; },
+			(value) => { Main.moonPhase = value % 8; QueueTimeUpdate(); });
 
-			drawButton(new Vector2(POS_X + 280, POS_Y + 44), Main.eclipse,
-			(value) => { Main.eclipse = value; QueueTimeUpdate(); },
-			(value) => "Solar Eclipse: " + (value ? "On" : "Off"),
-			(pos, value) => {
-				Texture2D tex = value ? Main.sun3Texture : Main.sunTexture;
-				float tscale = 1f;
-				if (tscale * tex.Width > 24f) tscale = 24f / tex.Width;
-				if (tscale * tex.Height > 24f) tscale = 24f / tex.Height;
-				sb.Draw(tex, pos + new Vector2(16, 16), null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
-			});
+			bHardmode.pos = new Vector2(POS_X, POS_Y + 124);
+			bHardmode.size = new Vector2(32, 32);
+			blocked = bHardmode.Draw(sb, true, !blocked && dragging == null) || blocked;
 
+			bBloodMoon.pos = new Vector2(POS_X + 40, POS_Y + 124);
+			bBloodMoon.size = new Vector2(32, 32);
+			blocked = bBloodMoon.Draw(sb, true, !blocked && dragging == null) || blocked;
 
-			drawButton(new Vector2(POS_X + 400, POS_Y + 44), Main.localPlayer.GetSubClass<MPlayer>().cheatGod,
-			(value) =>
-			{
-				MPlayer m = Main.localPlayer.GetSubClass<MPlayer>();
-				m.cheatGod = value;
-				if (Main.netMode == 1)
-				{
-					BinBuffer bb = new BinBuffer();
-					bb.WriteX((byte)Main.myPlayer, (byte)1, (byte)Main.myPlayer, new BitsByte(m.cheatGod, m.cheatNoclip));
-					bb.Pos = 0;
-					NetMessage.SendModData(MBase.me, MBase.MSG_CHEAT, -1, -1, bb);
-				}
-			},
-			(value) => "Godmode: " + (value ? "On" : "Off"),
-			(pos, value) =>
-			{
-				Texture2D tex = Main.buffTexture[10];
-				float tscale = 1f;
-				if (tscale * tex.Width > 24f) tscale = 24f / tex.Width;
-				if (tscale * tex.Height > 24f) tscale = 24f / tex.Height;
-				sb.Draw(tex, pos + new Vector2(16, 16), null, Color.White * (value ? 1f : .5f), 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
-			});
+			bEclipse.pos = new Vector2(POS_X + 80, POS_Y + 124);
+			bEclipse.size = new Vector2(32, 32);
+			blocked = bEclipse.Draw(sb, true, !blocked && dragging == null) || blocked;
 
-			drawButton(new Vector2(POS_X + 400, POS_Y + 84), Main.localPlayer.GetSubClass<MPlayer>().cheatNoclip,
-			(value) =>
-			{
-				MPlayer m = Main.localPlayer.GetSubClass<MPlayer>();
-				m.cheatNoclip = value;
-				m.oldPos = Main.localPlayer.position;
-				if (Main.netMode == 1)
-				{
-					BinBuffer bb = new BinBuffer();
-					bb.WriteX((byte)Main.myPlayer, (byte)1, (byte)Main.myPlayer, new BitsByte(m.cheatGod, m.cheatNoclip));
-					bb.Pos = 0;
-					NetMessage.SendModData(MBase.me, MBase.MSG_CHEAT, -1, -1, bb);
-				}
-			},
-			(value) => "Noclip: " + (value ? "On\nHold Shift to move faster" : "Off"),
-			(pos, value) =>
-			{
-				Texture2D tex = Main.buffTexture[18];
-				float tscale = 1f;
-				if (tscale * tex.Width > 24f) tscale = 24f / tex.Width;
-				if (tscale * tex.Height > 24f) tscale = 24f / tex.Height;
-				sb.Draw(tex, pos + new Vector2(16, 16), null, Color.White * (value ? 1f : .5f), 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
-			});
-
-
-			drawSliderInt("PlayerLifeMax", "Max life", new Vector2(POS_X, POS_Y + 100), MBase.me.textures["Images/LifeMaxSlider.png"], Main.localPlayer.statLifeMax / 5, 1, 100,
+			drawSliderInt("PlayerLifeMax", "Max life", new Vector2(POS_X + 244, POS_Y), MBase.me.textures["Images/LifeMaxSlider.png"], Main.localPlayer.statLifeMax / 5, 1, 100,
 			(value) => { return "" + (value * 5); },
 			(value) => { Main.localPlayer.statLifeMax = value * 5; });
 
-			drawSliderInt("PlayerLife", "Life", new Vector2(POS_X, POS_Y + 140), MBase.me.textures["Images/LifeSlider.png"], Main.localPlayer.statLife, 1, Main.localPlayer.statLifeMax2,
+			bNoclip.pos = new Vector2(POS_X + 434, POS_Y + 4);
+			bNoclip.size = new Vector2(32, 32);
+			blocked = bNoclip.Draw(sb, true, !blocked && dragging == null) || blocked;
+
+			drawSliderInt("PlayerLife", "Life", new Vector2(POS_X + 244, POS_Y + 40), MBase.me.textures["Images/LifeSlider.png"], Main.localPlayer.statLife, 1, Main.localPlayer.statLifeMax2,
 			(value) => { return "" + value; },
 			(value) => { Main.localPlayer.statLife = value; });
 
+			bGodmode.pos = new Vector2(POS_X + 434, POS_Y + 44);
+			bGodmode.size = new Vector2(32, 32);
+			blocked = bGodmode.Draw(sb, true, !blocked && dragging == null) || blocked;
 
-			drawSliderInt("PlayerManaMax", "Max mana", new Vector2(POS_X + 200, POS_Y + 100), MBase.me.textures["Images/ManaSlider.png"], Main.localPlayer.statManaMax / 20, 0, 10,
+			drawSliderInt("PlayerManaMax", "Max mana", new Vector2(POS_X + 244, POS_Y + 80), MBase.me.textures["Images/ManaSlider.png"], Main.localPlayer.statManaMax / 20, 0, 10,
 			(value) => { return "" + (value * 20); },
 			(value) => { Main.localPlayer.statManaMax = value * 20; });
 
-			drawSliderInt("PlayerMana", "Mana", new Vector2(POS_X + 200, POS_Y + 140), MBase.me.textures["Images/ManaSlider.png"], Main.localPlayer.statMana, 1, Main.localPlayer.statManaMax2,
+			drawSliderInt("PlayerMana", "Mana", new Vector2(POS_X + 244, POS_Y + 120), MBase.me.textures["Images/ManaSlider.png"], Main.localPlayer.statMana, 1, Main.localPlayer.statManaMax2,
 			(value) => { return "" + value; },
 			(value) => { Main.localPlayer.statMana = value; });
 		}
