@@ -18,9 +18,14 @@ namespace Shockah.FCM.Standard
 		public static InterfaceFCMMisc me = null;
 		public static int throttleTimeUpdate = 0;
 		public static bool timeUpdateSend = false;
+		public static bool freeCamera = false, fullBright = false, flashlight = false, flashlightOff = false;
 
 		public static void Reset()
 		{
+			freeCamera = false;
+			fullBright = false;
+			flashlight = false;
+			flashlightOff = false;
 			throttleTimeUpdate = 0;
 			timeUpdateSend = false;
 		}
@@ -157,7 +162,8 @@ namespace Shockah.FCM.Standard
 			bHardmode, bBloodMoon, bEclipse,
 			bGodmode, bNoclip, bUsage,
 			bBlockSpawns, bBlockSpawnsSave,
-			bRange, bTileSpeed, bTileUsage;
+			bRange, bTileSpeed, bTileUsage,
+			bCamera, bFullBright, bFlashlight;
 		protected string dragging = null;
 
 		public InterfaceFCMMisc()
@@ -490,6 +496,7 @@ namespace Shockah.FCM.Standard
 				{
 					MWorld mw = (MWorld)MBase.me.modWorld;
 					mw.blockNPCSpawn = !mw.blockNPCSpawn;
+					if (!mw.blockNPCSpawn) mw.blockNPCSpawnSave = false;
 					QueueTimeUpdate();
 				},
 				(b, sb, mb) =>
@@ -536,6 +543,75 @@ namespace Shockah.FCM.Standard
 					MWorld mw = (MWorld)MBase.me.modWorld;
 					StringBuilder sb = new StringBuilder();
 					sb.Append(mw.blockNPCSpawnSave ? "Save NPC spawning setting" : "Ignore NPC spawning setting when saving");
+					sb.Append("\nClick to toggle");
+					SBase.tip = sb.ToString();
+				}
+			);
+
+			bCamera = new ElButton(
+				(b, mb) =>
+				{
+					freeCamera = !freeCamera;
+				},
+				(b, sb, mb) =>
+				{
+					Texture2D tex = Main.buffTexture[12];
+					float tscale = 1f;
+					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
+					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White * (freeCamera ? 1f : .5f), 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				},
+				(b) =>
+				{
+					StringBuilder sb = new StringBuilder();
+					sb.Append(freeCamera ? "Camera attached to player" : "Free camera mode");
+					sb.Append("\nClick to toggle");
+					SBase.tip = sb.ToString();
+				}
+			);
+
+			bFullBright = new ElButton(
+				(b, mb) =>
+				{
+					fullBright = !fullBright;
+				},
+				(b, sb, mb) =>
+				{
+					Texture2D tex = Main.buffTexture[27];
+					float tscale = 1f;
+					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
+					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White * (fullBright ? 1f : .5f), 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				},
+				(b) =>
+				{
+					StringBuilder sb = new StringBuilder();
+					sb.Append("Full bright: " + (fullBright ? "On" : "Off"));
+					sb.Append("\n*experimental, might be very laggy*");
+					sb.Append("\nClick to toggle");
+					SBase.tip = sb.ToString();
+				}
+			);
+
+			bFlashlight = new ElButton(
+				(b, mb) =>
+				{
+					flashlight = !flashlight;
+					flashlightOff = false;
+				},
+				(b, sb, mb) =>
+				{
+					Texture2D tex = Main.buffTexture[19];
+					float tscale = 1f;
+					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
+					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White * (flashlight ? 1f : .5f), 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				},
+				(b) =>
+				{
+					StringBuilder sb = new StringBuilder();
+					sb.Append("Flashlight: " + (flashlight ? "On" : "Off"));
+					if (flashlight) sb.Append("\nPress Tab to quick-toggle");
 					sb.Append("\nClick to toggle");
 					SBase.tip = sb.ToString();
 				}
@@ -696,13 +772,25 @@ namespace Shockah.FCM.Standard
 			bTileUsage.size = new Vector2(32, 32);
 			blocked = bTileUsage.Draw(sb, true, !blocked && dragging == null) || blocked;
 
-			bBlockSpawns.pos = new Vector2(POS_X + 434, POS_Y + 84);
+			bCamera.pos = new Vector2(POS_X + 434, POS_Y + 84);
+			bCamera.size = new Vector2(32, 32);
+			blocked = bCamera.Draw(sb, true, !blocked && dragging == null) || blocked;
+
+			bFullBright.pos = new Vector2(POS_X + 474, POS_Y + 84);
+			bFullBright.size = new Vector2(32, 32);
+			blocked = bFullBright.Draw(sb, true, !blocked && dragging == null) || blocked;
+
+			bFlashlight.pos = new Vector2(POS_X + 514, POS_Y + 84);
+			bFlashlight.size = new Vector2(32, 32);
+			blocked = bFlashlight.Draw(sb, true, !blocked && dragging == null) || blocked;
+
+			bBlockSpawns.pos = new Vector2(POS_X + 434, POS_Y + 124);
 			bBlockSpawns.size = new Vector2(32, 32);
 			blocked = bBlockSpawns.Draw(sb, true, !blocked && dragging == null) || blocked;
 
 			if (mw.blockNPCSpawn)
 			{
-				bBlockSpawnsSave.pos = new Vector2(POS_X + 474, POS_Y + 84);
+				bBlockSpawnsSave.pos = new Vector2(POS_X + 474, POS_Y + 124);
 				bBlockSpawnsSave.size = new Vector2(32, 32);
 				blocked = bBlockSpawnsSave.Draw(sb, true, !blocked && dragging == null) || blocked;
 			}

@@ -12,15 +12,34 @@ namespace Shockah.FCM.Standard
 {
 	public class MPlayer : ModPlayer
 	{
-		public const float NOCLIP_SPEED = 8f, NOCLIP_SPEED_MULTIPLIER = 4f;
+		public const float
+			NOCLIP_SPEED = 8f, NOCLIP_SPEED_MULTIPLIER = 4f,
+			CAMERA_SPEED = 16f, CAMERA_SPEED_MULTIPLIER = 4f;
 		
 		public bool cheatGod, cheatNoclip, cheatUsage, cheatRange, cheatTileSpeed, cheatTileUsage;
-		public Vector2 oldPos = new Vector2(-1, -1);
+		public Vector2 oldPos = new Vector2(-1, -1), lastCameraPos = new Vector2(-1, -1);
 		
 		public MPlayer(ModBase modBase, Player player) : base(modBase, player) { }
 
 		public override void OnUpdate()
 		{
+			if (player.whoAmI == Main.myPlayer && InterfaceFCMMisc.freeCamera)
+			{
+				if (lastCameraPos.X == -1 && lastCameraPos.Y == -1) lastCameraPos = Main.screenPosition;
+
+				float speed = CAMERA_SPEED;
+				if (player.controlTorch) speed *= CAMERA_SPEED_MULTIPLIER;
+				if (player.controlLeft) lastCameraPos.X -= speed;
+				if (player.controlRight) lastCameraPos.X += speed;
+				if (player.controlUp) lastCameraPos.Y -= speed;
+				if (player.controlDown) lastCameraPos.Y += speed;
+				player.controlTorch = player.controlLeft = player.controlRight = player.controlUp = player.controlDown = false;
+			}
+			else
+			{
+				lastCameraPos = new Vector2(-1, -1);
+			}
+			
 			if (cheatGod)
 			{
 				player.immune = true;
@@ -40,12 +59,15 @@ namespace Shockah.FCM.Standard
 				player.step = 0;
 
 				player.oldPosition = player.position;
-				float speed = NOCLIP_SPEED;
-				if (Main.keyState.IsKeyDown(Keys.LeftShift)) speed *= NOCLIP_SPEED_MULTIPLIER;
-				if (player.controlLeft) player.position.X -= speed;
-				if (player.controlRight) player.position.X += speed;
-				if (player.controlUp) player.position.Y -= speed;
-				if (player.controlDown) player.position.Y += speed;
+				if (!InterfaceFCMMisc.freeCamera || player.whoAmI != Main.myPlayer)
+				{
+					float speed = NOCLIP_SPEED;
+					if (player.controlTorch) speed *= NOCLIP_SPEED_MULTIPLIER;
+					if (player.controlLeft) player.position.X -= speed;
+					if (player.controlRight) player.position.X += speed;
+					if (player.controlUp) player.position.Y -= speed;
+					if (player.controlDown) player.position.Y += speed;
+				}
 				oldPos = player.position;
 			}
 

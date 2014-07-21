@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using Shockah.Base;
 using TAPI;
 using Terraria;
@@ -42,6 +43,34 @@ namespace Shockah.FCM.Standard
 				list.Add(new LittleButton("Buffs", textures["Images/ModuleBuffs.png"], () => Interface.current is InterfaceFCMBuffs, () => InterfaceFCMBuffs.me.Open(), -3f));
 				list.Add(new LittleButton("Misc", textures["Images/ModuleMisc.png"], () => Interface.current is InterfaceFCMMisc, () => InterfaceFCMMisc.me.Open(), -4f));
 			};
+		}
+
+		public override void PreGameDraw(SpriteBatch sb)
+		{
+			if (!Main.gameMenu)
+			{
+				MPlayer mp = (MPlayer)Main.localPlayer.GetSubClass<MPlayer>();
+				if (mp.lastCameraPos.X != -1 || mp.lastCameraPos.Y != -1) Main.screenPosition = mp.lastCameraPos;
+
+				if (InterfaceFCMMisc.fullBright)
+				{
+					for (int i = 0; i < Lighting.color.GetLength(0); i++) for (int j = 0; j < Lighting.color.GetLength(1); j++)
+					{
+						Lighting.color[i, j] = 1f;
+						Lighting.colorG[i, j] = 1f;
+						Lighting.colorB[i, j] = 1f;
+						Lighting.color2[i, j] = 1f;
+						Lighting.colorG2[i, j] = 1f;
+						Lighting.colorB2[i, j] = 1f;
+					}
+					Main.renderNow = false;
+				}
+				if (InterfaceFCMMisc.flashlight)
+				{
+					if (Util.KeyPressed(Keys.Tab)) InterfaceFCMMisc.flashlightOff = !InterfaceFCMMisc.flashlightOff;
+					if (!InterfaceFCMMisc.flashlightOff) Lighting.AddLight(Main.screenPosition + Main.mouse, 50f, 50f, 50f);
+				}
+			}
 		}
 
 		public override void NetReceive(int msgType, BinBuffer bb)
