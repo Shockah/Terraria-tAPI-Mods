@@ -12,6 +12,8 @@ namespace Shockah.FCM.Standard
 		public bool? lockDayTime = null;
 		public int? lockDayRate = null;
 		public bool lockDayTimeSave = false;
+		public bool blockNPCSpawn = false;
+		public bool blockNPCSpawnSave = false;
 		
 		public MWorld(ModBase modBase) : base(modBase) { }
 
@@ -20,6 +22,8 @@ namespace Shockah.FCM.Standard
 			lockDayTime = null;
 			lockDayRate = null;
 			lockDayTimeSave = false;
+			blockNPCSpawn = false;
+			blockNPCSpawnSave = false;
 			SetupWorld();
 		}
 
@@ -31,6 +35,7 @@ namespace Shockah.FCM.Standard
 				lockDayTime = bb.ReadBool();
 			}
 			if (bb.ReadBool()) lockDayRate = bb.ReadInt();
+			if (bb.ReadBool()) blockNPCSpawnSave = blockNPCSpawn = true;
 			SetupWorld();
 		}
 		public override void Save(BinBuffer bb)
@@ -44,6 +49,7 @@ namespace Shockah.FCM.Standard
 
 			bb.Write(lockDayRate.HasValue);
 			if (lockDayRate.HasValue) bb.Write(lockDayRate.Value);
+			bb.Write(blockNPCSpawnSave && blockNPCSpawnSave);
 		}
 
 		public void SetupWorld()
@@ -108,13 +114,15 @@ namespace Shockah.FCM.Standard
 
 		public override void PlayerConnected(int index)
 		{
+			InterfaceFCMMisc.SendTimeUpdate(index, -1);
+			
 			List<int> list = new List<int>();
 			for (int i = 0; i < Main.maxPlayers; i++)
 			{
 				Player p = Main.player[i];
 				if (!p.active) continue;
 				MPlayer m = p.GetSubClass<MPlayer>();
-				if (m != null && (m.cheatGod || m.cheatNoclip)) list.Add(i);
+				if (m != null && (m.cheatGod || m.cheatNoclip || m.cheatUsage || m.cheatRange || m.cheatTileSpeed || m.cheatTileUsage)) list.Add(i);
 			}
 			
 			BinBuffer bb = new BinBuffer();
@@ -123,7 +131,7 @@ namespace Shockah.FCM.Standard
 			{
 				bb.Write((byte)pid);
 				MPlayer m = Main.player[pid].GetSubClass<MPlayer>();
-				bb.Write(new BitsByte(m.cheatGod, m.cheatNoclip));
+				bb.Write(new BitsByte(m.cheatGod, m.cheatNoclip, m.cheatUsage, m.cheatRange, m.cheatTileSpeed, m.cheatTileUsage));
 			}
 
 			bb.Pos = 0;

@@ -70,7 +70,7 @@ namespace Shockah.FCM.Standard
 						int pid = bb.ReadByte();
 						BitsByte bbyte = bb.ReadByte();
 						MPlayer m = Main.player[pid].GetSubClass<MPlayer>();
-						if (m != null) bbyte.Retrieve(ref m.cheatGod, ref m.cheatNoclip);
+						if (m != null) bbyte.Retrieve(ref m.cheatGod, ref m.cheatNoclip, ref m.cheatUsage, ref m.cheatRange, ref m.cheatTileSpeed, ref m.cheatTileUsage);
 					}
 
 					if (Main.netMode == 2) NetMessage.SendModData(this, MSG_CHEAT, -1, ignore, copybb);
@@ -91,6 +91,8 @@ namespace Shockah.FCM.Standard
 					((BitsByte)bb.ReadByte()).Retrieve(ref Main.hardMode, ref Main.bloodMoon, ref Main.eclipse);
 
 					MWorld mw = (MWorld)modWorld;
+					mw.blockNPCSpawn = bb.ReadBool();
+					mw.blockNPCSpawnSave = bb.ReadBool();
 					mw.lockDayTime = null;
 					if (bb.ReadBool()) mw.lockDayTime = bb.ReadBool();
 					mw.lockDayTimeSave = bb.ReadBool();

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using Shockah.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace Shockah.FCM.Standard
 	{
 		public const float NOCLIP_SPEED = 8f, NOCLIP_SPEED_MULTIPLIER = 4f;
 		
-		public bool cheatGod, cheatNoclip;
+		public bool cheatGod, cheatNoclip, cheatUsage, cheatRange, cheatTileSpeed, cheatTileUsage;
 		public Vector2 oldPos = new Vector2(-1, -1);
 		
 		public MPlayer(ModBase modBase, Player player) : base(modBase, player) { }
@@ -46,6 +47,32 @@ namespace Shockah.FCM.Standard
 				if (player.controlUp) player.position.Y -= speed;
 				if (player.controlDown) player.position.Y += speed;
 				oldPos = player.position;
+			}
+
+			if (cheatRange)
+			{
+				player.tileRangeX = Main.maxTilesX;
+				player.tileRangeY = Main.maxTilesY;
+			}
+
+			if (cheatUsage)
+			{
+				Item held = player.heldItem;
+				MItem mi = held.GetSubClass<MItem>();
+				if (mi.lastMana != -1)
+				{
+					held.mana = mi.lastMana;
+					mi.lastMana = -1;
+				}
+			}
+
+			if (cheatTileSpeed)
+			{
+				Item held = player.heldItem;
+				if (!held.IsBlank() && (held.createTile >= 0 || held.createWall > 0 || held.pick > 0 || held.axe > 0 || held.hammer > 0))
+				{
+					player.itemTime = 0;
+				}
 			}
 		}
 	}

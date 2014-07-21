@@ -71,6 +71,7 @@
     <Compile Include="MBase.cs" />
     <Compile Include="MInterface.cs" />
     <Compile Include="MItem.cs" />
+    <Compile Include="MNPC.cs" />
     <Compile Include="MPlayer.cs" />
     <Compile Include="MWorld.cs" />
     <Compile Include="NPCSlot.cs" />
@@ -83,6 +84,10 @@
   <ItemGroup>
     <Content Include="C3.XNA.Primitives2D.dll" />
     <Content Include="Images\BuffPositive.png" />
+    <Content Include="Images\IconCheatTileUsage.png" />
+    <Content Include="Images\IconCheatUsage.png" />
+    <Content Include="Images\IconCheatRange.png" />
+    <Content Include="Images\IconCheatTileSpeed.png" />
     <Content Include="Images\LifeMaxSlider.png" />
     <Content Include="Images\LifeSlider.png" />
     <Content Include="Images\ManaSlider.png" />

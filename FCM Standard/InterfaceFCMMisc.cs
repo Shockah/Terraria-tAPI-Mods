@@ -50,6 +50,8 @@ namespace Shockah.FCM.Standard
 			bb.Write(new BitsByte(Main.hardMode, Main.bloodMoon, Main.eclipse));
 
 			MWorld mw = (MWorld)MBase.me.modWorld;
+			bb.Write(mw.blockNPCSpawn);
+			bb.Write(mw.blockNPCSpawnSave);
 			bb.Write(mw.lockDayTime.HasValue);
 			if (mw.lockDayTime.HasValue) bb.Write(mw.lockDayTime.Value);
 			bb.Write(mw.lockDayTimeSave);
@@ -57,6 +59,25 @@ namespace Shockah.FCM.Standard
 
 			bb.Pos = 0;
 			NetMessage.SendModData(MBase.me, MBase.MSG_TIME, remote, ignore, bb);
+		}
+		public static void SendCheatUpdate(int player, int ignorePlayer)
+		{
+			SendCheatUpdate(player, ignorePlayer, Main.netMode == 1);
+		}
+		public static void SendCheatUpdate(int remote, int ignore, bool addMyId)
+		{
+			if (Main.netMode == 0) return;
+
+			BinBuffer bb = new BinBuffer();
+			if (addMyId) bb.Write((byte)Main.myPlayer);
+
+			MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
+			bb.Write((byte)1);
+			bb.Write((byte)Main.myPlayer);
+			bb.Write(new BitsByte(mp.cheatGod, mp.cheatNoclip, mp.cheatUsage, mp.cheatRange, mp.cheatTileSpeed, mp.cheatTileUsage));
+
+			bb.Pos = 0;
+			NetMessage.SendModData(MBase.me, MBase.MSG_CHEAT, remote, ignore, bb);
 		}
 
 		public static void SetAbsoluteTime(int time)
@@ -134,7 +155,9 @@ namespace Shockah.FCM.Standard
 		protected readonly ElButton
 			bLockDayTime, bLockDayTimeSave, bLockDayRate,
 			bHardmode, bBloodMoon, bEclipse,
-			bGodmode, bNoclip;
+			bGodmode, bNoclip, bUsage,
+			bBlockSpawns, bBlockSpawnsSave,
+			bRange, bTileSpeed, bTileUsage;
 		protected string dragging = null;
 
 		public InterfaceFCMMisc()
@@ -310,13 +333,7 @@ namespace Shockah.FCM.Standard
 				{
 					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
 					mp.cheatGod = !mp.cheatGod;
-					if (Main.netMode == 1)
-					{
-						BinBuffer bb = new BinBuffer();
-						bb.WriteX((byte)Main.myPlayer, (byte)1, (byte)Main.myPlayer, new BitsByte(mp.cheatGod, mp.cheatNoclip));
-						bb.Pos = 0;
-						NetMessage.SendModData(MBase.me, MBase.MSG_CHEAT, -1, -1, bb);
-					}
+					SendCheatUpdate(-1, -1);
 				},
 				(b, sb, mb) =>
 				{
@@ -342,13 +359,7 @@ namespace Shockah.FCM.Standard
 				{
 					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
 					mp.cheatNoclip = !mp.cheatNoclip;
-					if (Main.netMode == 1)
-					{
-						BinBuffer bb = new BinBuffer();
-						bb.WriteX((byte)Main.myPlayer, (byte)1, (byte)Main.myPlayer, new BitsByte(mp.cheatGod, mp.cheatNoclip));
-						bb.Pos = 0;
-						NetMessage.SendModData(MBase.me, MBase.MSG_CHEAT, -1, -1, bb);
-					}
+					SendCheatUpdate(-1, -1);
 				},
 				(b, sb, mb) =>
 				{
@@ -365,6 +376,166 @@ namespace Shockah.FCM.Standard
 					StringBuilder sb = new StringBuilder();
 					sb.Append("Noclip: " + (mp.cheatNoclip ? "On" : "Off"));
 					if (mp.cheatNoclip) sb.Append("\nHold Shift to move faster");
+					sb.Append("\nClick to toggle");
+					SBase.tip = sb.ToString();
+				}
+			);
+
+			bUsage = new ElButton(
+				(b, mb) =>
+				{
+					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
+					mp.cheatUsage = !mp.cheatUsage;
+					SendCheatUpdate(-1, -1);
+				},
+				(b, sb, mb) =>
+				{
+					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
+					Texture2D tex = MBase.me.textures["Images/IconCheatUsage.png"];
+					float tscale = 1f;
+					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
+					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White * (mp.cheatUsage ? 1f : .5f), 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				},
+				(b) =>
+				{
+					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
+					StringBuilder sb = new StringBuilder();
+					sb.Append("No ammo and mana usage: " + (mp.cheatUsage ? "On" : "Off"));
+					sb.Append("\nClick to toggle");
+					SBase.tip = sb.ToString();
+				}
+			);
+
+			bRange = new ElButton(
+				(b, mb) =>
+				{
+					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
+					mp.cheatRange = !mp.cheatRange;
+					SendCheatUpdate(-1, -1);
+				},
+				(b, sb, mb) =>
+				{
+					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
+					Texture2D tex = MBase.me.textures["Images/IconCheatRange.png"];
+					float tscale = 1f;
+					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
+					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White * (mp.cheatRange ? 1f : .5f), 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				},
+				(b) =>
+				{
+					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
+					StringBuilder sb = new StringBuilder();
+					sb.Append("Extended range: " + (mp.cheatRange ? "On" : "Off"));
+					sb.Append("\nClick to toggle");
+					SBase.tip = sb.ToString();
+				}
+			);
+
+			bTileSpeed = new ElButton(
+				(b, mb) =>
+				{
+					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
+					mp.cheatTileSpeed = !mp.cheatTileSpeed;
+					SendCheatUpdate(-1, -1);
+				},
+				(b, sb, mb) =>
+				{
+					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
+					Texture2D tex = MBase.me.textures["Images/IconCheatTileSpeed.png"];
+					float tscale = 1f;
+					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
+					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White * (mp.cheatTileSpeed ? 1f : .5f), 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				},
+				(b) =>
+				{
+					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
+					StringBuilder sb = new StringBuilder();
+					sb.Append("Increased building speed: " + (mp.cheatTileSpeed ? "On" : "Off"));
+					sb.Append("\nClick to toggle");
+					SBase.tip = sb.ToString();
+				}
+			);
+
+			bTileUsage = new ElButton(
+				(b, mb) =>
+				{
+					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
+					mp.cheatTileUsage = !mp.cheatTileUsage;
+					SendCheatUpdate(-1, -1);
+				},
+				(b, sb, mb) =>
+				{
+					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
+					Texture2D tex = MBase.me.textures["Images/IconCheatTileUsage.png"];
+					float tscale = 1f;
+					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
+					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White * (mp.cheatTileUsage ? 1f : .5f), 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				},
+				(b) =>
+				{
+					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
+					StringBuilder sb = new StringBuilder();
+					sb.Append("Don't consume tiles: " + (mp.cheatTileUsage ? "On" : "Off"));
+					sb.Append("\nClick to toggle");
+					SBase.tip = sb.ToString();
+				}
+			);
+
+			bBlockSpawns = new ElButton(
+				(b, mb) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					mw.blockNPCSpawn = !mw.blockNPCSpawn;
+					QueueTimeUpdate();
+				},
+				(b, sb, mb) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					if (!mw.blockNPCSpawn) return;
+
+					Texture2D tex = Main.cdTexture;
+					float tscale = 1f;
+					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
+					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				},
+				(b) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					StringBuilder sb = new StringBuilder();
+					sb.Append(mw.blockNPCSpawn ? "Block NPCs from spawning" : "Let NPCs spawn");
+					sb.Append("\nClick to toggle");
+					SBase.tip = sb.ToString();
+				}
+			);
+
+			bBlockSpawnsSave = new ElButton(
+				(b, mb) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					mw.blockNPCSpawnSave = !mw.blockNPCSpawnSave;
+					QueueTimeUpdate();
+				},
+				(b, sb, mb) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					if (!mw.blockNPCSpawnSave) return;
+
+					Texture2D tex = Shockah.FCM.MBase.me.textures["Images/Tick.png"];
+					float tscale = 1f;
+					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
+					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				},
+				(b) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					StringBuilder sb = new StringBuilder();
+					sb.Append(mw.blockNPCSpawnSave ? "Save NPC spawning setting" : "Ignore NPC spawning setting when saving");
 					sb.Append("\nClick to toggle");
 					SBase.tip = sb.ToString();
 				}
@@ -489,17 +660,9 @@ namespace Shockah.FCM.Standard
 			(value) => { return "" + (value * 5); },
 			(value) => { Main.localPlayer.statLifeMax = value * 5; });
 
-			bNoclip.pos = new Vector2(POS_X + 434, POS_Y + 4);
-			bNoclip.size = new Vector2(32, 32);
-			blocked = bNoclip.Draw(sb, true, !blocked && dragging == null) || blocked;
-
 			drawSliderInt("PlayerLife", "Life", new Vector2(POS_X + 244, POS_Y + 40), MBase.me.textures["Images/LifeSlider.png"], Main.localPlayer.statLife, 1, Main.localPlayer.statLifeMax2,
 			(value) => { return "" + value; },
 			(value) => { Main.localPlayer.statLife = value; });
-
-			bGodmode.pos = new Vector2(POS_X + 434, POS_Y + 44);
-			bGodmode.size = new Vector2(32, 32);
-			blocked = bGodmode.Draw(sb, true, !blocked && dragging == null) || blocked;
 
 			drawSliderInt("PlayerManaMax", "Max mana", new Vector2(POS_X + 244, POS_Y + 80), MBase.me.textures["Images/ManaSlider.png"], Main.localPlayer.statManaMax / 20, 0, 10,
 			(value) => { return "" + (value * 20); },
@@ -508,6 +671,41 @@ namespace Shockah.FCM.Standard
 			drawSliderInt("PlayerMana", "Mana", new Vector2(POS_X + 244, POS_Y + 120), MBase.me.textures["Images/ManaSlider.png"], Main.localPlayer.statMana, 1, Main.localPlayer.statManaMax2,
 			(value) => { return "" + value; },
 			(value) => { Main.localPlayer.statMana = value; });
+
+			bGodmode.pos = new Vector2(POS_X + 434, POS_Y + 4);
+			bGodmode.size = new Vector2(32, 32);
+			blocked = bGodmode.Draw(sb, true, !blocked && dragging == null) || blocked;
+			
+			bNoclip.pos = new Vector2(POS_X + 474, POS_Y + 4);
+			bNoclip.size = new Vector2(32, 32);
+			blocked = bNoclip.Draw(sb, true, !blocked && dragging == null) || blocked;
+
+			bUsage.pos = new Vector2(POS_X + 514, POS_Y + 4);
+			bUsage.size = new Vector2(32, 32);
+			blocked = bUsage.Draw(sb, true, !blocked && dragging == null) || blocked;
+
+			bRange.pos = new Vector2(POS_X + 434, POS_Y + 44);
+			bRange.size = new Vector2(32, 32);
+			blocked = bRange.Draw(sb, true, !blocked && dragging == null) || blocked;
+
+			bTileSpeed.pos = new Vector2(POS_X + 474, POS_Y + 44);
+			bTileSpeed.size = new Vector2(32, 32);
+			blocked = bTileSpeed.Draw(sb, true, !blocked && dragging == null) || blocked;
+
+			bTileUsage.pos = new Vector2(POS_X + 514, POS_Y + 44);
+			bTileUsage.size = new Vector2(32, 32);
+			blocked = bTileUsage.Draw(sb, true, !blocked && dragging == null) || blocked;
+
+			bBlockSpawns.pos = new Vector2(POS_X + 434, POS_Y + 84);
+			bBlockSpawns.size = new Vector2(32, 32);
+			blocked = bBlockSpawns.Draw(sb, true, !blocked && dragging == null) || blocked;
+
+			if (mw.blockNPCSpawn)
+			{
+				bBlockSpawnsSave.pos = new Vector2(POS_X + 474, POS_Y + 84);
+				bBlockSpawnsSave.size = new Vector2(32, 32);
+				blocked = bBlockSpawnsSave.Draw(sb, true, !blocked && dragging == null) || blocked;
+			}
 		}
 	}
 }
