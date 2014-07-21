@@ -1,7 +1,7 @@
 {
     "displayName": "Fancy Cheat Menu - Standard modules",
     "author": "Shockah",
-    "info": "Standard modules for Fancy Cheat Menu.\n#f80;Items#;, #f80;NPCs#;, #f80;Prefixes#;",
+    "info": "Standard modules for Fancy Cheat Menu.\n#f80;Items#;, #f80;NPCs#;, #f80;Prefixes#;, #f80;Buffs#;, #f80;Misc#;",
 	"version": "r1",
     "internalName": "Shockah.FCM.Standard",
 	"modReferences": [
