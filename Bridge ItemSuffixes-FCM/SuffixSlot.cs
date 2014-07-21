@@ -87,7 +87,7 @@ namespace Shockah.ItemSuffixes
 				if (Main.mouseLeft) OnLeftClick(ref Main.mouseLeftRelease);
 				else if (Main.mouseRight) OnRightClick(ref Main.mouseRightRelease);
 
-				if (!gui.slotItem.MyItem.IsBlank())
+				if (MySuffix != null && !gui.slotItem.MyItem.IsBlank())
 				{
 					BinBuffer bb = new BinBuffer();
 					gui.slotItem.MyItem.Write(bb);
