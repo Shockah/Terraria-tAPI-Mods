@@ -13,12 +13,12 @@ namespace Shockah.ETooltip.ModuleItem
 	{
 		public override void ModifyTip(ETipStyle style, OptionList options, STooltip tip, Item item)
 		{
-			if (item.toolTips != null)
+			if (item.tooltips != null)
 			{
 				Player player = Main.localPlayer;
 				float tipScale = (float)options["itemTipScale"].Value;
-				List<string> effective = new List<string>(item.toolTips);
-				if (item.allSubClasses.Length > 0) item.ModifyToolTip(player, effective);
+				List<string> effective = new List<string>(item.tooltips);
+				if (item.modEntities.Count != 0) item.ModifyToolTip(player, effective);
 				foreach (string tt in effective) tip += new STooltip.Line(tt, tipScale);
 			}
 		}

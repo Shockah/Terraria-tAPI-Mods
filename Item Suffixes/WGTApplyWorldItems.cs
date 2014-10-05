@@ -5,7 +5,7 @@ namespace Shockah.ItemSuffixes
 {
 	public class WGTApplyWorldItems : WorldGenTask
 	{
-		public WGTApplyWorldItems(ModBase modBase) : base(modBase.modName) { }
+		public WGTApplyWorldItems(ModBase modBase) : base(modBase.mod.InternalName) { }
 		
 		public override void Generate()
 		{

@@ -17,7 +17,7 @@ namespace Shockah.Bridge.ItemSuffixes_FCM
 			new InterfaceFCMSuffixes();
 			FrameFCMButtons.EventCreatingButtonList += (list) =>
 			{
-				list.Add(new LittleButton("Suffixes", textures["FCMModuleSuffixes.png"], () => { return Interface.current is InterfaceFCMSuffixes; }, () => { InterfaceFCMSuffixes.me.Open(); }, -2.5f));
+				list.Add(new LittleButton("Suffixes", textures["FCMModuleSuffixes"], () => { return UICore.currentInterface is InterfaceFCMSuffixes; }, () => { InterfaceFCMSuffixes.me.Open(); }, -2.5f));
 			};
 		}
 	}

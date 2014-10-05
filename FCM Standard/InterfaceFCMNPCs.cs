@@ -27,7 +27,7 @@ namespace Shockah.FCM.Standard
 		public static void Reset()
 		{
 			defs.Clear();
-			foreach (KeyValuePair<string, NPC> kvp in Defs.npcs)
+			foreach (KeyValuePair<string, NPC> kvp in NPCDef.byName)
 			{
 				if (string.IsNullOrEmpty(kvp.Value.displayName) && string.IsNullOrEmpty(kvp.Value.displayName)) continue;
 				defs.Add(kvp.Value);
@@ -79,8 +79,9 @@ namespace Shockah.FCM.Standard
 				Main.dust = new Dust[Main.dust.Length];
 				for (int i = 0; i < Main.dust.Length; i++) Main.dust[i] = new Dust();
 
-				int tempLightCount = Lighting.tempLightCount;
-				Lighting.tempLightCount = 2000; //Lighting.maxTempLights (which is private)
+				//apparently i can't block the lighting updates anymore...
+				//int tempLightCount = Lighting.tempLightCount;
+				//Lighting.tempLightCount = 2000; //Lighting.maxTempLights (which is private)
 
 				foreach (NPC npc in list)
 				{
@@ -91,7 +92,7 @@ namespace Shockah.FCM.Standard
 					npc.oldPosition = pos;
 				}
 
-				Lighting.tempLightCount = tempLightCount;
+				//Lighting.tempLightCount = tempLightCount;
 				Main.dust = cacheDust;
 				Main.npc = cacheNPCs;
 				Main.projectile = cacheProjectiles;
@@ -135,10 +136,10 @@ namespace Shockah.FCM.Standard
 			me = this;
 			if (Main.dedServ) return;
 
-			FFriendly = new Filter<NPC>("Friendly", Defs.items["Vanilla:Carrot"].GetTexture(), (npc) => npc.friendly || npc.damage <= 0);
-			FTown = new Filter<NPC>("Town", Defs.items["Vanilla:Guide Voodoo Doll"].GetTexture(), (npc) => npc.townNPC);
-			FBoss = new Filter<NPC>("Boss", Defs.items["Vanilla:Suspicious Looking Eye"].GetTexture(), (npc) => SBase.IsBoss(npc));
-			FOther = new Filter<NPC>("Other", Defs.unloadedItem.GetTexture(), null);
+			FFriendly = new Filter<NPC>("Friendly", ItemDef.byName["Vanilla:Carrot"].GetTexture(), (npc) => npc.friendly || npc.damage <= 0);
+			FTown = new Filter<NPC>("Town", ItemDef.byName["Vanilla:Guide Voodoo Doll"].GetTexture(), (npc) => npc.townNPC);
+			FBoss = new Filter<NPC>("Boss", ItemDef.byName["Vanilla:Suspicious Looking Eye"].GetTexture(), (npc) => SBase.IsBoss(npc));
+			FOther = new Filter<NPC>("Other", ItemDef.unloadedItem.GetTexture(), null);
 
 			SID = new Sorter<NPC>("ID", (i1, i2) => { return i1.type.CompareTo(i2.type); }, (npc) => true);
 			SName = new Sorter<NPC>("Name", (i1, i2) => {
@@ -173,7 +174,7 @@ namespace Shockah.FCM.Standard
 			sortingChooser = new ElChooser<Sorter<NPC>>(
 				(item) => { reverseSort = object.ReferenceEquals(sorter, item) ? !reverseSort : false; sorter = item; Refresh(true); },
 				() => { return sorter; },
-				() => { return Shockah.FCM.MBase.me.textures[reverseSort ? "Images/ArrowDecrease.png" : "Images/ArrowIncrease.png"]; }
+				() => { return Shockah.FCM.MBase.me.textures[reverseSort ? "Images/ArrowDecrease" : "Images/ArrowIncrease"]; }
 			);
 			foreach (Sorter<NPC> sorter2 in sorters) sortingChooser.Add(new Tuple<string, Sorter<NPC>>(sorter2.name, sorter2));
 
@@ -199,7 +200,7 @@ namespace Shockah.FCM.Standard
 				},
 				(b, sb, mb) =>
 				{
-					Texture2D tex = typing == null && filterText != null ? Main.cdTexture : Shockah.FCM.MBase.me.textures["Images/Arrow.png"];
+					Texture2D tex = typing == null && filterText != null ? Main.cdTexture : Shockah.FCM.MBase.me.textures["Images/Arrow"];
 					float tscale = 1f;
 					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
 					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
@@ -221,8 +222,8 @@ namespace Shockah.FCM.Standard
 				},
 				(b, sb, mb) =>
 				{
-					if (typing == null && filterText == null) SDrawing.StringShadowed(sb, Main.fontMouseText, "Search...", new Vector2(b.pos.X + 8, b.pos.Y + 4), Color.White * .5f);
-					else SDrawing.StringShadowed(sb, Main.fontMouseText, typing == null ? filterText : typing + "|", new Vector2(b.pos.X + 8, b.pos.Y + 4));
+					if (typing == null && filterText == null) Drawing.StringShadowed(sb, Main.fontMouseText, "Search...", new Vector2(b.pos.X + 8, b.pos.Y + 4), Color.White * .5f);
+					else Drawing.StringShadowed(sb, Main.fontMouseText, typing == null ? filterText : typing + "|", new Vector2(b.pos.X + 8, b.pos.Y + 4));
 				}
 			);
 		}
@@ -315,7 +316,7 @@ namespace Shockah.FCM.Standard
 						}
 					}
 
-					SDrawing.StringShadowed(sb, Main.fontMouseText, "" + count, Main.mouse - new Vector2(Main.fontMouseText.MeasureString("" + count).X / 2f, 24));
+					Drawing.StringShadowed(sb, Main.fontMouseText, "" + count, Main.mouse - new Vector2(Main.fontMouseText.MeasureString("" + count).X / 2f, 24));
 				}
 
 				return;
@@ -326,7 +327,7 @@ namespace Shockah.FCM.Standard
 			Scroll -= scrollBy;
 			if (Scroll != oldScroll) Refresh(false);
 
-			SDrawing.StringShadowed(sb, Main.fontMouseText, (filtered.Count == defs.Count ? "NPCs" : "Matching NPCs") + ": " + filtered.Count, new Vector2(POS_X, POS_Y - 26));
+			Drawing.StringShadowed(sb, Main.fontMouseText, (filtered.Count == defs.Count ? "NPCs" : "Matching NPCs") + ": " + filtered.Count, new Vector2(POS_X, POS_Y - 26));
 
 			Main.inventoryScale = 1f;
 			int offX = (int)Math.Ceiling(OFF_X * Main.inventoryScale), offY = (int)Math.Ceiling(OFF_Y * Main.inventoryScale);
@@ -342,7 +343,7 @@ namespace Shockah.FCM.Standard
 			slider.size = new Vector2(16, ROWS * OFF_Y * Main.inventoryScale);
 			blocked = slider.Draw(sb, true, !blocked) || blocked;
 
-			SDrawing.StringShadowed(sb, Main.fontMouseText, "Sort:", new Vector2(POS_X - 8 + COLS * OFF_X * Main.inventoryScale, POS_Y - 22), Color.White, SORT_TEXT_SCALE);
+			Drawing.StringShadowed(sb, Main.fontMouseText, "Sort:", new Vector2(POS_X - 8 + COLS * OFF_X * Main.inventoryScale, POS_Y - 22), Color.White, SORT_TEXT_SCALE);
 			sortingChooser.pos = new Vector2(POS_X + 24 + COLS * OFF_X * Main.inventoryScale, POS_Y - 26);
 			sortingChooser.size = new Vector2(96, 20);
 			blocked = sortingChooser.Draw(sb, false, !blocked) || blocked;
@@ -356,7 +357,7 @@ namespace Shockah.FCM.Standard
 				Filter<NPC> filter = filters[i];
 				Vector2 pos = new Vector2(POS_X + 32 + COLS * OFF_X * oldInventoryScale + (i / 10) * (filterW + FILTER_X_OFF * Main.inventoryScale), POS_Y + (i % 10) * filterH);
 				Drawing.DrawBox(sb, pos.X, pos.Y, filterW, filterH * Main.inventoryScale);
-				Texture2D tex = filter.mode == null ? filter.tex : (filter.mode.Value ? Shockah.FCM.MBase.me.textures["Images/Tick.png"] : Main.cdTexture);
+				Texture2D tex = filter.mode == null ? filter.tex : (filter.mode.Value ? Shockah.FCM.MBase.me.textures["Images/Tick"] : Main.cdTexture);
 				if (tex != null)
 				{
 					float tscale = 1f;
@@ -365,20 +366,20 @@ namespace Shockah.FCM.Standard
 					sb.Draw(tex, pos + new Vector2(filterH / 2f + 2, filterH / 2f), null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
 				}
 				Vector2 measure = Main.fontMouseText.MeasureString(filter.name) * Main.inventoryScale;
-				SDrawing.StringShadowed(sb, Main.fontMouseText, filter.name, pos + new Vector2(filterH + 4, (filterH - measure.Y) / 2), Color.White, Main.inventoryScale);
+				Drawing.StringShadowed(sb, Main.fontMouseText, filter.name, pos + new Vector2(filterH + 4, (filterH - measure.Y) / 2), Color.White, Main.inventoryScale);
 
 				if (new Rectangle((int)pos.X, (int)pos.Y, (int)filterW, (int)filterH).Contains(Main.mouseX, Main.mouseY))
 				{
 					Main.localPlayer.mouseInterface = true;
 					if (Main.mouseLeft && Main.mouseLeftRelease)
 					{
-						if (!Main.keyState.IsKeyDown(Keys.LeftControl)) foreach (Filter<NPC> filter2 in filters) if (!object.ReferenceEquals(filter, filter2)) filter2.mode = null;
+						if (!KState.Special.Ctrl.Down()) foreach (Filter<NPC> filter2 in filters) if (!object.ReferenceEquals(filter, filter2)) filter2.mode = null;
 						if (filter.mode == null) filter.mode = true; else filter.mode = null;
 						Refresh(true);
 					}
 					if (Main.mouseRight && Main.mouseRightRelease)
 					{
-						if (!Main.keyState.IsKeyDown(Keys.LeftControl)) foreach (Filter<NPC> filter2 in filters) if (!object.ReferenceEquals(filter, filter2)) filter2.mode = null;
+						if (!KState.Special.Ctrl.Down()) foreach (Filter<NPC> filter2 in filters) if (!object.ReferenceEquals(filter, filter2)) filter2.mode = null;
 						if (filter.mode == null) filter.mode = false; else filter.mode = null;
 						Refresh(true);
 					}

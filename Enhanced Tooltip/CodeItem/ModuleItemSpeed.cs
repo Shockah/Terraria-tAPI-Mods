@@ -15,7 +15,7 @@ namespace Shockah.ETooltip.ModuleItem
 		{
 			if (item.damage > 0 && !item.notAmmo && item.useStyle > 0 && item.useAnimation > 0)
 			{
-				Item itemDef = item.Def();
+				Item itemDef = item.def.item;
 				
 				int bstats = BaseStats(options, itemDef.useAnimation == item.useAnimation);
 				StringBuilder sbv = new StringBuilder();

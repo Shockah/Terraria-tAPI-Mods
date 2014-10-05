@@ -79,7 +79,7 @@ namespace Shockah.ItemSuffixes
 			sortingChooser = new ElChooser<Sorter<ItemSuffix>>(
 				(item) => { reverseSort = object.ReferenceEquals(sorter, item) ? !reverseSort : false; sorter = item; Refresh(true); },
 				() => { return sorter; },
-				() => { return Shockah.FCM.MBase.me.textures[reverseSort ? "Images/ArrowDecrease.png" : "Images/ArrowIncrease.png"]; }
+				() => { return Shockah.FCM.MBase.me.textures[reverseSort ? "Images/ArrowDecrease" : "Images/ArrowIncrease"]; }
 			);
 			foreach (Sorter<ItemSuffix> sorter2 in sorters) sortingChooser.Add(new Tuple<string, Sorter<ItemSuffix>>(sorter2.name, sorter2));
 
@@ -105,7 +105,7 @@ namespace Shockah.ItemSuffixes
 				},
 				(b, sb, mb) =>
 				{
-					Texture2D tex = typing == null && filterText != null ? Main.cdTexture : Shockah.FCM.MBase.me.textures["Images/Arrow.png"];
+					Texture2D tex = typing == null && filterText != null ? Main.cdTexture : Shockah.FCM.MBase.me.textures["Images/Arrow"];
 					float tscale = 1f;
 					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
 					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
@@ -127,8 +127,8 @@ namespace Shockah.ItemSuffixes
 				},
 				(b, sb, mb) =>
 				{
-					if (typing == null && filterText == null) SDrawing.StringShadowed(sb, Main.fontMouseText, "Search...", new Vector2(b.pos.X + 8, b.pos.Y + 4), Color.White * .5f);
-					else SDrawing.StringShadowed(sb, Main.fontMouseText, typing == null ? filterText : typing + "|", new Vector2(b.pos.X + 8, b.pos.Y + 4));
+					if (typing == null && filterText == null) Drawing.StringShadowed(sb, Main.fontMouseText, "Search...", new Vector2(b.pos.X + 8, b.pos.Y + 4), Color.White * .5f);
+					else Drawing.StringShadowed(sb, Main.fontMouseText, typing == null ? filterText : typing + "|", new Vector2(b.pos.X + 8, b.pos.Y + 4));
 				}
 			);
 
@@ -147,7 +147,7 @@ namespace Shockah.ItemSuffixes
 			base.OnClose();
 			if (!slotItem.MyItem.IsBlank())
 			{
-				Main.localPlayer.GetItem(Main.myPlayer, slotItem.MyItem.DeepClone());
+				Main.localPlayer.GetItem(Main.myPlayer, slotItem.MyItem.Clone()); //used to be DeepClone
 				slotItem.MyItem.SetDefaults(0);
 			}
 		}
@@ -176,7 +176,7 @@ namespace Shockah.ItemSuffixes
 			Scroll -= scrollBy;
 			if (Scroll != oldScroll) Refresh(false);
 
-			SDrawing.StringShadowed(sb, Main.fontMouseText, (filtered.Count == defs.Count ? "Suffixes" : "Matching suffixes") + ": " + filtered.Count, new Vector2(POS_X, POS_Y - 26));
+			Drawing.StringShadowed(sb, Main.fontMouseText, (filtered.Count == defs.Count ? "Suffixes" : "Matching suffixes") + ": " + filtered.Count, new Vector2(POS_X, POS_Y - 26));
 
 			Main.inventoryScale = 1f;
 			for (int y = 0; y < ROWS; y++) for (int x = 0; x < COLS; x++)
@@ -194,7 +194,7 @@ namespace Shockah.ItemSuffixes
 			slotItem.UpdatePos(new Vector2(POS_X + COLS * offX * Main.inventoryScale + 32, POS_Y + ROWS * offY * Main.inventoryScale - 56));
 			slotItem.Draw(sb, true, !blocked);
 
-			SDrawing.StringShadowed(sb, Main.fontMouseText, "Sort:", new Vector2(POS_X - 8 + COLS * offX * Main.inventoryScale, POS_Y - 22), Color.White, SORT_TEXT_SCALE);
+			Drawing.StringShadowed(sb, Main.fontMouseText, "Sort:", new Vector2(POS_X - 8 + COLS * offX * Main.inventoryScale, POS_Y - 22), Color.White, SORT_TEXT_SCALE);
 			sortingChooser.pos = new Vector2(POS_X + 24 + COLS * offX * Main.inventoryScale, POS_Y - 26);
 			sortingChooser.size = new Vector2(96, 20);
 			blocked = sortingChooser.Draw(sb, false, !blocked) || blocked;

@@ -49,7 +49,7 @@ namespace Shockah.ETooltip.ModuleItem
 
 				if (itemValue == 0)
 				{
-					tip += new STooltip.Line(SDrawing.ToColorCode(COLOR_NOCOIN) + "No Value");
+					tip += new STooltip.Line(Drawing.ToColorCode(COLOR_NOCOIN) + "No Value");
 				}
 				else
 				{
@@ -66,10 +66,10 @@ namespace Shockah.ETooltip.ModuleItem
 							if (style == ETipStyle.TwoCols) tip += new string[] { (Main.toolTip.buy ? "Buy" : "Sell") + " price:", CText(color, sb) };
 							break;
 						case "Multiple colors":
-							if (coinP > 0) { if (sb.Length != 0) sb.Append(" "); sb.Append(SDrawing.ToColorCode(COLOR_PLATINUM) + coinP + "p"); }
-							if (coinP + coinG > 0) { if (sb.Length != 0) sb.Append(" "); sb.Append(SDrawing.ToColorCode(COLOR_GOLD) + coinG + "g"); }
-							if (coinP + coinG + coinS > 0) { if (sb.Length != 0) sb.Append(" "); sb.Append(SDrawing.ToColorCode(COLOR_SILVER) + coinS + "s"); }
-							if (coinP + coinG + coinS + coinC > 0) { if (sb.Length != 0) sb.Append(" "); sb.Append(SDrawing.ToColorCode(COLOR_COPPER) + coinC + "c"); }
+							if (coinP > 0) { if (sb.Length != 0) sb.Append(" "); sb.Append(Drawing.ToColorCode(COLOR_PLATINUM) + coinP + "p"); }
+							if (coinP + coinG > 0) { if (sb.Length != 0) sb.Append(" "); sb.Append(Drawing.ToColorCode(COLOR_GOLD) + coinG + "g"); }
+							if (coinP + coinG + coinS > 0) { if (sb.Length != 0) sb.Append(" "); sb.Append(Drawing.ToColorCode(COLOR_SILVER) + coinS + "s"); }
+							if (coinP + coinG + coinS + coinC > 0) { if (sb.Length != 0) sb.Append(" "); sb.Append(Drawing.ToColorCode(COLOR_COPPER) + coinC + "c"); }
 
 							if (style == ETipStyle.Vanilla) tip += CText(Main.toolTip.buy ? "Buy" : "Sell", " price: ", sb);
 							if (style == ETipStyle.TwoCols) tip += new string[] { (Main.toolTip.buy ? "Buy" : "Sell") + " price:", sb.ToString() };

@@ -10,7 +10,7 @@ namespace Shockah.Base
 {
 	public class ILFrames : InterfaceLayer
 	{
-		public ILFrames() : base(MBase.me.modName + ":Frames") { }
+		public ILFrames() : base(MBase.me.mod.InternalName + ":Frames") { }
 
 		protected override void OnDraw(SpriteBatch sb)
 		{

@@ -18,7 +18,7 @@ namespace Shockah.ETooltip.ModuleItem
 				Player player = Main.localPlayer;
 				if (item.type != 127 || !player.spaceGun)
 				{
-					Item itemDef = item.Def();
+					Item itemDef = item.def.item;
 					float itemMana = item.mana;
 					itemMana *= player.manaCost;
 					if ((int)itemMana > 0)

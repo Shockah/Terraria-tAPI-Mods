@@ -175,7 +175,7 @@ namespace Shockah.ItemSuffixes
 		public virtual void DrawSlotSuffix(SpriteBatch sb)
 		{
 			if (MySuffix == null) return;
-			SDrawing.StringShadowed(sb, Main.fontMouseText, InterfaceFCMSuffixes.defsNames[InterfaceFCMSuffixes.defs.IndexOf(MySuffix)], pos + new Vector2(6, 6), Color.White, .75f);
+			Drawing.StringShadowed(sb, Main.fontMouseText, InterfaceFCMSuffixes.defsNames[InterfaceFCMSuffixes.defs.IndexOf(MySuffix)], pos + new Vector2(6, 6), Color.White, .75f);
 		}
 
 		public bool Draw(SpriteBatch sb, bool draw, bool update)

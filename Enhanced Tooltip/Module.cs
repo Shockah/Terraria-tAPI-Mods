@@ -22,7 +22,7 @@ namespace Shockah.ETooltip
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < args.Length; i++)
 			{
-				if (args[i] is Color) sb.Append(SDrawing.ToColorCode((Color)args[i]));
+				if (args[i] is Color) sb.Append(Drawing.ToColorCode((Color)args[i]));
 				else sb.Append(args[i]);
 			}
 			return sb.ToString();
@@ -32,7 +32,7 @@ namespace Shockah.ETooltip
 		{
 			string s = (string)options["itemBaseStats"].Value;
 			if (s == "Always") return valuesEqual ? 2 : 3;
-			else if (s == "Hold Alt") return Main.keyState.IsKeyDown(Keys.LeftAlt) ? 1 : 2;
+			else if (s == "Hold Alt") return KState.Special.Alt.Down() ? 1 : 2;
 			return 2;
 		}
 		

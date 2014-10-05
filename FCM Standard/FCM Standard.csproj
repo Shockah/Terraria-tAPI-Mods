@@ -60,7 +60,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BuffDef.cs" />
+    <Compile Include="BuffDefFCM.cs" />
     <Compile Include="InterfaceFCMBuffs.cs" />
     <Compile Include="InterfaceFCMItems.cs" />
     <Compile Include="InterfaceFCMMisc.cs" />

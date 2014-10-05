@@ -31,14 +31,14 @@ namespace Shockah.Insight
 
 			if (item.stack > 1 && (bool)MBase.me.options["showStack"].Value)
 			{
-				SDrawing.StringShadowed(sb, Main.fontItemStack, "" + item.stack, new Vector2(pos.X - Main.fontItemStack.MeasureString("" + item.stack).X / 2, pos.Y + 8), Color.White * alpha, 1f);
+				Drawing.StringShadowed(sb, Main.fontItemStack, "" + item.stack, new Vector2(pos.X - Main.fontItemStack.MeasureString("" + item.stack).X / 2, pos.Y + 8), Color.White * alpha, 1f);
 			}
 		}
 
 		protected readonly ModBase modBase;
 		public int cX = -1, cY = -1, cId = -1, life = 0;
 
-		public ILChestContents(ModBase modBase) : base(modBase.modName)
+		public ILChestContents(ModBase modBase) : base(modBase.mod.InternalName)
 		{
 			this.modBase = modBase;
 		}

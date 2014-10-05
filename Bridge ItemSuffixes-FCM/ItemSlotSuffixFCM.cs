@@ -2,11 +2,12 @@
 using Microsoft.Xna.Framework.Input;
 using Shockah.FCM;
 using TAPI;
+using TAPI.UIKit;
 using Terraria;
 
 namespace Shockah.ItemSuffixes
 {
-	public class ItemSlotSuffixFCM : Interface.ItemSlot, El
+	public class ItemSlotSuffixFCM : ItemSlot, El
 	{
 		protected readonly InterfaceFCMSuffixes gui;
 		public Item item = new Item();
@@ -23,7 +24,7 @@ namespace Shockah.ItemSuffixes
 
 		public override void OnLeftClick(ref bool release)
 		{
-			if (release && Main.keyState.IsKeyDown(Keys.LeftShift) && !MyItem.IsBlank())
+			if (release && KState.Special.Shift.Down() && !MyItem.IsBlank())
 			{
 				Main.localPlayer.GetItem(Main.myPlayer, (Item)MyItem.Clone());
 				MyItem.SetDefaults(0);

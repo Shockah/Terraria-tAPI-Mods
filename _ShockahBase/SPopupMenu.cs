@@ -39,7 +39,7 @@ namespace Shockah.Base
 						return true;
 					}
 				}
-				SDrawing.StringShadowed(sb, Main.fontMouseText, name, new Vector2(pos.X + 8, pos.Y), Color.White, scale);
+				Drawing.StringShadowed(sb, Main.fontMouseText, name, new Vector2(pos.X + 8, pos.Y), Color.White, scale);
 				return false;
 			}
 		}

@@ -7,8 +7,6 @@ namespace Shockah.ItemSuffixes
 	{
 		public static WGTApplyWorldItems Task = null;
 
-		public MWorld(ModBase modBase) : base(modBase) { }
-
 		public override void WorldGenModifyTaskList(List<WorldGenTask> list)
 		{
 			if (Task == null) Task = new WGTApplyWorldItems(modBase);

@@ -13,8 +13,6 @@ namespace Shockah.Base
 		}
 		
 		protected Item[] inventory = null, armor = null;
-		
-		public MPlayer(ModBase modBase, Player player) : base(modBase, player) { }
 
 		public override void PostUpdate()
 		{

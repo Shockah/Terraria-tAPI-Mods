@@ -37,7 +37,7 @@ namespace Shockah.FCM
 
 		public bool Draw(SpriteBatch sb, bool draw, bool update)
 		{
-			Texture2D blip = API.main.colorBlipTexture;
+			Texture2D blip = Main.colorBlipTexture;
 			int ewidth = 0, eheight = 0;
 			float alpha = 200f / 255f;
 

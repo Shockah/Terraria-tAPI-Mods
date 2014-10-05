@@ -8,8 +8,6 @@ namespace Shockah.Base
 		internal static uint autoIncrement = 0;
 
 		internal uint myId;
-		
-		public MItem(ModBase modBase, Item item) : base(modBase, item) { }
 
 		public override void Initialize()
 		{

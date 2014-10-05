@@ -10,7 +10,7 @@ namespace Shockah.Base
 {
 	public class IlPopupMenus : InterfaceLayer
 	{
-		public IlPopupMenus() : base(MBase.me.modName + ":PopupMenus") { }
+		public IlPopupMenus() : base(MBase.me.mod.InternalName + ":PopupMenus") { }
 
 		protected override void OnDraw(SpriteBatch sb)
 		{

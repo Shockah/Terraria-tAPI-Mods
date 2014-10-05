@@ -16,8 +16,6 @@ namespace Shockah.ItemSuffixes
 		public uint myId;
 		public ItemSuffix suffix = ItemSuffix.list[0];
 		public int resetDamage = 0, resetCrit = 0;
-		
-		public MItem(ModBase modBase, Item item) : base(modBase, item) { }
 
 		public override void Initialize()
 		{

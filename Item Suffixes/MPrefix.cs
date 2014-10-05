@@ -9,8 +9,6 @@ namespace Shockah.ItemSuffixes
 {
 	[GlobalMod] public class MPrefix : ModPrefix
 	{
-		public MPrefix(ModBase modBase) : base(modBase) { }
-
 		public override void AdditionalTooltips(Item item, ref List<Tuple<string, bool>> current)
 		{
 			MItem m = item.GetSubClass<MItem>();

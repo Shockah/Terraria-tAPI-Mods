@@ -15,7 +15,7 @@ namespace Shockah.ETooltip.ModuleItem
 		{
 			if (item.tileWand > 0)
 			{
-				Item itemDef = Defs.items[Defs.itemNames[item.tileWand]];
+				Item itemDef = ItemDef.byType[item.tileWand];
 				if (style == ETipStyle.Vanilla) tip += CText("Consumes ", (bool)options["itemWandItemColor"].Value ? itemDef.GetRarityColor() : Color.White, itemDef.displayName);
 				if (style == ETipStyle.TwoCols) tip += new string[] { "Consumes:", CText((bool)options["itemWandItemColor"].Value ? itemDef.GetRarityColor() : Color.White, itemDef.displayName) };
 			}

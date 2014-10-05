@@ -19,26 +19,10 @@ namespace Shockah.ETooltip
 		public int maxPowerPick = 0, maxPowerAxe = 0, maxPowerHammer = 0, maxManaCost = 0;
 		public List<Module<Item>> modulesItems = new List<Module<Item>>();
 		public bool oneTooltip = false;
-
-		public static InterfaceLayer LayerPreTooltip = null, LayerPreMouseOver = null, LayerPreBuffs = null;
-		internal static InterfaceLayer CopyLayerMouseText, CopyLayerMouseOver, CopyLayerBuffs;
 		
 		public override void OnLoad()
 		{
 			me = this;
-
-			CopyLayerMouseText = InterfaceLayer.LayerMouseText;
-			CopyLayerMouseOver = InterfaceLayer.LayerMouseOver;
-			CopyLayerBuffs = InterfaceLayer.LayerBuffs;
-
-			LayerPreTooltip = new ILPreTooltip();
-			LayerPreMouseOver = new ILPreMouseOver();
-			LayerPreBuffs = new ILPreBuffs();
-
-			Type refType = typeof(InterfaceLayer);
-			refType.GetField("LayerMouseText", BindingFlags.Static | BindingFlags.Public).SetValue(null, LayerPreTooltip);
-			refType.GetField("LayerMouseOver", BindingFlags.Static | BindingFlags.Public).SetValue(null, LayerPreMouseOver);
-			refType.GetField("LayerBuffs", BindingFlags.Static | BindingFlags.Public).SetValue(null, LayerPreBuffs);
 
 			modulesItems.Add(new ModuleItemName());
 			modulesItems.Add(new ModuleItemDamage());
@@ -65,21 +49,13 @@ namespace Shockah.ETooltip
 			modulesItems.Add(new ModuleItemPrice());
 		}
 
-		public override void OnUnload()
-		{
-			Type refType = typeof(InterfaceLayer);
-			refType.GetField("LayerMouseText", BindingFlags.Static | BindingFlags.Public).SetValue(null, CopyLayerMouseText);
-			refType.GetField("LayerMouseOver", BindingFlags.Static | BindingFlags.Public).SetValue(null, CopyLayerMouseOver);
-			refType.GetField("LayerBuffs", BindingFlags.Static | BindingFlags.Public).SetValue(null, CopyLayerBuffs);
-		}
-
 		public override void OnAllModsLoaded()
 		{
 			SBase.EventSTooltipDraw += () => { return tip; };
 
-			foreach (KeyValuePair<string, Item> kvp in Defs.items)
+			foreach (KeyValuePair<string, Item> kvp in ItemDef.byName)
 			{
-				if (kvp.Value.type == Defs.unloadedItem.type) continue;
+				if (kvp.Value.type == ItemDef.unloadedItem.type) continue;
 				if (kvp.Value.pick > maxPowerPick) maxPowerPick = kvp.Value.pick;
 				if (kvp.Value.axe > maxPowerAxe) maxPowerAxe = kvp.Value.axe;
 				if (kvp.Value.hammer > maxPowerHammer) maxPowerHammer = kvp.Value.hammer;
@@ -126,25 +102,23 @@ namespace Shockah.ETooltip
 			tip += Main.buffTip[buffType];
 		}
 
-		public void FillTooltip(ItemTooltip item, string cursorText = null)
+		public void FillTooltip(Item item, string cursorText = null)
 		{
 			if (!FillTooltipBase()) return;
-			if (cursorText == null) cursorText = item.item.displayName;
+			if (cursorText == null) cursorText = item.displayName;
 
 			ETipStyle style = ETipStyle.map[(string)options["itemStyle"].Value];
-			foreach (Module<Item> module in modulesItems) module.ModifyTip(style, options, tip, Main.toolTip.item);
+			foreach (Module<Item> module in modulesItems) module.ModifyTip(style, options, tip, Main.toolTip);
 		}
 
 		public void FillTooltipItemInWorld(Item item)
 		{
 			if (!FillTooltipBase()) return;
-			ItemTooltip itemT = new ItemTooltip();
-			itemT = item;
 
 			ETipStyle style = ETipStyle.map[(string)options["itemStyle"].Value];
 			foreach (Module<Item> module in modulesItems) if (module is ModuleItemName)
 			{
-				module.ModifyTip(style, options, tip, itemT);
+				module.ModifyTip(style, options, tip, item);
 				break;
 			}
 

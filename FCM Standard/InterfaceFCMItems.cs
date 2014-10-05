@@ -23,10 +23,11 @@ namespace Shockah.FCM.Standard
 		public static void Reset()
 		{
 			defs.Clear();
-			foreach (KeyValuePair<string, Item> kvp in Defs.items)
+			foreach (KeyValuePair<string, Item> kvp in ItemDef.byName)
 			{
-				if (kvp.Value.type == Defs.unloadedItem.type) continue;
-				if (kvp.Value.toolTip == "You shouldn't have this") continue;
+				if (kvp.Value.IsBlank()) continue;
+				if (kvp.Value.type == ItemDef.unloadedItem.type) continue;
+				if (kvp.Value.tooltip == "You shouldn't have this") continue;
 				if (!Main.cEd && kvp.Key == "Vanilla:Carrot") continue;
 				if (kvp.Key == "Vanilla:Red Potion") continue;
 				if (kvp.Value.type == 58 || kvp.Value.type == 184 || kvp.Value.type == 1734 || kvp.Value.type == 1735 || kvp.Value.type == 1867 || kvp.Value.type == 1868) continue;
@@ -76,26 +77,26 @@ namespace Shockah.FCM.Standard
 			me = this;
 			if (Main.dedServ) return;
 
-			FHead = new Filter<Item>("Head", Defs.items["Vanilla:Adamantite Helmet"].GetTexture(), (item) => item.headSlot != -1);
-			FBody = new Filter<Item>("Body", Defs.items["Vanilla:Hallowed Plate Mail"].GetTexture(), (item) => item.bodySlot != -1);
-			FLegs = new Filter<Item>("Legs", Defs.items["Vanilla:Titanium Leggings"].GetTexture(), (item) => item.legSlot != -1);
-			FVanity = new Filter<Item>("Vanity", Defs.items["Vanilla:Clown Shirt"].GetTexture(), (item) => item.vanity);
-			FMelee = new Filter<Item>("Melee", Defs.items["Vanilla:Terra Blade"].GetTexture(), (item) => item.damage > 0 && item.melee);
-			FRanged = new Filter<Item>("Ranged", Defs.items["Vanilla:S.D.M.G."].GetTexture(), (item) => item.damage > 0 && item.ranged && (item.ammo == 0));
-			FAmmo = new Filter<Item>("Ammo", Defs.items["Vanilla:Chlorophyte Bullet"].GetTexture(), (item) => item.damage > 0 && item.ranged && item.ammo != 0 && !item.notAmmo);
-			FMagic = new Filter<Item>("Magic", Defs.items["Vanilla:Golden Shower"].GetTexture(), (item) => item.damage > 0 && item.magic);
-			FSummon = new Filter<Item>("Summon", Defs.items["Vanilla:Pygmy Staff"].GetTexture(), (item) => item.damage > 0 && item.summon);
-			FAccessory = new Filter<Item>("Accessory", Defs.items["Vanilla:Ankh Shield"].GetTexture(), (item) => item.accessory);
-			FPickaxe = new Filter<Item>("Pickaxe", Defs.items["Vanilla:Picksaw"].GetTexture(), (item) => item.pick > 0);
-			FAxe = new Filter<Item>("Axe", Defs.items["Vanilla:Spirit Hamaxe"].GetTexture(), (item) => item.axe > 0);
-			FHammer = new Filter<Item>("Hammer", Defs.items["Vanilla:Pwnhammer"].GetTexture(), (item) => item.hammer > 0);
-			FConsumable = new Filter<Item>("Consumable", Defs.items["Vanilla:Lesser Healing Potion"].GetTexture(), (item) => item.consumable && item.damage <= 0 && item.createTile == -1 && item.tileWand == -1 && item.createWall == -1 && item.ammo == 0 && item.name != "Xmas decorations");
-			FDye = new Filter<Item>("Dye", Defs.items["Vanilla:Flame Dye"].GetTexture(), (item) => item.dye != 0);
-			FPaint = new Filter<Item>("Paint", Defs.items["Vanilla:Blue Paint"].GetTexture(), (item) => item.paint != 0);
-			FTile = new Filter<Item>("Tile", Defs.items["Vanilla:Stone Block"].GetTexture(), (item) => item.createTile != -1 || item.tileWand != -1 || item.name == "Xmas decorations");
-			FWall = new Filter<Item>("Wall", Defs.items["Vanilla:Green Brick Wall"].GetTexture(), (item) => item.createWall != -1);
-			FPet = new Filter<Item>("Pet", Defs.items["Vanilla:Wisp in a Bottle"].GetTexture(), (item) => item.damage <= 0 && ((item.shoot > 0 && Main.projPet[item.shoot]) || (item.buffType > 0 && (Main.vanityPet[item.buffType] || Main.lightPet[item.buffType]))));
-			FOther = new Filter<Item>("Other", Defs.unloadedItem.GetTexture(), null);
+			FHead = new Filter<Item>("Head", ItemDef.byName["Vanilla:Adamantite Helmet"].GetTexture(), (item) => item.headSlot != -1);
+			FBody = new Filter<Item>("Body", ItemDef.byName["Vanilla:Hallowed Plate Mail"].GetTexture(), (item) => item.bodySlot != -1);
+			FLegs = new Filter<Item>("Legs", ItemDef.byName["Vanilla:Titanium Leggings"].GetTexture(), (item) => item.legSlot != -1);
+			FVanity = new Filter<Item>("Vanity", ItemDef.byName["Vanilla:Clown Shirt"].GetTexture(), (item) => item.vanity);
+			FMelee = new Filter<Item>("Melee", ItemDef.byName["Vanilla:Terra Blade"].GetTexture(), (item) => item.damage > 0 && item.melee);
+			FRanged = new Filter<Item>("Ranged", ItemDef.byName["Vanilla:S.D.M.G."].GetTexture(), (item) => item.damage > 0 && item.ranged && (item.ammo == 0));
+			FAmmo = new Filter<Item>("Ammo", ItemDef.byName["Vanilla:Chlorophyte Bullet"].GetTexture(), (item) => item.damage > 0 && item.ranged && item.ammo != 0 && !item.notAmmo);
+			FMagic = new Filter<Item>("Magic", ItemDef.byName["Vanilla:Golden Shower"].GetTexture(), (item) => item.damage > 0 && item.magic);
+			FSummon = new Filter<Item>("Summon", ItemDef.byName["Vanilla:Pygmy Staff"].GetTexture(), (item) => item.damage > 0 && item.summon);
+			FAccessory = new Filter<Item>("Accessory", ItemDef.byName["Vanilla:Ankh Shield"].GetTexture(), (item) => item.accessory);
+			FPickaxe = new Filter<Item>("Pickaxe", ItemDef.byName["Vanilla:Picksaw"].GetTexture(), (item) => item.pick > 0);
+			FAxe = new Filter<Item>("Axe", ItemDef.byName["Vanilla:Spectre Hamaxe"].GetTexture(), (item) => item.axe > 0);
+			FHammer = new Filter<Item>("Hammer", ItemDef.byName["Vanilla:Pwnhammer"].GetTexture(), (item) => item.hammer > 0);
+			FConsumable = new Filter<Item>("Consumable", ItemDef.byName["Vanilla:Lesser Healing Potion"].GetTexture(), (item) => item.consumable && item.damage <= 0 && item.createTile == -1 && item.tileWand == -1 && item.createWall == -1 && item.ammo == 0 && item.name != "Xmas decorations");
+			FDye = new Filter<Item>("Dye", ItemDef.byName["Vanilla:Flame Dye"].GetTexture(), (item) => item.dye != 0);
+			FPaint = new Filter<Item>("Paint", ItemDef.byName["Vanilla:Blue Paint"].GetTexture(), (item) => item.paint != 0);
+			FTile = new Filter<Item>("Tile", ItemDef.byName["Vanilla:Stone Block"].GetTexture(), (item) => item.createTile != -1 || item.tileWand != -1 || item.name == "Xmas decorations");
+			FWall = new Filter<Item>("Wall", ItemDef.byName["Vanilla:Green Brick Wall"].GetTexture(), (item) => item.createWall != -1);
+			FPet = new Filter<Item>("Pet", ItemDef.byName["Vanilla:Wisp in a Bottle"].GetTexture(), (item) => item.damage <= 0 && ((item.shoot > 0 && Main.projPet[item.shoot]) || (item.buffType > 0 && (Main.vanityPet[item.buffType] || Main.lightPet[item.buffType]))));
+			FOther = new Filter<Item>("Other", ItemDef.unloadedItem.GetTexture(), null);
 
 			SID = new Sorter<Item>("ID", (i1, i2) => i1.type.CompareTo(i2.type), (item) => true);
 			SName = new Sorter<Item>("Name", (i1, i2) => i1.displayName.CompareTo(i2.displayName), (item) => true);
@@ -134,7 +135,7 @@ namespace Shockah.FCM.Standard
 			sortingChooser = new ElChooser<Sorter<Item>>(
 				(item) => { reverseSort = object.ReferenceEquals(sorter, item) ? !reverseSort : false; sorter = item; Refresh(true); },
 				() => { return sorter; },
-				() => { return Shockah.FCM.MBase.me.textures[reverseSort ? "Images/ArrowDecrease.png" : "Images/ArrowIncrease.png"]; }
+				() => { return Shockah.FCM.MBase.me.textures[reverseSort ? "Images/ArrowDecrease" : "Images/ArrowIncrease"]; }
 			);
 			foreach (Sorter<Item> sorter2 in sorters) sortingChooser.Add(new Tuple<string, Sorter<Item>>(sorter2.name, sorter2));
 
@@ -160,7 +161,7 @@ namespace Shockah.FCM.Standard
 				},
 				(b, sb, mb) =>
 				{
-					Texture2D tex = typing == null && filterText != null ? Main.cdTexture : Shockah.FCM.MBase.me.textures["Images/Arrow.png"];
+					Texture2D tex = typing == null && filterText != null ? Main.cdTexture : Shockah.FCM.MBase.me.textures["Images/Arrow"];
 					float tscale = 1f;
 					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
 					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
@@ -182,8 +183,8 @@ namespace Shockah.FCM.Standard
 				},
 				(b, sb, mb) =>
 				{
-					if (typing == null && filterText == null) SDrawing.StringShadowed(sb, Main.fontMouseText, "Search...", new Vector2(b.pos.X + 8, b.pos.Y + 4), Color.White * .5f);
-					else SDrawing.StringShadowed(sb, Main.fontMouseText, typing == null ? filterText : typing + "|", new Vector2(b.pos.X + 8, b.pos.Y + 4));
+					if (typing == null && filterText == null) Drawing.StringShadowed(sb, Main.fontMouseText, "Search...", new Vector2(b.pos.X + 8, b.pos.Y + 4), Color.White * .5f);
+					else Drawing.StringShadowed(sb, Main.fontMouseText, typing == null ? filterText : typing + "|", new Vector2(b.pos.X + 8, b.pos.Y + 4));
 				}
 			);
 		}
@@ -233,7 +234,7 @@ namespace Shockah.FCM.Standard
 				}
 			}
 
-			SDrawing.StringShadowed(sb, Main.fontMouseText, (filtered.Count == defs.Count ? "Items" : "Matching items") + ": " + filtered.Count, new Vector2(POS_X, POS_Y - 26));
+			Drawing.StringShadowed(sb, Main.fontMouseText, (filtered.Count == defs.Count ? "Items" : "Matching items") + ": " + filtered.Count, new Vector2(POS_X, POS_Y - 26));
 
 			for (int y = 0; y < ROWS; y++) for (int x = 0; x < COLS; x++)
 			{
@@ -246,7 +247,7 @@ namespace Shockah.FCM.Standard
 			slider.size = new Vector2(16, ROWS * OFF_Y * Main.inventoryScale);
 			blocked = slider.Draw(sb, true, !blocked) || blocked;
 
-			SDrawing.StringShadowed(sb, Main.fontMouseText, "Sort:", new Vector2(POS_X - 8 + COLS * OFF_X * Main.inventoryScale, POS_Y - 22), Color.White, SORT_TEXT_SCALE);
+			Drawing.StringShadowed(sb, Main.fontMouseText, "Sort:", new Vector2(POS_X - 8 + COLS * OFF_X * Main.inventoryScale, POS_Y - 22), Color.White, SORT_TEXT_SCALE);
 			sortingChooser.pos = new Vector2(POS_X + 24 + COLS * OFF_X * Main.inventoryScale, POS_Y - 26);
 			sortingChooser.size = new Vector2(96, 20);
 			blocked = sortingChooser.Draw(sb, false, !blocked) || blocked;
@@ -258,26 +259,26 @@ namespace Shockah.FCM.Standard
 				Filter<Item> filter = filters[i];
 				Vector2 pos = new Vector2(POS_X + 32 + COLS * OFF_X * Main.inventoryScale + (i / 10) * (filterW + FILTER_X_OFF * Main.inventoryScale), POS_Y + (i % 10) * filterH);
 				Drawing.DrawBox(sb, pos.X, pos.Y, filterW, filterH * Main.inventoryScale);
-				Texture2D tex = filter.mode == null ? filter.tex : (filter.mode.Value ? Shockah.FCM.MBase.me.textures["Images/Tick.png"] : Main.cdTexture);
+				Texture2D tex = filter.mode == null ? filter.tex : (filter.mode.Value ? Shockah.FCM.MBase.me.textures["Images/Tick"] : Main.cdTexture);
 				float tscale = 1f;
 				if (tscale * tex.Width > filterH - 2f) tscale = (filterH - 2f) / tex.Width;
 				if (tscale * tex.Height > filterH - 2f) tscale = (filterH - 2f) / tex.Height;
 				sb.Draw(tex, pos + new Vector2(filterH / 2f + 2, filterH / 2f), null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
 				Vector2 measure = Main.fontMouseText.MeasureString(filter.name) * Main.inventoryScale;
-				SDrawing.StringShadowed(sb, Main.fontMouseText, filter.name, pos + new Vector2(filterH + 4, (filterH - measure.Y) / 2), Color.White, Main.inventoryScale);
+				Drawing.StringShadowed(sb, Main.fontMouseText, filter.name, pos + new Vector2(filterH + 4, (filterH - measure.Y) / 2), Color.White, Main.inventoryScale);
 
 				if (new Rectangle((int)pos.X, (int)pos.Y, (int)filterW, (int)filterH).Contains(Main.mouseX, Main.mouseY))
 				{
 					Main.localPlayer.mouseInterface = true;
 					if (Main.mouseLeft && Main.mouseLeftRelease)
 					{
-						if (!Main.keyState.IsKeyDown(Keys.LeftControl)) foreach (Filter<Item> filter2 in filters) if (!object.ReferenceEquals(filter, filter2)) filter2.mode = null;
+						if (!KState.Special.Ctrl.Down()) foreach (Filter<Item> filter2 in filters) if (!object.ReferenceEquals(filter, filter2)) filter2.mode = null;
 						if (filter.mode == null) filter.mode = true; else filter.mode = null;
 						Refresh(true);
 					}
 					if (Main.mouseRight && Main.mouseRightRelease)
 					{
-						if (!Main.keyState.IsKeyDown(Keys.LeftControl)) foreach (Filter<Item> filter2 in filters) if (!object.ReferenceEquals(filter, filter2)) filter2.mode = null;
+						if (!KState.Special.Ctrl.Down()) foreach (Filter<Item> filter2 in filters) if (!object.ReferenceEquals(filter, filter2)) filter2.mode = null;
 						if (filter.mode == null) filter.mode = false; else filter.mode = null;
 						Refresh(true);
 					}

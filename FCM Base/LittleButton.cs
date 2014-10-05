@@ -38,7 +38,7 @@ namespace Shockah.FCM
 				SBase.tip = name;
 				if (Main.mouseLeft && Main.mouseLeftRelease)
 				{
-					if (isPressed()) Interface.current.Close();
+					if (isPressed()) UICore.currentInterface.Close();
 					else onClick();
 				}
 			}

@@ -207,9 +207,9 @@ namespace Shockah.Base
 
 		public void Create()
 		{
-			if (data.Has(modBase.modName))
+			if (data.Has(modBase.mod.InternalName))
 			{
-				JsonData j = data[modBase.modName];
+				JsonData j = data[modBase.mod.InternalName];
 				if (j.Has(tag))
 				{
 					JsonData j2 = j[tag];
@@ -230,8 +230,8 @@ namespace Shockah.Base
 			OnDestroy();
 			framesRemove.Add(this);
 
-			if (!data.Has(modBase.modName)) data[modBase.modName] = SBase.JsonObject();
-			JsonData j = data[modBase.modName];
+			if (!data.Has(modBase.mod.InternalName)) data[modBase.mod.InternalName] = SBase.JsonObject();
+			JsonData j = data[modBase.mod.InternalName];
 
 			j[tag] = SBase.JsonObject(
 				"pos", SBase.JsonArray((int)pos.X, (int)pos.Y),
@@ -241,7 +241,7 @@ namespace Shockah.Base
 				"anchor", Enum.GetName(typeof(Anchor), anchor)
 			);
 			OnSave(j[tag]);
-			data[modBase.modName] = j;
+			data[modBase.mod.InternalName] = j;
 		}
 		public void Update()
 		{

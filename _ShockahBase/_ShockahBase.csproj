@@ -53,7 +53,6 @@
     <None Include="ModInfo.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions.cs" />
     <Compile Include="IlPopupMenus.cs" />
     <Compile Include="ILFrames.cs" />
     <Compile Include="Math2.cs" />
@@ -62,7 +61,6 @@
     <Compile Include="MItem.cs" />
     <Compile Include="MNPC.cs" />
     <Compile Include="MTileType.cs" />
-    <Compile Include="SDrawing.cs" />
     <Compile Include="SEvent.cs" />
     <Compile Include="MPlayer.cs" />
     <Compile Include="SBase.cs" />

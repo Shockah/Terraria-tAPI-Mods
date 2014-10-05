@@ -5,9 +5,7 @@ namespace Shockah.ItemSuffixes
 {
 	public class MPlayer : ModPlayer
 	{
-		public MPlayer(ModBase modBase, Player p) : base(modBase, p) { }
-
-		public override void OnUpdate()
+		public override void MidUpdate()
 		{
 			Item heldItem = player.heldItem;
 			MItem mheldItem = null;

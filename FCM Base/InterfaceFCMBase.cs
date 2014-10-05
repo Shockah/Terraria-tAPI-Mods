@@ -19,7 +19,7 @@ namespace Shockah.FCM
 
 		public override void Draw(InterfaceLayer layer, SpriteBatch sb)
 		{
-			if (Util.KeyPressed(Keys.Enter))
+			if (Keys.Enter.Pressed())
 			{
 				Main.GetInputText("");
 				if (typing == null) typing = "";

@@ -1,11 +1,12 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using TAPI;
+using TAPI.UIKit;
 using Terraria;
 
 namespace Shockah.FCM.Standard
 {
-	public class ItemSlotPrefixFCM : Interface.ItemSlot, El
+	public class ItemSlotPrefixFCM : ItemSlot, El
 	{
 		protected readonly InterfaceFCMPrefixes gui;
 		public Item item = new Item();
@@ -22,7 +23,7 @@ namespace Shockah.FCM.Standard
 
 		public override void OnLeftClick(ref bool release)
 		{
-			if (release && Main.keyState.IsKeyDown(Keys.LeftShift) && !MyItem.IsBlank())
+			if (release && KState.Special.Shift.Down() && !MyItem.IsBlank())
 			{
 				Main.localPlayer.GetItem(Main.myPlayer, (Item)MyItem.Clone());
 				MyItem.SetDefaults(0);

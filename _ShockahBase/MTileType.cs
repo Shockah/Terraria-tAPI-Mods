@@ -10,8 +10,6 @@ namespace Shockah.Base
 		public static int nested = 0;
 		public static uint[] cacheItems;
 
-		public MTileType(ModBase modBase) : base(modBase) { }
-
 		public override bool PreKill(int x, int y, bool fail, bool effectsOnly, bool noItem)
 		{
 			if (nested == 0)

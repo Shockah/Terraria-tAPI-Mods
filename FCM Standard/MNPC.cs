@@ -9,8 +9,6 @@ namespace Shockah.FCM.Standard
 {
 	[GlobalMod] public class MNPC : ModNPC
 	{
-		public MNPC(ModBase modBase, NPC npc) : base(modBase, npc) { }
-
 		public override void Initialize()
 		{
 			if (npc.type == 68)

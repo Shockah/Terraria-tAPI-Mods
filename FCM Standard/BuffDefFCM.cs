@@ -5,12 +5,12 @@ using System.Text;
 
 namespace Shockah.FCM.Standard
 {
-	public class BuffDef
+	public class BuffDefFCM
 	{
 		public readonly int type;
 		public readonly string name, noModName;
 
-		public BuffDef(int type, string name)
+		public BuffDefFCM(int type, string name)
 		{
 			this.type = type;
 			this.name = name;

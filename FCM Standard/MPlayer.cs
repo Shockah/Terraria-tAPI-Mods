@@ -19,9 +19,7 @@ namespace Shockah.FCM.Standard
 		public bool cheatGod, cheatNoclip, cheatUsage, cheatRange, cheatTileSpeed, cheatTileUsage;
 		public Vector2 oldPos = new Vector2(-1, -1), lastCameraPos = new Vector2(-1, -1);
 		
-		public MPlayer(ModBase modBase, Player player) : base(modBase, player) { }
-
-		public override void OnUpdate()
+		public override void MidUpdate()
 		{
 			if (player.whoAmI == Main.myPlayer && InterfaceFCMMisc.freeCamera)
 			{

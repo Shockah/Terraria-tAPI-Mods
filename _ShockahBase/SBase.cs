@@ -77,7 +77,7 @@ namespace Shockah.Base
 
 		public static bool BuffHasTimer(int type)
 		{
-			if (Defs.buffNoTimer[type]) return false;
+			if (Main.buffNoTimeDisplay[type]) return false;
 			if (Main.vanityPet[type] || Main.lightPet[type]) return false;
 			if (noTimerBuffs.Contains(type)) return false;
 			if (!Main.localPlayer.honeyWet && type == 48) return true;

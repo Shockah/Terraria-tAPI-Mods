@@ -14,7 +14,7 @@ namespace Shockah.FCM.Standard
 		public float scale = .85f, alpha = 1f;
 		public readonly InterfaceFCMBuffs gui;
 		public readonly int index;
-		public BuffDef def = null;
+		public BuffDefFCM def = null;
 
 		public BuffSlot(InterfaceFCMBuffs gui, int index, Vector2 size)
 		{
@@ -23,7 +23,7 @@ namespace Shockah.FCM.Standard
 			this.size = size;
 		}
 
-		public BuffDef MyBuffDef
+		public BuffDefFCM MyBuffDef
 		{
 			get
 			{
@@ -87,7 +87,7 @@ namespace Shockah.FCM.Standard
 
 				if (MyBuffDef != null)
 				{
-					Shockah.FCM.MBase.tip += new STooltip.Line((Main.keyState.IsKeyDown(Keys.LeftControl) ? "[" + MyBuffDef.type + "] " : "") + MyBuffDef.noModName, Color.White);
+					Shockah.FCM.MBase.tip += new STooltip.Line((KState.Special.Ctrl.Down() ? "[" + MyBuffDef.type + "] " : "") + MyBuffDef.noModName, Color.White);
 					Shockah.FCM.MBase.tip += new STooltip.Line(Main.buffTip[MyBuffDef.type], Color.White);
 				}
 			}
@@ -120,7 +120,7 @@ namespace Shockah.FCM.Standard
 			}
 		}
 
-		public BuffDef ShouldHold()
+		public BuffDefFCM ShouldHold()
 		{
 			if (index >= 0 && index < gui.filtered.Count) return gui.filtered[index];
 			return null;
@@ -149,7 +149,7 @@ namespace Shockah.FCM.Standard
 			Vector2 measure = Main.fontMouseText.MeasureString(MyBuffDef.noModName);
 			float tscale = .75f;
 			if (measure.X * .75f > InterfaceFCMBuffs.SLOT_W - InterfaceFCMBuffs.SLOT_H - 6) tscale = (InterfaceFCMBuffs.SLOT_W - InterfaceFCMBuffs.SLOT_H - 6) / measure.X;
-			SDrawing.StringShadowed(sb, Main.fontMouseText, MyBuffDef.noModName, pos + new Vector2(InterfaceFCMBuffs.SLOT_H, InterfaceFCMBuffs.SLOT_H / 2 + 2), Color.White, tscale, new Vector2(0, measure.Y / 2));
+			Drawing.StringShadowed(sb, Main.fontMouseText, MyBuffDef.noModName, pos + new Vector2(InterfaceFCMBuffs.SLOT_H, InterfaceFCMBuffs.SLOT_H / 2 + 2), Color.White, tscale, new Vector2(0, measure.Y / 2));
 		}
 
 		public bool Draw(SpriteBatch sb, bool draw, bool update)

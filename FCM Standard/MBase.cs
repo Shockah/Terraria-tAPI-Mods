@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using Shockah.Base;
 using TAPI;
 using Terraria;
+using Terraria.DataStructures;
 
 namespace Shockah.FCM.Standard
 {
@@ -37,11 +38,11 @@ namespace Shockah.FCM.Standard
 
 			FrameFCMButtons.EventCreatingButtonList += (list) =>
 			{
-				list.Add(new LittleButton("Items", textures["Images/ModuleItems.png"], () => Interface.current is InterfaceFCMItems, () => InterfaceFCMItems.me.Open(), 0f));
-				list.Add(new LittleButton("NPCs", textures["Images/ModuleNPCs.png"], () => Interface.current is InterfaceFCMNPCs, () => InterfaceFCMNPCs.me.Open(), -1f));
-				list.Add(new LittleButton("Prefixes", textures["Images/ModulePrefixes.png"], () => Interface.current is InterfaceFCMPrefixes, () => InterfaceFCMPrefixes.me.Open(), -2f));
-				list.Add(new LittleButton("Buffs", textures["Images/ModuleBuffs.png"], () => Interface.current is InterfaceFCMBuffs, () => InterfaceFCMBuffs.me.Open(), -3f));
-				list.Add(new LittleButton("Misc", textures["Images/ModuleMisc.png"], () => Interface.current is InterfaceFCMMisc, () => InterfaceFCMMisc.me.Open(), -4f));
+				list.Add(new LittleButton("Items", textures["Images/ModuleItems"], () => UICore.currentInterface is InterfaceFCMItems, () => InterfaceFCMItems.me.Open(), 0f));
+				list.Add(new LittleButton("NPCs", textures["Images/ModuleNPCs"], () => UICore.currentInterface is InterfaceFCMNPCs, () => InterfaceFCMNPCs.me.Open(), -1f));
+				list.Add(new LittleButton("Prefixes", textures["Images/ModulePrefixes"], () => UICore.currentInterface is InterfaceFCMPrefixes, () => InterfaceFCMPrefixes.me.Open(), -2f));
+				list.Add(new LittleButton("Buffs", textures["Images/ModuleBuffs"], () => UICore.currentInterface is InterfaceFCMBuffs, () => InterfaceFCMBuffs.me.Open(), -3f));
+				list.Add(new LittleButton("Misc", textures["Images/ModuleMisc"], () => UICore.currentInterface is InterfaceFCMMisc, () => InterfaceFCMMisc.me.Open(), -4f));
 			};
 		}
 
@@ -54,26 +55,17 @@ namespace Shockah.FCM.Standard
 
 				if (InterfaceFCMMisc.fullBright)
 				{
-					for (int i = 0; i < Lighting.color.GetLength(0); i++) for (int j = 0; j < Lighting.color.GetLength(1); j++)
-					{
-						Lighting.color[i, j] = 1f;
-						Lighting.colorG[i, j] = 1f;
-						Lighting.colorB[i, j] = 1f;
-						Lighting.color2[i, j] = 1f;
-						Lighting.colorG2[i, j] = 1f;
-						Lighting.colorB2[i, j] = 1f;
-					}
-					Main.renderNow = false;
+					Lighting.fullBright = true;
 				}
 				if (InterfaceFCMMisc.flashlight)
 				{
-					if (Util.KeyPressed(Keys.Tab)) InterfaceFCMMisc.flashlightOff = !InterfaceFCMMisc.flashlightOff;
+					if (Keys.Tab.Pressed()) InterfaceFCMMisc.flashlightOff = !InterfaceFCMMisc.flashlightOff;
 					if (!InterfaceFCMMisc.flashlightOff) Lighting.AddLight(Main.screenPosition + Main.mouse, 50f, 50f, 50f);
 				}
 			}
 		}
 
-		public override void NetReceive(int msgType, BinBuffer bb)
+		public override void NetReceive(byte msgType, BinBuffer bb)
 		{
 			int ignore;
 			BinBuffer copybb;

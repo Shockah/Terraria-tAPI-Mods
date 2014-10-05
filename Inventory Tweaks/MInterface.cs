@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Shockah.Base;
 using TAPI;
+using TAPI.UIKit;
 using Terraria;
 
 namespace Shockah.InvTweaks
@@ -10,10 +11,8 @@ namespace Shockah.InvTweaks
 	public class MInterface : ModInterface
 	{
 		private Texture2D texGlow = null, texCracked = null;
-		
-		public MInterface(ModBase modBase) : base(modBase) { }
 
-		public override void PostDrawItemSlotBackground(SpriteBatch sb, Interface.ItemSlot slot)
+		public override void PostDrawItemSlotBackground(SpriteBatch sb, ItemSlot slot)
 		{
 			if ((bool)modBase.options["colorRarity"].Value)
 			{
@@ -21,8 +20,8 @@ namespace Shockah.InvTweaks
 				{
 					if (texGlow == null)
 					{
-						texGlow = modBase.textures["Images/ItemSlotGlow.png"];
-						texCracked = modBase.textures["Images/ItemSlotCracked.png"];
+						texGlow = modBase.textures["Images/ItemSlotGlow"];
+						texCracked = modBase.textures["Images/ItemSlotCracked"];
 					}
 					Texture2D tex = slot.MyItem.rare >= 0 ? texGlow : texCracked;
 					Color c = slot.MyItem.GetRarityColor();
@@ -33,10 +32,10 @@ namespace Shockah.InvTweaks
 			}
 		}
 
-		public override bool PreItemSlotLeftClick(Interface.ItemSlot slot, ref bool release)
+		public override bool PreItemSlotLeftClick(ItemSlot slot, ref bool release)
 		{
 			if (!(bool)modBase.options["bindShiftMove"].Value) return true;
-			if (slot.modBase == null && Main.localPlayer.chestObj != null && release && Main.keyState.IsKeyDown(Keys.LeftShift))
+			if (slot.modBase == null && Main.localPlayer.chestObj != null && release && KState.Special.Shift.Down())
 			{
 				if (slot.type == "Inventory")
 				{

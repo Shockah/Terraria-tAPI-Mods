@@ -15,7 +15,7 @@ namespace Shockah.ETooltip.ModuleItem
 		{
 			if (item.damage > 0 && !item.notAmmo)
 			{
-				Item itemDef = item.Def();
+				Item itemDef = item.def.item;
 				Player player = Main.localPlayer;
 				
 				float knockback = item.knockBack;

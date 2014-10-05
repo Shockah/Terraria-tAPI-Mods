@@ -9,8 +9,6 @@ namespace Shockah.Insight
 	public class MPlayer : ModPlayer
 	{
 		public Dictionary<int, List<ChestCache>> visited = new Dictionary<int,List<ChestCache>>();
-		
-		public MPlayer(ModBase modBase, Player p) : base(modBase, p) { }
 
 		public void MarkAsVisited()
 		{

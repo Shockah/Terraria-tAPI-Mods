@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using TAPI;
 using Terraria;
+using Terraria.DataStructures;
 
 namespace Shockah.FCM.Standard
 {
@@ -221,7 +222,7 @@ namespace Shockah.FCM.Standard
 					MWorld mw = (MWorld)MBase.me.modWorld;
 					if (!mw.lockDayTimeSave) return;
 
-					Texture2D tex = Shockah.FCM.MBase.me.textures["Images/Tick.png"];
+					Texture2D tex = Shockah.FCM.MBase.me.textures["Images/Tick"];
 					float tscale = 1f;
 					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
 					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
@@ -249,7 +250,7 @@ namespace Shockah.FCM.Standard
 					MWorld mw = (MWorld)MBase.me.modWorld;
 					if (!mw.lockDayRate.HasValue) return;
 
-					Texture2D tex = Shockah.FCM.MBase.me.textures["Images/Tick.png"];
+					Texture2D tex = Shockah.FCM.MBase.me.textures["Images/Tick"];
 					float tscale = 1f;
 					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
 					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
@@ -397,7 +398,7 @@ namespace Shockah.FCM.Standard
 				(b, sb, mb) =>
 				{
 					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
-					Texture2D tex = MBase.me.textures["Images/IconCheatUsage.png"];
+					Texture2D tex = MBase.me.textures["Images/IconCheatUsage"];
 					float tscale = 1f;
 					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
 					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
@@ -423,7 +424,7 @@ namespace Shockah.FCM.Standard
 				(b, sb, mb) =>
 				{
 					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
-					Texture2D tex = MBase.me.textures["Images/IconCheatRange.png"];
+					Texture2D tex = MBase.me.textures["Images/IconCheatRange"];
 					float tscale = 1f;
 					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
 					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
@@ -449,7 +450,7 @@ namespace Shockah.FCM.Standard
 				(b, sb, mb) =>
 				{
 					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
-					Texture2D tex = MBase.me.textures["Images/IconCheatTileSpeed.png"];
+					Texture2D tex = MBase.me.textures["Images/IconCheatTileSpeed"];
 					float tscale = 1f;
 					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
 					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
@@ -475,7 +476,7 @@ namespace Shockah.FCM.Standard
 				(b, sb, mb) =>
 				{
 					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
-					Texture2D tex = MBase.me.textures["Images/IconCheatTileUsage.png"];
+					Texture2D tex = MBase.me.textures["Images/IconCheatTileUsage"];
 					float tscale = 1f;
 					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
 					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
@@ -532,7 +533,7 @@ namespace Shockah.FCM.Standard
 					MWorld mw = (MWorld)MBase.me.modWorld;
 					if (!mw.blockNPCSpawnSave) return;
 
-					Texture2D tex = Shockah.FCM.MBase.me.textures["Images/Tick.png"];
+					Texture2D tex = Shockah.FCM.MBase.me.textures["Images/Tick"];
 					float tscale = 1f;
 					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
 					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
@@ -633,12 +634,12 @@ namespace Shockah.FCM.Standard
 			Action<string, string, Vector2, Texture2D, float, Func<float, string>, Action<float>> drawSliderFloat = (name, tip, pos, sliderTex, ratio, textBuilder, codeSet) =>
 			{
 				sb.Draw(sliderTex, new Vector2(pos.X, pos.Y + 20), Color.White);
-				sb.Draw(API.main.colorSliderTexture, new Vector2(pos.X + 4 + (sliderTex.Width - 8) * ratio, pos.Y + 20 + sliderTex.Height / 2), null, Color.White, 0f, API.main.colorSliderTexture.Size() * .5f, 1f, SpriteEffects.None, 0f);
-				SDrawing.StringShadowed(sb, Main.fontMouseText, tip, pos, Color.White, .8f);
+				sb.Draw(Main.colorSliderTexture, new Vector2(pos.X + 4 + (sliderTex.Width - 8) * ratio, pos.Y + 20 + sliderTex.Height / 2), null, Color.White, 0f, Main.colorSliderTexture.Size() * .5f, 1f, SpriteEffects.None, 0f);
+				Drawing.StringShadowed(sb, Main.fontMouseText, tip, pos, Color.White, .8f);
 				string valtext = textBuilder(ratio);
 				float valscale = .8f;
 				if (Main.fontMouseText.MeasureString(valtext).X * valscale > sliderTex.Width / 2) valscale = (sliderTex.Width / 2) / Main.fontMouseText.MeasureString(valtext).X;
-				SDrawing.StringShadowed(sb, Main.fontMouseText, valtext, new Vector2((float)Math.Round(pos.X + sliderTex.Width - Main.fontMouseText.MeasureString(textBuilder(ratio)).X * valscale), pos.Y), Color.White, valscale);
+				Drawing.StringShadowed(sb, Main.fontMouseText, valtext, new Vector2((float)Math.Round(pos.X + sliderTex.Width - Main.fontMouseText.MeasureString(textBuilder(ratio)).X * valscale), pos.Y), Color.White, valscale);
 				if (dragging == name || (dragging == null && Math2.InRegion(Main.mouse, new Vector2(pos.X, pos.Y + 20), sliderTex.Width, sliderTex.Height)))
 				{
 					Main.localPlayer.mouseInterface = true;
@@ -657,12 +658,12 @@ namespace Shockah.FCM.Standard
 			{
 				float ratio = 1f * (value - vmin) / (vmax - vmin);
 				sb.Draw(sliderTex, new Vector2(pos.X, pos.Y + 20), Color.White);
-				sb.Draw(API.main.colorSliderTexture, new Vector2(pos.X + 4 + (sliderTex.Width - 8) * ratio, pos.Y + 20 + sliderTex.Height / 2), null, Color.White, 0f, API.main.colorSliderTexture.Size() * .5f, 1f, SpriteEffects.None, 0f);
-				SDrawing.StringShadowed(sb, Main.fontMouseText, tip, pos, Color.White, .8f);
+				sb.Draw(Main.colorSliderTexture, new Vector2(pos.X + 4 + (sliderTex.Width - 8) * ratio, pos.Y + 20 + sliderTex.Height / 2), null, Color.White, 0f, Main.colorSliderTexture.Size() * .5f, 1f, SpriteEffects.None, 0f);
+				Drawing.StringShadowed(sb, Main.fontMouseText, tip, pos, Color.White, .8f);
 				string valtext = textBuilder(value);
 				float valscale = .8f;
 				if (Main.fontMouseText.MeasureString(valtext).X * valscale > sliderTex.Width / 2) valscale = (sliderTex.Width / 2) / Main.fontMouseText.MeasureString(valtext).X;
-				SDrawing.StringShadowed(sb, Main.fontMouseText, valtext, new Vector2((float)Math.Round(pos.X + sliderTex.Width - Main.fontMouseText.MeasureString(textBuilder(value)).X * valscale), pos.Y), Color.White, valscale);
+				Drawing.StringShadowed(sb, Main.fontMouseText, valtext, new Vector2((float)Math.Round(pos.X + sliderTex.Width - Main.fontMouseText.MeasureString(textBuilder(value)).X * valscale), pos.Y), Color.White, valscale);
 				if (dragging == name || (dragging == null && Math2.InRegion(Main.mouse, new Vector2(pos.X, pos.Y + 20), sliderTex.Width, sliderTex.Height)))
 				{
 					Main.localPlayer.mouseInterface = true;
@@ -693,7 +694,7 @@ namespace Shockah.FCM.Standard
 				codeDraw(pos, value);
 			};
 
-			drawSliderFloat("TimeSlider", "Current time", new Vector2(POS_X, POS_Y), MBase.me.textures["Images/TimeSlider.png"], 1f * FixAbsoluteTime(GetAbsoluteTime() - 43200) / 86400,
+			drawSliderFloat("TimeSlider", "Current time", new Vector2(POS_X, POS_Y), MBase.me.textures["Images/TimeSlider"], 1f * FixAbsoluteTime(GetAbsoluteTime() - 43200) / 86400,
 			(ratio) => { return GetTimeText(false, GetAbsoluteTime()); },
 			(ratio) => { SetAbsoluteTime((int)(Math.Min(Math.Max(ratio, 0f), 1f) * 86400) - 43200); QueueTimeUpdate(); });
 
@@ -708,7 +709,7 @@ namespace Shockah.FCM.Standard
 				blocked = bLockDayTimeSave.Draw(sb, true, !blocked && dragging == null) || blocked;
 			}
 
-			drawSliderInt("TimeRateSlider", "Time rate", new Vector2(POS_X, POS_Y + 40), MBase.me.textures["Images/TimeRateSlider.png"], (int)Math.Ceiling(Math.Pow(Main.dayRate, 1f / 1.3545f)), 0, 50,
+			drawSliderInt("TimeRateSlider", "Time rate", new Vector2(POS_X, POS_Y + 40), MBase.me.textures["Images/TimeRateSlider"], (int)Math.Ceiling(Math.Pow(Main.dayRate, 1f / 1.3545f)), 0, 50,
 			(value) => { return "" + (int)Math.Pow(value, 1.3545f); },
 			(value) => { Main.dayRate = (int)Math.Pow(value, 1.3545f); if (mw.lockDayRate.HasValue) mw.lockDayRate = Main.dayRate; QueueTimeUpdate(); });
 
@@ -716,7 +717,7 @@ namespace Shockah.FCM.Standard
 			bLockDayRate.size = new Vector2(24, 24);
 			blocked = bLockDayRate.Draw(sb, true, !blocked && dragging == null) || blocked;
 
-			drawSliderInt("MoonPhase", "Moon phase", new Vector2(POS_X, POS_Y + 80), API.main.colorBarTexture, Main.moonPhase, 0, 8,
+			drawSliderInt("MoonPhase", "Moon phase", new Vector2(POS_X, POS_Y + 80), Main.colorBarTexture, Main.moonPhase, 0, 8,
 			(value) => { return MOON_PHASES[value]; },
 			(value) => { Main.moonPhase = value % 8; QueueTimeUpdate(); });
 
@@ -732,19 +733,19 @@ namespace Shockah.FCM.Standard
 			bEclipse.size = new Vector2(32, 32);
 			blocked = bEclipse.Draw(sb, true, !blocked && dragging == null) || blocked;
 
-			drawSliderInt("PlayerLifeMax", "Max life", new Vector2(POS_X + 244, POS_Y), MBase.me.textures["Images/LifeMaxSlider.png"], Main.localPlayer.statLifeMax / 5, 1, 100,
+			drawSliderInt("PlayerLifeMax", "Max life", new Vector2(POS_X + 244, POS_Y), MBase.me.textures["Images/LifeMaxSlider"], Main.localPlayer.statLifeMax / 5, 1, 100,
 			(value) => { return "" + (value * 5); },
 			(value) => { Main.localPlayer.statLifeMax = value * 5; });
 
-			drawSliderInt("PlayerLife", "Life", new Vector2(POS_X + 244, POS_Y + 40), MBase.me.textures["Images/LifeSlider.png"], Main.localPlayer.statLife, 1, Main.localPlayer.statLifeMax2,
+			drawSliderInt("PlayerLife", "Life", new Vector2(POS_X + 244, POS_Y + 40), MBase.me.textures["Images/LifeSlider"], Main.localPlayer.statLife, 1, Main.localPlayer.statLifeMax2,
 			(value) => { return "" + value; },
 			(value) => { Main.localPlayer.statLife = value; });
 
-			drawSliderInt("PlayerManaMax", "Max mana", new Vector2(POS_X + 244, POS_Y + 80), MBase.me.textures["Images/ManaSlider.png"], Main.localPlayer.statManaMax / 20, 0, 10,
+			drawSliderInt("PlayerManaMax", "Max mana", new Vector2(POS_X + 244, POS_Y + 80), MBase.me.textures["Images/ManaSlider"], Main.localPlayer.statManaMax / 20, 0, 10,
 			(value) => { return "" + (value * 20); },
 			(value) => { Main.localPlayer.statManaMax = value * 20; });
 
-			drawSliderInt("PlayerMana", "Mana", new Vector2(POS_X + 244, POS_Y + 120), MBase.me.textures["Images/ManaSlider.png"], Main.localPlayer.statMana, 1, Main.localPlayer.statManaMax2,
+			drawSliderInt("PlayerMana", "Mana", new Vector2(POS_X + 244, POS_Y + 120), MBase.me.textures["Images/ManaSlider"], Main.localPlayer.statMana, 1, Main.localPlayer.statManaMax2,
 			(value) => { return "" + value; },
 			(value) => { Main.localPlayer.statMana = value; });
 

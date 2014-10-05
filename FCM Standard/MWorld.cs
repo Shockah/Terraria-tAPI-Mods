@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using TAPI;
 using Terraria;
+using Terraria.DataStructures;
 
 namespace Shockah.FCM.Standard
 {
@@ -15,8 +16,6 @@ namespace Shockah.FCM.Standard
 		public bool blockNPCSpawn = false;
 		public bool blockNPCSpawnSave = false;
 		
-		public MWorld(ModBase modBase) : base(modBase) { }
-
 		public override void Initialize()
 		{
 			lockDayTime = null;
@@ -71,7 +70,7 @@ namespace Shockah.FCM.Standard
 		{
 			if (!Main.dedServ)
 			{
-				if (!(Interface.current is InterfaceFCMNPCs) && InterfaceFCMNPCs.spawning != null)
+				if (!(UICore.currentInterface is InterfaceFCMNPCs) && InterfaceFCMNPCs.spawning != null)
 				{
 					InterfaceFCMBase.resetInterface = false;
 					InterfaceFCMNPCs.spawning = null;

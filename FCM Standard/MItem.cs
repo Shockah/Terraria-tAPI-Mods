@@ -10,8 +10,6 @@ namespace Shockah.FCM.Standard
 	[GlobalMod] public class MItem : ModItem
 	{
 		public int lastMana = -1;
-		
-		public MItem(ModBase modBase, Item item) : base(modBase, item) { }
 
 		[CallPriority(-10000f)] public override string OnAffixName(string currentName, string oldName)
 		{

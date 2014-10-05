@@ -109,7 +109,7 @@ namespace Shockah.FCM
 			}
 
 			Vector2 measure = Main.fontMouseText.MeasureString(item.Item1) * TEXT_SCALE;
-			SDrawing.StringShadowed(sb, Main.fontMouseText, item.Item1, new Vector2(pos.X + size.X - wLeft + (wLeft - measure.X) / 2, pos.Y + index * size.Y + size.Y / 2), Color.White, TEXT_SCALE, new Vector2(0, measure.Y / 2));
+			Drawing.StringShadowed(sb, Main.fontMouseText, item.Item1, new Vector2(pos.X + size.X - wLeft + (wLeft - measure.X) / 2, pos.Y + index * size.Y + size.Y / 2), Color.White, TEXT_SCALE, new Vector2(0, measure.Y / 2));
 		}
 	}
 }

@@ -8,7 +8,7 @@ namespace Shockah.Base
 {
 	public class ILTooltip : InterfaceLayer
 	{
-		public ILTooltip() : base(MBase.me.modName + ":Tooltip") { }
+		public ILTooltip() : base(MBase.me.mod.InternalName + ":Tooltip") { }
 
 		protected override void OnDraw(SpriteBatch sb)
 		{

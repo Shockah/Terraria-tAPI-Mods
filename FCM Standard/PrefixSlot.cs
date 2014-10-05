@@ -101,7 +101,8 @@ namespace Shockah.FCM.Standard
 						else
 						{
 							tempItem.prefix = Prefix.None;
-							tempItem.ResetStats();
+							//tempItem.ResetStats();
+							tempItem.CopyFrom(tempItem.def.item);
 						}
 					}
 					tempItem.PostReforge();
@@ -127,7 +128,8 @@ namespace Shockah.FCM.Standard
 					if (MyPrefix == null || MyPrefix.type == 0)
 					{
 						gui.slotItem.MyItem.prefix = Prefix.None;
-						gui.slotItem.MyItem.ResetStats();
+						//gui.slotItem.MyItem.ResetStats();
+						gui.slotItem.MyItem.CopyFrom(gui.slotItem.MyItem.def.item);
 					}
 					else
 					{
@@ -163,7 +165,7 @@ namespace Shockah.FCM.Standard
 		public virtual void DrawSlotPrefix(SpriteBatch sb)
 		{
 			if (MyPrefix == null) return;
-			SDrawing.StringShadowed(sb, Main.fontMouseText, InterfaceFCMPrefixes.defsNames[InterfaceFCMPrefixes.defs.IndexOf(MyPrefix)], pos + new Vector2(6, 6), Item.GetRarityColor(MyPrefix.tier), .75f);
+			Drawing.StringShadowed(sb, Main.fontMouseText, InterfaceFCMPrefixes.defsNames[InterfaceFCMPrefixes.defs.IndexOf(MyPrefix)], pos + new Vector2(6, 6), Item.GetRarityColor(MyPrefix.tier), .75f);
 		}
 
 		public bool Draw(SpriteBatch sb, bool draw, bool update)

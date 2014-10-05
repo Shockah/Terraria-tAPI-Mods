@@ -96,16 +96,16 @@ namespace Shockah.Base
 			foreach (Line line in lines)
 			{
 				float h = Math.Max(line.scaleL, line.scaleR) * Main.fontMouseText.LineSpacing;
-				sizeL = SDrawing.MeasureColorCodedString(Main.fontMouseText, line.textL) * line.scaleL * scale;
-				sizeR = SDrawing.MeasureColorCodedString(Main.fontMouseText, line.textR) * line.scaleR * scale;
+				sizeL = Drawing.MeasureColorCodedString(Main.fontMouseText, line.textL) * line.scaleL * scale;
+				sizeR = Drawing.MeasureColorCodedString(Main.fontMouseText, line.textR) * line.scaleR * scale;
 				size.X = Math.Max(size.X, sizeL.X + sizeR.X + (sizeL.X != 0f && sizeR.X != 0f ? sideSeparator : 0f));
 				size.Y += Math.Max(sizeL.Y, sizeR.Y);
 				if (sb != null)
 				{
-					SDrawing.DrawColorCodedStringShadow(sb, Main.fontMouseText, line.textL, pos, Color.Black, 0f, default(Vector2), line.scaleL * scale, -1f, 2);
-					SDrawing.DrawColorCodedString(sb, Main.fontMouseText, line.textL, pos, line.colorL * (Main.mouseTextColor / 255f), 0f, default(Vector2), line.scaleL * scale);
-					SDrawing.DrawColorCodedStringShadow(sb, Main.fontMouseText, line.textR, pos + new Vector2(sizeCalc.X - sizeR.X, 0), Color.Black, 0f, default(Vector2), line.scaleR * scale, -1f, 2);
-					SDrawing.DrawColorCodedString(sb, Main.fontMouseText, line.textR, pos + new Vector2(sizeCalc.X - sizeR.X, 0), line.colorR * (Main.mouseTextColor / 255f), 0f, default(Vector2), line.scaleR * scale);
+					Drawing.DrawColorCodedStringShadow(sb, Main.fontMouseText, line.textL, pos, Color.Black, 0f, default(Vector2), line.scaleL * scale, -1f, 2);
+					Drawing.DrawColorCodedString(sb, Main.fontMouseText, line.textL, pos, line.colorL * (Main.mouseTextColor / 255f), 0f, default(Vector2), line.scaleL * scale);
+					Drawing.DrawColorCodedStringShadow(sb, Main.fontMouseText, line.textR, pos + new Vector2(sizeCalc.X - sizeR.X, 0), Color.Black, 0f, default(Vector2), line.scaleR * scale, -1f, 2);
+					Drawing.DrawColorCodedString(sb, Main.fontMouseText, line.textR, pos + new Vector2(sizeCalc.X - sizeR.X, 0), line.colorR * (Main.mouseTextColor / 255f), 0f, default(Vector2), line.scaleR * scale);
 				}
 				pos.Y += Math.Max(sizeL.Y, sizeR.Y);
 			}

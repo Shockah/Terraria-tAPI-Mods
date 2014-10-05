@@ -8,8 +8,6 @@ namespace Shockah.Base
 	{
 		public uint[] cacheItems;
 
-		public MNPC(ModBase modBase, NPC npc) : base(modBase, npc) { }
-
 		public override bool PreNPCLoot()
 		{
 			cacheItems = new uint[Main.item.Length - 1];
