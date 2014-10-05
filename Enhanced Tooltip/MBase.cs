@@ -29,6 +29,7 @@ namespace Shockah.ETooltip
 			modulesItems.Add(new ModuleItemCrit());
 			modulesItems.Add(new ModuleItemSpeed());
 			modulesItems.Add(new ModuleItemKnockback());
+			modulesItems.Add(new ModuleItemHook());
 			modulesItems.Add(new ModuleItemEquipable());
 			modulesItems.Add(new ModuleItemWand());
 			modulesItems.Add(new ModuleItemDefense());
