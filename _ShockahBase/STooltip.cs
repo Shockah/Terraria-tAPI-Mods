@@ -83,8 +83,9 @@ namespace Shockah.Base
 				if (alpha.HasValue) Drawing.DrawBox(sb, pos.X - 6, pos.Y - 6, sizeCalc.X + 12, sizeCalc.Y + 12, alpha.Value);
 				else Drawing.DrawBox(sb, pos.X - 6, pos.Y - 6, sizeCalc.X + 12, sizeCalc.Y + 12, background);
 			}
-			foreach (Action<STooltip, Rectangle> h in SBase.EventPreSTooltipDraw) h(this, new Rectangle((int)pos.X, (int)pos.Y, (int)sizeCalc.X, (int)sizeCalc.Y));
+			foreach (Action<SpriteBatch, STooltip, Rectangle> h in SBase.EventPreSTooltipDraw) h(sb, this, new Rectangle((int)pos.X, (int)pos.Y, (int)sizeCalc.X, (int)sizeCalc.Y));
 			ActualDraw(sb, pos, sizeCalc);
+			foreach (Action<SpriteBatch, STooltip, Rectangle> h in SBase.EventPostSTooltipDraw) h(sb, this, new Rectangle((int)pos.X, (int)pos.Y, (int)sizeCalc.X, (int)sizeCalc.Y));
 		}
 
 		public virtual Vector2 ActualDraw(SpriteBatch sb, Vector2 pos, Vector2 sizeCalc = default(Vector2))

@@ -1,5 +1,6 @@
 ﻿using LitJson;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using TAPI;
@@ -11,7 +12,7 @@ namespace Shockah.Base
 	{
 		public static SEvent<Action<bool>> EventMenuStateChange;
 		public static SEvent<Action<Player, string, int, Item, Item>> EventInventoryChange;
-		public static SEvent<Action<STooltip, Rectangle>> EventPreSTooltipDraw;
+		public static SEvent<Action<SpriteBatch, STooltip, Rectangle>> EventPreSTooltipDraw, EventPostSTooltipDraw;
 		public static SEvent<Func<STooltip>> EventSTooltipDraw;
 		public static SEvent<Func<NPC, bool>> EventIsBoss, EventRequiresAttaching, EventUnsafeSpawn;
 		public static SEvent<Action<NPC, Item>> EventNPCLoot;
@@ -29,7 +30,8 @@ namespace Shockah.Base
 		{
 			EventMenuStateChange = new SEvent<Action<bool>>();
 			EventInventoryChange = new SEvent<Action<Player, string, int, Item, Item>>();
-			EventPreSTooltipDraw = new SEvent<Action<STooltip, Rectangle>>();
+			EventPreSTooltipDraw = new SEvent<Action<SpriteBatch, STooltip, Rectangle>>();
+			EventPostSTooltipDraw = new SEvent<Action<SpriteBatch, STooltip, Rectangle>>();
 			EventSTooltipDraw = new SEvent<Func<STooltip>>();
 			EventIsBoss = new SEvent<Func<NPC, bool>>();
 			EventRequiresAttaching = new SEvent<Func<NPC, bool>>();
