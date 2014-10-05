@@ -19,6 +19,8 @@ namespace Shockah.ETooltip
 		public int maxPowerPick = 0, maxPowerAxe = 0, maxPowerHammer = 0, maxManaCost = 0;
 		public List<Module<Item>> modulesItems = new List<Module<Item>>();
 		public bool oneTooltip = false;
+		public Player cachePlayer = null;
+		public NPC cacheNPC = null;
 		
 		public override void OnLoad()
 		{
@@ -53,6 +55,31 @@ namespace Shockah.ETooltip
 		public override void OnAllModsLoaded()
 		{
 			SBase.EventSTooltipDraw += () => { return tip; };
+
+			SBase.EventPostSTooltipDraw += (sb, tip, rect) =>
+			{
+				int life = 0, lifeMax = 0;
+				if (cachePlayer != null)
+				{
+					life = cachePlayer.statLife;
+					lifeMax = cachePlayer.statLifeMax2;
+				}
+				if (cacheNPC != null)
+				{
+					life = cacheNPC.life;
+					lifeMax = cacheNPC.lifeMax;
+				}
+
+				if (life != 0 && lifeMax != 0)
+				{
+					float f = 1f * life / lifeMax;
+					Color c = Module<Item>.DoubleLerp(Color.Red, Color.Yellow, Color.Lime, f);
+					sb.Draw(Main.magicPixel, new Rectangle(rect.X - 2, rect.Y + rect.Height, (int)((rect.Width + 4) * f), 2), null, c, 0f, default(Vector2), SpriteEffects.None, 0f);
+				}
+				
+				cachePlayer = null;
+				cacheNPC = null;
+			};
 
 			foreach (KeyValuePair<string, Item> kvp in ItemDef.byName)
 			{
@@ -146,6 +173,7 @@ namespace Shockah.ETooltip
 
 			if (npc.active && npc.life > 0 && !npc.dontTakeDamage)
 			{
+				cacheNPC = npc;
 				while (true)
 				{
 					if (npc.realLife == -1 || npc.realLife == npc.whoAmI) break;
@@ -176,6 +204,7 @@ namespace Shockah.ETooltip
 		{
 			if (!FillTooltipBase()) return;
 			float f;
+			cachePlayer = player;
 
 			Color color1 = Color.White;
 			switch ((string)options["playerNameColor"].Value)
