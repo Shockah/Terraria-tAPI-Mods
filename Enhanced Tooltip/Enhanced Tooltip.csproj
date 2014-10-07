@@ -69,6 +69,7 @@
     <Compile Include="CodeItem\ModuleItemDefense.cs" />
     <Compile Include="CodeItem\ModuleItemEquipable.cs" />
     <Compile Include="CodeItem\ModuleItemHammer.cs" />
+    <Compile Include="CodeItem\ModuleItemHook.cs" />
     <Compile Include="CodeItem\ModuleItemManaCost.cs" />
     <Compile Include="CodeItem\ModuleItemMaterial.cs" />
     <Compile Include="CodeItem\ModuleItemName.cs" />
