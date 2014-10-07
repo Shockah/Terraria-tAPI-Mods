@@ -405,7 +405,7 @@ namespace Shockah.Base
 			OnRender(sb);
 			if (!locked && Main.playerInventory && !parentAnchorMode)
 			{
-				Texture2D texResizer = MBase.me.textures["Resizer.png"];
+				Texture2D texResizer = MBase.me.textures["Resizer"];
 				bool corners = size.X >= 32 && size.Y >= 32;
 				if (resizable.AnchorResizable(anchor, Anchor.TopLeft) && corners) sb.Draw(texResizer, p1, null, Color.White, Math2.ToRadians(-45f), texResizer.Size() / 2, 1f, SpriteEffects.None, 0f);
 				if (resizable.AnchorResizable(anchor, Anchor.Top)) sb.Draw(texResizer, new Vector2((p1.X + p2.X) / 2, p1.Y), null, Color.White, Math2.ToRadians(0f), texResizer.Size() / 2, 1f, SpriteEffects.None, 0f);
