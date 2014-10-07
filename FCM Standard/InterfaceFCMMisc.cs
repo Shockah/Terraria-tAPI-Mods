@@ -195,8 +195,8 @@ namespace Shockah.FCM.Standard
 					
 					Texture2D tex = mw.lockDayTime.Value ? Main.sunTexture : Main.sun3Texture;
 					float tscale = 1f;
-					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
-					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					int dist = (tex.Width > tex.Height ? tex.Width : tex.Height);
+					if (dist > b.size.X - 4) tscale = (b.size.X - 4) / dist;
 					sb.Draw(tex, b.pos + b.size / 2, null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
 				},
 				(b) =>
@@ -224,8 +224,8 @@ namespace Shockah.FCM.Standard
 
 					Texture2D tex = Shockah.FCM.MBase.me.textures["Images/Tick"];
 					float tscale = 1f;
-					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
-					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					int dist = (tex.Width > tex.Height ? tex.Width : tex.Height);
+					if (dist > b.size.X - 4) tscale = (b.size.X - 4) / dist;
 					sb.Draw(tex, b.pos + b.size / 2, null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
 				},
 				(b) =>
@@ -252,8 +252,8 @@ namespace Shockah.FCM.Standard
 
 					Texture2D tex = Shockah.FCM.MBase.me.textures["Images/Tick"];
 					float tscale = 1f;
-					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
-					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					int dist = (tex.Width > tex.Height ? tex.Width : tex.Height);
+					if (dist > b.size.X - 4) tscale = (b.size.X - 4) / dist;
 					sb.Draw(tex, b.pos + b.size / 2, null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
 				},
 				(b) =>
@@ -276,8 +276,8 @@ namespace Shockah.FCM.Standard
 				{
 					Texture2D tex = Main.itemTexture[Main.hardMode ? 544 : 43];
 					float tscale = 1f;
-					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
-					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					int dist = (tex.Width > tex.Height ? tex.Width : tex.Height);
+					if (dist > b.size.X - 4) tscale = (b.size.X - 4) / dist;
 					sb.Draw(tex, b.pos + b.size / 2, null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
 				},
 				(b) =>
@@ -299,9 +299,9 @@ namespace Shockah.FCM.Standard
 				{
 					Texture2D tex = Main.moonTexture[0];
 					float tscale = 1f;
-					if (tex.Width * tscale > 24 - 4) tscale = (24 - 4) / (tex.Width * tscale);
-					if (tex.Height / 8 * tscale > 24 - 4) tscale = (24 - 4) / (tex.Height / 8 * tscale);
-					sb.Draw(tex, b.pos + b.size / 2, new Rectangle?(new Rectangle(0, 0, tex.Width, tex.Height / 8)), Main.bloodMoon ? Color.Red : Color.White, 0f, new Vector2(tex.Width / 2, tex.Height / 8 / 2), tscale, SpriteEffects.None, 0f);
+					int dist = tex.Height / 8;
+					if (dist > b.size.X - 4) tscale = (b.size.X - 4) / dist;
+					sb.Draw(tex, b.pos + b.size / 2, new Rectangle?(new Rectangle(0, 0, tex.Width, dist)), Main.bloodMoon ? Color.Red : Color.White, 0f, new Vector2(tex.Width / 2, tex.Height / 8 / 2), tscale, SpriteEffects.None, 0f);
 				},
 				(b) =>
 				{
@@ -322,8 +322,8 @@ namespace Shockah.FCM.Standard
 				{
 					Texture2D tex = Main.eclipse ? Main.sun3Texture : Main.sunTexture;
 					float tscale = 1f;
-					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
-					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
+					int dist = (tex.Width > tex.Height ? tex.Width : tex.Height);
+					if (dist > b.size.X - 4) tscale = (b.size.X - 4) / dist;
 					sb.Draw(tex, b.pos + b.size / 2, null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
 				},
 				(b) =>
