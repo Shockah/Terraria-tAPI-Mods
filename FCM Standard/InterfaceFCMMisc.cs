@@ -164,7 +164,7 @@ namespace Shockah.FCM.Standard
 			bGodmode, bNoclip, bUsage,
 			bBlockSpawns, bBlockSpawnsSave,
 			bRange, bTileSpeed, bTileUsage,
-			bCamera, bFullBright, bFlashlight;
+			bCamera, bFullBright/*, bFlashlight*/;
 		protected string dragging = null;
 
 		public InterfaceFCMMisc()
@@ -565,7 +565,7 @@ namespace Shockah.FCM.Standard
 				(b) =>
 				{
 					StringBuilder sb = new StringBuilder();
-					sb.Append(freeCamera ? "Camera attached to player" : "Free camera mode");
+					sb.Append(freeCamera ? "Free camera mode" : "Camera attached to player");
 					sb.Append("\nClick to toggle");
 					SBase.tip = sb.ToString();
 				}
@@ -588,13 +588,12 @@ namespace Shockah.FCM.Standard
 				{
 					StringBuilder sb = new StringBuilder();
 					sb.Append("Full bright: " + (fullBright ? "On" : "Off"));
-					sb.Append("\n*experimental, might be very laggy*");
 					sb.Append("\nClick to toggle");
 					SBase.tip = sb.ToString();
 				}
 			);
 
-			bFlashlight = new ElButton(
+			/*bFlashlight = new ElButton(
 				(b, mb) =>
 				{
 					flashlight = !flashlight;
@@ -616,7 +615,7 @@ namespace Shockah.FCM.Standard
 					sb.Append("\nClick to toggle");
 					SBase.tip = sb.ToString();
 				}
-			);
+			);*/
 		}
 
 		public override void OnOpen()
@@ -781,9 +780,9 @@ namespace Shockah.FCM.Standard
 			bFullBright.size = new Vector2(32, 32);
 			blocked = bFullBright.Draw(sb, true, !blocked && dragging == null) || blocked;
 
-			bFlashlight.pos = new Vector2(POS_X + 514, POS_Y + 84);
+			/*bFlashlight.pos = new Vector2(POS_X + 514, POS_Y + 84);
 			bFlashlight.size = new Vector2(32, 32);
-			blocked = bFlashlight.Draw(sb, true, !blocked && dragging == null) || blocked;
+			blocked = bFlashlight.Draw(sb, true, !blocked && dragging == null) || blocked;*/
 
 			bBlockSpawns.pos = new Vector2(POS_X + 434, POS_Y + 124);
 			bBlockSpawns.size = new Vector2(32, 32);

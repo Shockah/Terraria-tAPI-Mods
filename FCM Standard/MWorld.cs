@@ -110,31 +110,5 @@ namespace Shockah.FCM.Standard
 				}
 			}
 		}
-
-		public override void PlayerConnected(int index)
-		{
-			InterfaceFCMMisc.SendTimeUpdate(index, -1);
-			
-			List<int> list = new List<int>();
-			for (int i = 0; i < Main.maxPlayers; i++)
-			{
-				Player p = Main.player[i];
-				if (!p.active) continue;
-				MPlayer m = p.GetSubClass<MPlayer>();
-				if (m != null && (m.cheatGod || m.cheatNoclip || m.cheatUsage || m.cheatRange || m.cheatTileSpeed || m.cheatTileUsage)) list.Add(i);
-			}
-			
-			BinBuffer bb = new BinBuffer();
-			bb.Write((byte)list.Count);
-			foreach (int pid in list)
-			{
-				bb.Write((byte)pid);
-				MPlayer m = Main.player[pid].GetSubClass<MPlayer>();
-				bb.Write(new BitsByte(m.cheatGod, m.cheatNoclip, m.cheatUsage, m.cheatRange, m.cheatTileSpeed, m.cheatTileUsage));
-			}
-
-			bb.Pos = 0;
-			NetMessage.SendModData(MBase.me, MBase.MSG_CHEAT, index, -1, bb);
-		}
 	}
 }
