@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FCM Standard", "FCM Standar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enhanced Tooltip", "Enhanced Tooltip\Enhanced Tooltip.csproj", "{D95E3487-F5B3-4614-8A51-C9414267C644}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Accessory Slots+", "Accessory Slots+\Accessory Slots+.csproj", "{5045408C-A8CB-4A12-85B6-AEF2B8F803E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,6 +92,10 @@ Global
 		{D95E3487-F5B3-4614-8A51-C9414267C644}.Debug|Any CPU.Build.0 = Release|Any CPU
 		{D95E3487-F5B3-4614-8A51-C9414267C644}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D95E3487-F5B3-4614-8A51-C9414267C644}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5045408C-A8CB-4A12-85B6-AEF2B8F803E2}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{5045408C-A8CB-4A12-85B6-AEF2B8F803E2}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{5045408C-A8CB-4A12-85B6-AEF2B8F803E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5045408C-A8CB-4A12-85B6-AEF2B8F803E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

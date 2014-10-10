@@ -1,0 +1,10 @@
+{
+    "displayName": "Accessory Slots+",
+    "author": "Shockah",
+    "info": "Adds additional accessory slots.",
+	"version": "r1",
+    "internalName": "Shockah.AccSlots",
+	"modReferences": [
+		"Shockah.Base"
+	]
+}
