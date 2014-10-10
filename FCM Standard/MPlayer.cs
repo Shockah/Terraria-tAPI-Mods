@@ -44,7 +44,7 @@ namespace Shockah.FCM.Standard
 				player.immuneAlpha = 0;
 				player.breath = player.breathMax;
 				if (player.lifeRegen < 0) player.lifeRegen = 0;
-				player.poisoned = player.venom = player.onFire = player.onFire2 = player.onFrostBurn = player.burned = player.suffocating = false;
+				player.poisoned = player.venom = player.onFire = player.onFire2 = player.onFrostBurn = player.burned = player.suffocating = 0;
 			}
 
 			if (cheatNoclip)
