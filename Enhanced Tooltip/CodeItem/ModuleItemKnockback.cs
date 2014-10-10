@@ -19,8 +19,9 @@ namespace Shockah.ETooltip.ModuleItem
 				Player player = Main.localPlayer;
 				
 				float knockback = item.knockBack;
-				if (player.kbGlove) knockback *= 1.7f;
-				if (item.ranged && player.armorSteath) knockback *= 1f + (1f - player.stealth) * 0.5f;
+				if (item.melee) knockback *= player.knockbackMeleeMod;
+				knockback *= player.knockbackMod;
+				if (item.ranged && player.armorStealth) knockback *= 1f + (1f - player.stealth) * 0.5f;
 				if (item.summon) knockback += player.minionKB;
 
 				int bstats = BaseStats(options, itemDef.knockBack == knockback);
