@@ -3,6 +3,7 @@
     "author": "Shockah",
     "info": "Cheat menu mod. 'nuff said.\nDoesn't do anything by itself - install some FCM module mods.",
 	"version": "r1",
+	"icon": "Icon",
     "internalName": "Shockah.FCM",
 	"modReferences": [
 		"Shockah.Base"

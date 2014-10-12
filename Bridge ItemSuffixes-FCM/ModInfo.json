@@ -3,6 +3,7 @@
     "author": "Shockah",
     "info": "#f80;Suffixes#; module for Fancy Cheat Menu.",
 	"version": "r1",
+	"icon": "Icon",
     "internalName": "Shockah.Bridge.ItemSuffixes_FCM",
 	"modReferences": [
 		"Shockah.Base",
