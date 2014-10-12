@@ -3,6 +3,7 @@
     "author": "Shockah",
     "info": "Library used by all my mods.",
 	"version": "r2",
+	"icon": "Icon",
     "internalName": "Shockah.Base",
 	"dllReferences": [
 		"C3.XNA.Primitives2D.dll"
