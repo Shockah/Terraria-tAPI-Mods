@@ -3,6 +3,7 @@
     "author": "Shockah",
     "info": "Allows you to peek into chests without opening them.",
 	"version": "r1",
+	"icon": "Icon",
     "internalName": "Shockah.Insight",
 	"modReferences": [
 		"Shockah.Base"
