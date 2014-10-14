@@ -14,10 +14,6 @@ namespace Shockah.AccSlots
 		
 		public override void ModifyInterfaceLayerList(List<InterfaceLayer> list)
 		{
-			for (int i = MBase.ACC_SLOT_1; i <= MBase.ACC_SLOT_5; i++) ItemSlot.equip[i].active = false;
-			for (int i = MBase.ACC_SOCIAL_1; i <= MBase.ACC_SOCIAL_5; i++) ItemSlot.equip[i].active = false;
-			for (int i = MBase.ACC_DYE_1; i <= MBase.ACC_DYE_5; i++) ItemSlot.dye[i].active = false;
-			
 			if (layer == null)
 			{
 				layer = new ILSlots(modBase);

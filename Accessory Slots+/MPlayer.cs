@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using TAPI;
 using Terraria;
+using Terraria.DataStructures;
 
 namespace Shockah.AccSlots
 {
@@ -13,21 +14,34 @@ namespace Shockah.AccSlots
 
 		public static PLDyeAccessories layer = null;
 		
-		public int currentSlots;
+		public int currentSlots
+		{
+			get
+			{
+				int slots = MBase.me.optMaxSlots;
+				if (MBase.me.optUnlockMode == "Shopping")
+				{
+					for (int i = 0; i < 8; i++)
+					{
+						if (boughtSlots[i]) slots++;
+					}
+					return slots;
+				}
+				return Math.Min(slots, MAX_EXTRA_SLOTS + 5);
+			}
+		}
 		public int currentExtraSlots
 		{
 			get { return currentSlots - 5; }
-			set { currentSlots = value + 5; }
 		}
 		public Item[] extraItem, extraSocial, extraDye;
 		public BitsBytes visibility;
+		public BitsByte boughtSlots;
 
 		public override void Initialize()
 		{
-			currentSlots = 15;
+			boughtSlots = new BitsByte();
 			visibility = new BitsBytes();
-			visibility.bytes[0] = 255;
-			visibility.bytes[1] = 255;
 
 			extraItem = new Item[MAX_EXTRA_SLOTS];
 			extraSocial = new Item[MAX_EXTRA_SLOTS];
@@ -43,7 +57,7 @@ namespace Shockah.AccSlots
 
 		public override void Load(BinBuffer bb)
 		{
-			currentSlots = bb.ReadByte();
+			boughtSlots = bb.ReadByte();
 			visibility = bb.ReadBytes(2);
 			for (int i = 0; i < currentExtraSlots; i++)
 			{
@@ -55,7 +69,7 @@ namespace Shockah.AccSlots
 
 		public override void Save(BinBuffer bb)
 		{
-			bb.Write((byte)currentSlots);
+			bb.Write(boughtSlots);
 			bb.Write(visibility);
 			for (int i = 0; i < currentExtraSlots; i++)
 			{

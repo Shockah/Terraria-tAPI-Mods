@@ -72,15 +72,14 @@ namespace Shockah.AccSlots
 		protected override void OnDraw(SpriteBatch sb)
 		{
 			if (API.main.showNPCs) return;
+			MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
+			if (mp.currentSlots == 0) return;
 			
 			Main.inventoryScale = 0.85f;
 			int mainX = Main.screenWidth - 64 - 28;
 			int mainY = 174 + Main.mH;
 			int off = (int)(56 * Main.inventoryScale);
 			mainY += 3 * off;
-
-			int mainX2 = mainX - off * 3;
-			int mainY2 = mainY + off * 5;
 
 			Action<Vector2, Vector2, int, string, Texture2D> drawButtonMode = (pos, size, myMode, tip, tex) =>
 			{
@@ -104,18 +103,28 @@ namespace Shockah.AccSlots
 				sb.Draw(tex, pos + size / 2, null, Color.White * (onButton ? 1f : .5f), 0f, tex.Size() / 2, scale, SpriteEffects.None, 0f);
 			};
 
+			for (int i = 0; i < mp.currentSlots; i++)
+			{
+				int xx = mainX - off * (i / 5);
+				int yy = mainY + off * (i % 5);
+
+				if ((mp.currentSlots % 5 != 0) && (i / 5 == (mp.currentSlots - 1) / 5) && i / 5 != 0)
+				{
+					int freeSlots = 5 - (mp.currentSlots % 5);
+					yy += (int)(.5f * off * freeSlots);
+				}
+
+				slots[mode][i].UpdateAndDraw(sb, new Vector2(xx, yy), Main.inventoryScale);
+			}
+
+			int mainX2 = mainX - off * (int)Math.Ceiling(mp.currentSlots / 5f);
+			int mainY2 = mainY + off * 5;
+
 			for (int i = 0; i < 3; i++)
 			{
 				Texture2D tex = ItemDef.byType[i == MODE_ITEM ? ItemID.AnkhShield : (i == MODE_SOCIAL ? ItemID.RedCape : ItemID.FlameDye)].Texture;
 				string tip = i == MODE_ITEM ? "Active" : (i == MODE_SOCIAL ? "Social" : "Dye");
 				drawButtonMode(new Vector2(mainX2 + 4, mainY + off + 4 + off * i), new Vector2(off - 8, off - 8), i, tip, tex);
-			}
-			
-			for (int i = 0; i < MAX_SLOTS; i++)
-			{
-				int xx = mainX - off * (i / 5);
-				int yy = mainY + off * (i % 5);
-				slots[mode][i].UpdateAndDraw(sb, new Vector2(xx, yy), Main.inventoryScale);
 			}
 		}
 	}

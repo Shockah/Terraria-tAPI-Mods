@@ -1,0 +1,12 @@
+{
+	"displayName": "Accessory Extension VII",
+	"code": "MItemExtraSlot",
+	"useStyle": 4,
+	"useTime": 30,
+	"useAnimation": 30,
+	"consumable": true,
+	"useSound": 4,
+	
+	"value": [50,0,0],
+	"rare": 8
+}

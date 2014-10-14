@@ -1,0 +1,27 @@
+﻿{
+	"options": [
+		{
+			"name": "maxSlots",
+			"displayName": "Max slots",
+			"tooltip": "Or rather, starting amount of slots",
+			"type": "Integer",
+			"minimum": 0,
+			"maximum": 15,
+			"default": 0,
+			"sync": true,
+			"notify": true
+		},
+		{
+			"name": "unlockMode",
+			"displayName": "Unlock mode",
+			"type": "List",
+			"list": [
+				"Instant",
+				"Shopping"
+			],
+			"default": 1,
+			"sync": true,
+			"notify": true
+		}
+	]
+}
