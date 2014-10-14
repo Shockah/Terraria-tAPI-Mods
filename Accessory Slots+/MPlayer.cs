@@ -165,7 +165,6 @@ namespace Shockah.AccSlots
 			{
 				Item item = extraSocial[i];
 				if (item.IsBlank()) continue;
-				bool hideVisual = !visibility[i];
 				if (item.handOnSlot > 0)
 				{
 					player.handon = item.handOnSlot;
