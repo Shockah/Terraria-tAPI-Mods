@@ -87,7 +87,28 @@ namespace Shockah.FCM.Standard
 				{
 					Vector2 pos = npc.position;
 					int times = rand.Next(600);
-					for (int i = 0; i < times; i++) npc.UpdateNPC(npc.whoAmI);
+					for (int i = 0; i < times; i++)
+					{
+						npc.UpdateNPC(npc.whoAmI);
+						if (i == 0)
+						{
+							bool breakout = false;
+							for (int j = 0; j < Main.npc.Length; j++)
+							{
+								NPC npc2 = Main.npc[j];
+								if (npc2.active && npc.realLife == npc.whoAmI)
+								{
+									npc2.active = false;
+									breakout = true;
+								}
+							}
+							if (breakout)
+							{
+								npc.SetDefaults(npc.name);
+								break;
+							}
+						}
+					}
 					npc.position = pos;
 					npc.oldPosition = pos;
 				}
