@@ -22,6 +22,7 @@ namespace Shockah.AccSlots
 			{
 				layer = new ILSlots(modBase);
 			}
+			layer.visible = true;
 			InterfaceLayer.Add(list, layer, InterfaceLayer.LayerInventory, false);
 		}
 	}
