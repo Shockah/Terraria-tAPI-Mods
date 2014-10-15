@@ -24,7 +24,7 @@ namespace Shockah.FCM.Standard
 			Item fake = new Item();
 			fake.displayName = "";
 			defs.Clear();
-			foreach (KeyValuePair<int, string> kvp in BuffDef.name)
+			foreach (KeyValuePair<int, string> kvp in BuffDef.byType)
 			{
 				defs.Add(new BuffDefFCM(kvp.Key, kvp.Value));
 				//defsNames.Add(kvp.Value.type == 0 ? "<none>" : kvp.Value.SetItemName(fake).Trim());
