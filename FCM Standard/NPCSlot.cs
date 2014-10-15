@@ -86,17 +86,56 @@ namespace Shockah.FCM.Standard
 
 				if (MyNPC.type > 0)
 				{
-					bool isBoss = SBase.IsBoss(MyNPC);
-					Shockah.FCM.MBase.tip += new STooltip.Line(
-						(KState.Special.Ctrl.Down() ? "[" + MyNPC.type + (MyNPC.netID != MyNPC.type ? "/" + MyNPC.netID : "") + "] " : "") + (string.IsNullOrEmpty(MyNPC.displayName) ? MyNPC.name : MyNPC.displayName),
-						(MyNPC.friendly || MyNPC.damage <= 0 ? "#0f0;Friendly#;" : "#f00;Hostile#;") + (MyNPC.townNPC ? ", #0f0;Town NPC#;" : "") + (isBoss ? ", #f00;Boss#;" : ""),
-						Color.White, Color.White
-					);
-					if (SBase.IsUnsafeToSpawn(MyNPC)) Shockah.FCM.MBase.tip += new STooltip.Line("Unsafe to spawn", Color.Orange);
+					Mod modETooltip = Mods.GetMod("Shockah.ETooltip");
+					bool hasETooltip = modETooltip != null && modETooltip.Loaded;
 
-					Shockah.FCM.MBase.tip += new STooltip.Line("" + MyNPC.lifeMax + " life");
-					if (MyNPC.damage > 0) Shockah.FCM.MBase.tip += new STooltip.Line("" + MyNPC.damage + " damage");
-					Shockah.FCM.MBase.tip += new STooltip.Line("" + MyNPC.defense + " defense");
+					bool isBoss = SBase.IsBoss(MyNPC);
+					if (hasETooltip)
+					{
+						ModBase modBaseETooltip = modETooltip.modBase;
+						float scale = (float)modBaseETooltip.options["itemNameScale"].Value;
+						string style = (string)modBaseETooltip.options["itemStyle"].Value;
+
+						switch (style)
+						{
+							case "Vanilla":
+								Shockah.FCM.MBase.tip += new STooltip.Line(
+									(KState.Special.Ctrl.Down() ? "[" + MyNPC.type + (MyNPC.netID != MyNPC.type ? "/" + MyNPC.netID : "") + "] " : "") + (string.IsNullOrEmpty(MyNPC.displayName) ? MyNPC.name : MyNPC.displayName),
+									(MyNPC.friendly || MyNPC.damage <= 0 ? "#0f0;Friendly#;" : "#f00;Hostile#;") + (MyNPC.townNPC ? ", #0f0;Town NPC#;" : "") + (isBoss ? ", #f00;Boss#;" : ""),
+									scale, 1f
+								);
+								if (SBase.IsUnsafeToSpawn(MyNPC)) Shockah.FCM.MBase.tip += new STooltip.Line("Unsafe to spawn", Color.Orange);
+
+								Shockah.FCM.MBase.tip += new STooltip.Line("" + MyNPC.lifeMax + " life");
+								if (MyNPC.damage > 0) Shockah.FCM.MBase.tip += new STooltip.Line("" + MyNPC.damage + " damage");
+								Shockah.FCM.MBase.tip += new STooltip.Line("" + MyNPC.defense + " defense");
+								break;
+							case "2 columns":
+								Shockah.FCM.MBase.tip += new STooltip.Line(
+									(KState.Special.Ctrl.Down() ? "[" + MyNPC.type + (MyNPC.netID != MyNPC.type ? "/" + MyNPC.netID : "") + "] " : "") + (string.IsNullOrEmpty(MyNPC.displayName) ? MyNPC.name : MyNPC.displayName),
+									(MyNPC.friendly || MyNPC.damage <= 0 ? "#0f0;Friendly#;" : "#f00;Hostile#;") + (MyNPC.townNPC ? ", #0f0;Town NPC#;" : "") + (isBoss ? ", #f00;Boss#;" : ""),
+									scale, 1f
+								);
+								if (SBase.IsUnsafeToSpawn(MyNPC)) Shockah.FCM.MBase.tip += new STooltip.Line("Unsafe to spawn", Color.Orange);
+
+								Shockah.FCM.MBase.tip += new STooltip.Line("Life:", "" + MyNPC.lifeMax, Color.White, Color.Lime);
+								if (MyNPC.damage > 0) Shockah.FCM.MBase.tip += new STooltip.Line("Damage:", "" + MyNPC.damage, Color.White, Color.Red);
+								Shockah.FCM.MBase.tip += new STooltip.Line("Defense:", "" + MyNPC.lifeMax, Color.White, Color.Lime);
+								break;
+						}
+					}
+					else
+					{
+						Shockah.FCM.MBase.tip += new STooltip.Line(
+							(KState.Special.Ctrl.Down() ? "[" + MyNPC.type + (MyNPC.netID != MyNPC.type ? "/" + MyNPC.netID : "") + "] " : "") + (string.IsNullOrEmpty(MyNPC.displayName) ? MyNPC.name : MyNPC.displayName),
+							(MyNPC.friendly || MyNPC.damage <= 0 ? "#0f0;Friendly#;" : "#f00;Hostile#;") + (MyNPC.townNPC ? ", #0f0;Town NPC#;" : "") + (isBoss ? ", #f00;Boss#;" : "")
+						);
+						if (SBase.IsUnsafeToSpawn(MyNPC)) Shockah.FCM.MBase.tip += new STooltip.Line("Unsafe to spawn", Color.Orange);
+
+						Shockah.FCM.MBase.tip += new STooltip.Line("" + MyNPC.lifeMax + " life");
+						if (MyNPC.damage > 0) Shockah.FCM.MBase.tip += new STooltip.Line("" + MyNPC.damage + " damage");
+						Shockah.FCM.MBase.tip += new STooltip.Line("" + MyNPC.defense + " defense");
+					}
 				}
 			}
 		}

@@ -10,6 +10,7 @@ namespace Shockah.FCM.Standard
 	{
 		public override void ModifyInterfaceLayerList(List<InterfaceLayer> list)
 		{
+			InterfaceFCMItems.displayIds = false;
 			if (UICore.currentInterface is InterfaceFCMNPCs && InterfaceFCMNPCs.spawning != null)
 			{
 				foreach (InterfaceLayer il in list)

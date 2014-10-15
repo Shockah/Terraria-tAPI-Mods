@@ -16,7 +16,6 @@ namespace Shockah.FCM.Standard
 			if (InterfaceFCMItems.displayIds)
 			{
 				currentName = "[" + item.type + (item.netID != item.type ? "/" + item.netID : "") + "] " + currentName;
-				InterfaceFCMItems.displayIds = false;
 			}
 			return currentName;
 		}
