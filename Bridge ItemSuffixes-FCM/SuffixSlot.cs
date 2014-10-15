@@ -118,8 +118,7 @@ namespace Shockah.ItemSuffixes
 					StringBuilder sb = new StringBuilder();
 					foreach (string tip in ttips)
 					{
-						if (sb.Length > 0) sb.Append("\n");
-						sb.Append(tip);
+						Shockah.FCM.MBase.tip += new STooltip.Line(tip, Color.White);
 					}
 					SBase.tip = sb.ToString();
 				}
