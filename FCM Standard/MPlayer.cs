@@ -45,6 +45,7 @@ namespace Shockah.FCM.Standard
 				player.breath = player.breathMax;
 				if (player.lifeRegen < 0) player.lifeRegen = 0;
 				player.poisoned = player.venom = player.onFire = player.onFire2 = player.onFrostBurn = player.burned = player.suffocating = 0;
+				player.noFallDmg = true;
 			}
 
 			if (cheatNoclip)
@@ -55,6 +56,7 @@ namespace Shockah.FCM.Standard
 				player.sloping = false;
 				player.stepSpeed = 160f;
 				player.step = 0;
+				player.noFallDmg = true;
 
 				player.oldPosition = player.position;
 				if (!InterfaceFCMMisc.freeCamera || player.whoAmI != Main.myPlayer)
