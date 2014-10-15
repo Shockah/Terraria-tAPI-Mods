@@ -250,5 +250,74 @@ namespace Shockah.ETooltip
 			
 			ttip.lines.Clear();
 		}
+
+		public override object OnModCall(ModBase mod, params object[] args)
+		{
+			if (args.Length == 0)
+			{
+				return base.OnModCall(mod, args);
+			}
+
+			string call = (string)args[0];
+			if (args.Length <= 3 && call == "RequestHooks")
+			{
+				if (args.Length >= 2)
+				{
+					bool includeSTooltip = args.Length == 3 && args[2] is bool and (bool)args[2];
+
+					Action<string> ft1 = FillTooltip;
+					Action<int> ft2 = FillTooltipBuff;
+					Action<Item, string> ft3 = FillTooltip;
+					Action<Item> ft4 = FillTooltipItemInWorld;
+					Action<NPC> ft5 = FillTooltip;
+					Action<Player> ft6 = FillTooltip;
+					Action<STooltip> ft7 = FillTooltip;
+
+					if (includeSTooltip)
+					{
+						var callback = args[1] as Action<
+							Action<string>,
+							Action<int>,
+							Action<Item, string>,
+							Action<Item>,
+							Action<NPC>,
+							Action<Player>,
+							Action<STooltip>
+						>;
+						if (callback == null)
+						{
+							return new object[] { ft1, ft2, ft3, ft4, ft5, ft6, ft7 };
+						}
+						else
+						{
+							callback(ft1, ft2, ft3, ft4, ft5, ft6, ft7);
+							return null;
+						}
+					}
+					else
+					{
+						var callback = args[1] as Action<
+							Action<string>,
+							Action<int>,
+							Action<Item, string>,
+							Action<Item>,
+							Action<NPC>,
+							Action<Player>
+						>;
+						if (callback == null)
+						{
+							return new object[] { ft1, ft2, ft3, ft4, ft5, ft6 };
+						}
+						else
+						{
+							callback(ft1, ft2, ft3, ft4, ft5, ft6);
+							return null;
+						}
+					}
+				}
+			}
+
+			return base.OnModCall(mod, args);
+		}
 	}
 }
