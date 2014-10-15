@@ -30,7 +30,7 @@ namespace Shockah.AccSlots
 			bool? hb = Hooks.Interface.ItemSlotAllowsItem(this, item);
 			if (hb.HasValue) return hb.Value;
 			if (item.IsBlank()) return true;
-			return item.accessory && item.CanEquip(Main.localPlayer, this);
+			return item.accessory && item.CanEquip(Main.localPlayer, this) && CustomItemSlotAccessory.CanEquip(item);
 		}
 		public override void OnLeftClick(ref bool release)
 		{

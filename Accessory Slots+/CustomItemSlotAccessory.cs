@@ -12,6 +12,23 @@ namespace Shockah.AccSlots
 {
 	public class CustomItemSlotAccessory : ItemSlotAccessory
 	{
+		public static bool CanEquip(Item item)
+		{
+			Player player = Main.localPlayer;
+			MPlayer mp = player.GetSubClass<MPlayer>();
+			for (int i = 0; i < 5; i++)
+			{
+				if (player.armor[3 + i].IsTheSameAs(item)) return false;
+				if (player.armor[11 + i].IsTheSameAs(item)) return false;
+			}
+			for (int i = 0; i < mp.currentExtraSlots; i++)
+			{
+				if (mp.extraItem[i].IsTheSameAs(item)) return false;
+				if (mp.extraSocial[i].IsTheSameAs(item)) return false;
+			}
+			return true;
+		}
+		
 		public readonly int customIndex;
 		public readonly Action<CustomItemSlotAccessory, bool> VisibleSet;
 		public readonly Func<CustomItemSlotAccessory, bool> VisibleGet;
@@ -76,7 +93,7 @@ namespace Shockah.AccSlots
 			bool? hb = Hooks.Interface.ItemSlotAllowsItem(this, item);
 			if (hb.HasValue) return hb.Value;
 			if (item.IsBlank()) return true;
-			return item.accessory && item.CanEquip(Main.localPlayer, this);
+			return item.accessory && item.CanEquip(Main.localPlayer, this) && CanEquip(item);
 		}
 		public override void OnLeftClick(ref bool release)
 		{
