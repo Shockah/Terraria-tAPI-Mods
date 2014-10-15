@@ -27,6 +27,8 @@ namespace Shockah.AccSlots
 		public int optMaxSlots = 0;
 		public string optUnlockMode = null;
 
+		public static int counterSlot = 0;
+
 		public override void OnLoad()
 		{
 			me = this;
@@ -48,6 +50,14 @@ namespace Shockah.AccSlots
 			for (int i = ACC_SLOT_1; i <= ACC_SLOT_5; i++) ItemSlot.equip[i].active = true;
 			for (int i = ACC_SOCIAL_1; i <= ACC_SOCIAL_5; i++) ItemSlot.equip[i].active = true;
 			for (int i = ACC_DYE_1; i <= ACC_DYE_5; i++) ItemSlot.dye[i].active = true;
+		}
+
+		public override void OnAllModsLoaded()
+		{
+			SBase.EventMenuStateChange += (menu) =>
+			{
+				counterSlot = 0;
+			};
 		}
 
 		public override void OptionChanged(Option option)
