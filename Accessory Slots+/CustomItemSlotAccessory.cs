@@ -33,7 +33,7 @@ namespace Shockah.AccSlots
 		{
 			bool newState = !VisibleGet(this);
 			VisibleSet(this, newState);
-			foreach (Action<Player, int, bool> h in MBase.EventExtraVisibilityChange) h(player, customIndex, newState);
+			foreach (Action<Player, int, bool> h in MBase.EventExtraVisibilityChange) h(Main.localPlayer, customIndex, newState);
 		}
 
 		public override void Update(Vector2 offset)

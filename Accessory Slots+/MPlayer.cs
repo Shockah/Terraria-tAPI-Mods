@@ -109,7 +109,7 @@ namespace Shockah.AccSlots
 		public override void PostUpdate()
 		{
 			if (Main.netMode == 2 || player.whoAmI != Main.myPlayer) return;
-			if (SBase.EventInventoryChange.Count == 0) return;
+			if (MBase.EventExtraSlotChange.Count == 0) return;
 
 			bool wasNull = false;
 			if (cacheItem == null)

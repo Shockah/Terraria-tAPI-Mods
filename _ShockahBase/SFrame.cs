@@ -114,7 +114,7 @@ namespace Shockah.Base
 
 		internal static void Clear()
 		{
-			data = SBase.JsonObject();
+			data = JsonData.Object();
 			frames = new List<SFrame>();
 			framesAdd = new List<SFrame>();
 			framesRemove = new List<SFrame>();
@@ -230,12 +230,12 @@ namespace Shockah.Base
 			OnDestroy();
 			framesRemove.Add(this);
 
-			if (!data.Has(modBase.mod.InternalName)) data[modBase.mod.InternalName] = SBase.JsonObject();
+			if (!data.Has(modBase.mod.InternalName)) data[modBase.mod.InternalName] = JsonData.Object();
 			JsonData j = data[modBase.mod.InternalName];
 
-			j[tag] = SBase.JsonObject(
-				"pos", SBase.JsonArray((int)pos.X, (int)pos.Y),
-				"size", SBase.JsonArray((int)size.X, (int)size.Y),
+			j[tag] = JsonData.Object(
+				"pos", JsonData.List((int)pos.X, (int)pos.Y),
+				"size", JsonData.List((int)size.X, (int)size.Y),
 				"locked", locked,
 				"parentAnchor", Enum.GetName(typeof(Anchor), parentAnchor),
 				"anchor", Enum.GetName(typeof(Anchor), anchor)

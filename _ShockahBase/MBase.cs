@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using TAPI;
@@ -56,7 +57,7 @@ namespace Shockah.Base
 			}
 
 			string call = (string)args[0];
-			if (call.StartsWith("RegisterEvent") && args == 2)
+			if (call.StartsWith("RegisterEvent") && args.Length == 2)
 			{
 				call = call.Substring("RegisterEvent".Length);
 				switch (call)
@@ -115,26 +116,22 @@ namespace Shockah.Base
 					case "IsBoss":
 					{
 						Func<NPC, bool> f = SBase.IsBoss;
-						return func ? f : f((NPC)args[1]);
-						break;
+						return func ? f : (object)f((NPC)args[1]);
 					}
 					case "RequiresAttaching":
 					{
 						Func<NPC, bool> f = SBase.RequiresAttaching;
-						return func ? f : f((NPC)args[1]);
-						break;
+						return func ? f : (object)f((NPC)args[1]);
 					}
 					case "IsUnsafeToSpawn":
 					{
 						Func<NPC, bool> f = SBase.IsUnsafeToSpawn;
-						return func ? f : f((NPC)args[1]);
-						break;
+						return func ? f : (object)f((NPC)args[1]);
 					}
 					case "BuffHasTimer":
 					{
 						Func<int, bool> f = SBase.BuffHasTimer;
-						return func ? f : f((int)args[1]);
-						break;
+						return func ? f : (object)f((int)args[1]);
 					}
 				}
 			}

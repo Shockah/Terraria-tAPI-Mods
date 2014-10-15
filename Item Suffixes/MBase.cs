@@ -1,6 +1,7 @@
 ﻿using Shockah.Base;
 using System;
 using TAPI;
+using Terraria;
 
 namespace Shockah.ItemSuffixes
 {
@@ -39,31 +40,30 @@ namespace Shockah.ItemSuffixes
 			string call = (string)args[0];
 			if (args.Length <= 2 && call == "RequestHooks")
 			{
-				Func<Item, int> getSuffixID = (item) -> {
+				Func<Item, int> getSuffixID = (item) => {
 					return item.GetSubClass<MItem>().suffix.id;
 				};
-				Func<Item, bool> hasSuffix = (item) -> {
+				Func<Item, bool> hasSuffix = (item) => {
 					return item.GetSubClass<MItem>().suffix.id != 0;
 				};
-				Func<Item, bool> canGetSuffixes = (item) -> {
+				Func<Item, bool> canGetSuffixes = (item) => {
 					return item.GetSubClass<MItem>().CanGetSuffixes();
 				};
-				Action<Item> setRandomSuffix = (item) -> {
+				Action<Item> setRandomSuffix = (item) => {
 					item.GetSubClass<MItem>().SetRandomSuffix();
 				};
-				Func<int, Tuple<string, string, int[], int[], int, int, int>> getSuffixInfo = (suffixID) -> {
-					MItem mi = item.GetSubClass<MItem>();
-					if (mi.suffix.id == 0) return null;
+				Func<int, Tuple<string, string, int[], int[], int, int, int>> getSuffixInfo = (suffixID) => {
+					ItemSuffix suffix = ItemSuffix.list[suffixID];
 					return new Tuple<string, string, int[], int[], int, int, int>(
-						mi.suffix.displayName,
-						mi.suffix.format
-						new int[] { mi.suffix.damageMelee, mi.suffix.damageRanged, mi.suffix.damageMagic },
-						new int[] { mi.suffix.critMelee, mi.suffix.critRanged, mi.suffix.critMagic },
-						mi.suffix.defense,
-						mi.suffix.threat,
-						mi.suffix.regenHP
+						suffix.displayName,
+						suffix.format,
+						new int[] { suffix.damageMelee, suffix.damageRanged, suffix.damageMagic },
+						new int[] { suffix.critMelee, suffix.critRanged, suffix.critMagic },
+						suffix.defense,
+						suffix.threat,
+						suffix.regenHP
 					);
-				}
+				};
 
 				if (args.Length == 2)
 				{

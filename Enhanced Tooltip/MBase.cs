@@ -263,7 +263,7 @@ namespace Shockah.ETooltip
 			{
 				if (args.Length >= 2)
 				{
-					bool includeSTooltip = args.Length == 3 && args[2] is bool and (bool)args[2];
+					bool includeSTooltip = args.Length == 3 && args[2] is bool && (bool)args[2];
 
 					Action<string> ft1 = FillTooltip;
 					Action<int> ft2 = FillTooltipBuff;

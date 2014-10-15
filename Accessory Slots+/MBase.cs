@@ -71,7 +71,7 @@ namespace Shockah.AccSlots
 			}
 
 			string call = (string)args[0];
-			if (call.StartsWith("RegisterEvent") && args == 2)
+			if (call.StartsWith("RegisterEvent") && args.Length == 2)
 			{
 				call = call.Substring("RegisterEvent".Length);
 				switch (call)
@@ -79,57 +79,57 @@ namespace Shockah.AccSlots
 					case "ExtraSlotChange":
 					{
 						var ev = args[1] as Action<Player, string, int, Item, Item>;
-						if (ev != null) SBase.EventExtraSlotChange += ev;
+						if (ev != null) EventExtraSlotChange += ev;
 						break;
 					}
 					case "ExtraVisibilityChange":
 					{
 						var ev = args[1] as Action<Player, int, bool>;
-						if (ev != null) SBase.EventExtraVisibilityChange += ev;
+						if (ev != null) EventExtraVisibilityChange += ev;
 						break;
 					}
 					case "UnlockSlot":
 					{
 						var ev = args[1] as Action<Player, int>;
-						if (ev != null) SBase.EventUnlockSlot += ev;
+						if (ev != null) EventUnlockSlot += ev;
 						break;
 					}
 				}
 			}
 			else if (args.Length <= 2 && call == "RequestHooks")
 			{
-				Func<Player, int> getAvailableSlots = (player) -> {
+				Func<Player, int> getAvailableSlots = (player) => {
 					return player.GetSubClass<MPlayer>().currentSlots;
 				};
-				Func<Player, int> getAvailableExtraSlots = (player) -> {
+				Func<Player, int> getAvailableExtraSlots = (player) => {
 					return player.GetSubClass<MPlayer>().currentExtraSlots;
 				};
 
-				Func<Player, int, Item> getItemAt = (player, slot) -> {
+				Func<Player, int, Item> getItemAt = (player, slot) => {
 					return slot < 5 ? player.armor[ACC_SLOT_1 + slot] : player.GetSubClass<MPlayer>().extraItem[slot - 5];
 				};
-				Func<Player, int, Item> getExtraItemAt = (player, slot) -> {
+				Func<Player, int, Item> getExtraItemAt = (player, slot) => {
 					return player.GetSubClass<MPlayer>().extraItem[slot];
 				};
 
-				Func<Player, int, Item> getSocialItemAt = (player, slot) -> {
+				Func<Player, int, Item> getSocialItemAt = (player, slot) => {
 					return slot < 5 ? player.armor[ACC_SOCIAL_1 + slot] : player.GetSubClass<MPlayer>().extraSocial[slot - 5];
 				};
-				Func<Player, int, Item> getExtraSocialItemAt = (player, slot) -> {
+				Func<Player, int, Item> getExtraSocialItemAt = (player, slot) => {
 					return player.GetSubClass<MPlayer>().extraSocial[slot];
 				};
 
-				Func<Player, int, Item> getDyeItemAt = (player, slot) -> {
+				Func<Player, int, Item> getDyeItemAt = (player, slot) => {
 					return slot < 5 ? player.dye[ACC_DYE_1 + slot] : player.GetSubClass<MPlayer>().extraDye[slot - 5];
 				};
-				Func<Player, int, Item> getExtraDyeItemAt = (player, slot) -> {
+				Func<Player, int, Item> getExtraDyeItemAt = (player, slot) => {
 					return player.GetSubClass<MPlayer>().extraDye[slot];
 				};
 
-				Func<Player, int, bool> isVisibleAt = (player, slot) -> {
+				Func<Player, int, bool> isVisibleAt = (player, slot) => {
 					return slot < 5 ? !player.hideVisual[ACC_SLOT_1 + slot] : player.GetSubClass<MPlayer>().visibility[slot - 5];
 				};
-				Func<Player, int, bool> isExtraVisibleAt = (player, slot) -> {
+				Func<Player, int, bool> isExtraVisibleAt = (player, slot) => {
 					return player.GetSubClass<MPlayer>().visibility[slot];
 				};
 
