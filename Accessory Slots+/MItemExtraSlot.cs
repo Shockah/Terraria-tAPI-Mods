@@ -26,8 +26,11 @@ namespace Shockah.AccSlots
 		
 		public override bool? UseItem(Player player)
 		{
-			if (player.GetSubClass<MPlayer>().boughtSlots[Type]) return false;
-			player.GetSubClass<MPlayer>().boughtSlots[Type] = true;
+			MPlayer mp = player.GetSubClass<MPlayer>();
+			if (mp.boughtSlots[Type]) return false;
+			mp.boughtSlots[Type] = true;
+			int now = mp.currentSlots;
+			foreach (Action<Player, int> h in MBase.EventUnlockSlot) h(player, now);
 			return true;
 		}
 	}

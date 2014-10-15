@@ -13,6 +13,12 @@ namespace Shockah.AccSlots
 		public const int MAX_EXTRA_SLOTS = 10;
 
 		public static PLDyeAccessories layer = null;
+
+		private static void CopyFromItem(Item target, Item source)
+		{
+			target.netDefaults(source.netID);
+			target.stack = source.stack;
+		}
 		
 		public int currentSlots
 		{
@@ -37,6 +43,8 @@ namespace Shockah.AccSlots
 		public Item[] extraItem, extraSocial, extraDye;
 		public BitsBytes visibility;
 		public BitsByte boughtSlots;
+
+		protected Item[] cacheItem = null, cacheSocial = null, cacheDye = null;
 
 		public override void Initialize()
 		{
@@ -95,6 +103,49 @@ namespace Shockah.AccSlots
 			{
 				if (extraSocial[i].IsBlank()) continue;
 				player.UpdateEquipAccessoryVanity(player.whoAmI, extraSocial[i]);
+			}
+		}
+
+		public override void PostUpdate()
+		{
+			if (Main.netMode == 2 || player.whoAmI != Main.myPlayer) return;
+			if (SBase.EventInventoryChange.Count == 0) return;
+
+			bool wasNull = false;
+			if (cacheItem == null)
+			{
+				cacheItem = new Item[extraItem.Length];
+				for (int i = 0; i < cacheItem.Length; i++) cacheItem[i] = new Item();
+				cacheSocial = new Item[extraSocial.Length];
+				for (int i = 0; i < cacheSocial.Length; i++) cacheSocial[i] = new Item();
+				cacheDye = new Item[extraDye.Length];
+				for (int i = 0; i < cacheDye.Length; i++) cacheDye[i] = new Item();
+				wasNull = true;
+			}
+
+			for (int i = 0; i < cacheItem.Length && (i < currentExtraSlots || wasNull); i++)
+			{
+				if (!extraItem[i].IsTheSameAs(cacheItem[i]) || extraItem[i].stack != cacheItem[i].stack || wasNull)
+				{
+					if (!wasNull) foreach (Action<Player, string, int, Item, Item> h in MBase.EventExtraSlotChange) h(player, "Item", i, cacheItem[i], extraItem[i]);
+					CopyFromItem(cacheItem[i], extraItem[i]);
+				}
+			}
+			for (int i = 0; i < cacheSocial.Length && (i < currentExtraSlots || wasNull); i++)
+			{
+				if (!extraSocial[i].IsTheSameAs(cacheSocial[i]) || extraSocial[i].stack != cacheSocial[i].stack || wasNull)
+				{
+					if (!wasNull) foreach (Action<Player, string, int, Item, Item> h in MBase.EventExtraSlotChange) h(player, "Social", i, cacheSocial[i], extraSocial[i]);
+					CopyFromItem(cacheSocial[i], extraSocial[i]);
+				}
+			}
+			for (int i = 0; i < cacheDye.Length && (i < currentExtraSlots || wasNull); i++)
+			{
+				if (!extraDye[i].IsTheSameAs(cacheDye[i]) || extraDye[i].stack != cacheDye[i].stack || wasNull)
+				{
+					if (!wasNull) foreach (Action<Player, string, int, Item, Item> h in MBase.EventExtraSlotChange) h(player, "Dye", i, cacheDye[i], extraDye[i]);
+					CopyFromItem(cacheDye[i], extraDye[i]);
+				}
 			}
 		}
 

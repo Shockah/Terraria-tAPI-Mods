@@ -5,6 +5,7 @@ using System.Text;
 using TAPI;
 using TAPI.UIKit;
 using Terraria;
+using Shockah.Base;
 
 namespace Shockah.AccSlots
 {
@@ -19,6 +20,9 @@ namespace Shockah.AccSlots
 			ACC_DYE_5 = 7;
 
 		public static MBase me { get; private set; }
+		public static SEvent<Action<Player, string, int, Item, Item>> EventExtraSlotChange;
+		public static SEvent<Action<Player, int, bool>> EventExtraVisibilityChange;
+		public static SEvent<Action<Player, int>> EventUnlockSlot;
 		
 		public int optMaxSlots = 0;
 		public string optUnlockMode = null;
@@ -27,6 +31,9 @@ namespace Shockah.AccSlots
 		{
 			me = this;
 			ID.Fill(this);
+			EventExtraSlotChange = new SEvent<Action<Player, string, int, Item, Item>>();
+			EventExtraVisibilityChange = new SEvent<Action<Player, int, bool>>();
+			EventUnlockSlot = new SEvent<Action<Player, int>>();
 
 			optMaxSlots = (int)options["maxSlots"].Value;
 			optUnlockMode = (string)options["unlockMode"].Value;
@@ -64,7 +71,32 @@ namespace Shockah.AccSlots
 			}
 
 			string call = (string)args[0];
-			if (args.Length <= 2 && call == "RequestHooks")
+			if (call.StartsWith("RegisterEvent") && args == 2)
+			{
+				call = call.Substring("RegisterEvent".Length);
+				switch (call)
+				{
+					case "ExtraSlotChange":
+					{
+						var ev = args[1] as Action<Player, string, int, Item, Item>;
+						if (ev != null) SBase.EventExtraSlotChange += ev;
+						break;
+					}
+					case "ExtraVisibilityChange":
+					{
+						var ev = args[1] as Action<Player, int, bool>;
+						if (ev != null) SBase.EventExtraVisibilityChange += ev;
+						break;
+					}
+					case "UnlockSlot":
+					{
+						var ev = args[1] as Action<Player, int>;
+						if (ev != null) SBase.EventUnlockSlot += ev;
+						break;
+					}
+				}
+			}
+			else if (args.Length <= 2 && call == "RequestHooks")
 			{
 				Func<Player, int> getAvailableSlots = (player) -> {
 					return player.GetSubClass<MPlayer>().currentSlots;
