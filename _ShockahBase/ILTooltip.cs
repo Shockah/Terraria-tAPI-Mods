@@ -30,7 +30,10 @@ namespace Shockah.Base
 			}
 			else if (!string.IsNullOrEmpty(SBase.tip))
 			{
-				API.main.MouseText(SBase.tip);
+				ttip = STooltip.global;
+				ttip += SBase.tip;
+				ttip.Draw(sb, Main.mouse + new Vector2(10, 10));
+				ttip.Clear();
 				SBase.tip = null;
 			}
 		}

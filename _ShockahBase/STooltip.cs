@@ -21,7 +21,11 @@ namespace Shockah.Base
 			public Line(string textL, string textR) : this(textL, textR, Color.White, Color.White, 1f, 1f) { }
 			public Line(string textL, string textR, float scale) : this(textL, textR, Color.White, Color.White, scale, scale) { }
 			public Line(string textL, string textR, float scaleL, float scaleR) : this(textL, textR, Color.White, Color.White, scaleL, scaleR) { }
+			public Line(string textL, string textR, Color color) : this(textL, textR, color, color, 1f, 1f) { }
+			public Line(string textL, string textR, Color color, float scale) : this(textL, textR, color, color, scale, scale) { }
+			public Line(string textL, string textR, Color color, float scaleL, float scaleR) : this(textL, textR, color, color, scaleL, scaleR) { }
 			public Line(string textL, string textR, Color colorL, Color colorR) : this(textL, textR, colorL, colorR, 1f, 1f) { }
+			public Line(string textL, string textR, Color colorL, Color colorR, float scale) : this(textL, textR, colorL, colorR, scale, scale) { }
 			public Line(string textL, string textR, Color colorL, Color colorR, float scaleL, float scaleR)
 			{
 				this.textL = textL;
