@@ -115,26 +115,6 @@ namespace Shockah.Base
             return false;
         }
 
-		public static JsonData JsonObject(params object[] objs)
-		{
-			if (objs.Length % 2 == 1) throw new ArgumentException();
-			JsonData j = JsonMapper.ToObject("{}");
-			for (int i = 0; i < objs.Length; i += 2) j[(string)objs[i]] = ToJsonData(objs[i + 1]);
-			return j;
-		}
-		public static JsonData JsonArray(params object[] objs)
-		{
-			JsonData j = JsonMapper.ToObject("[]");
-			for (int i = 0; i < objs.Length; i++) j.Add(objs[i]);
-			return j;
-		}
-		private static JsonData ToJsonData(object obj)
-		{
-			if (obj == null) return null;
-			if (obj is JsonData) return (JsonData)obj;
-			return new JsonData(obj);
-		}
-
 		public static BinBuffer CopyFurther(BinBuffer source)
 		{
 			int pos = source.Pos;
