@@ -68,8 +68,6 @@ namespace Shockah.AccSlots
 					Main.hoverItemName = MyItem.AffixName();
 					if (MyItem.stack > 1) Main.hoverItemName += " (" + MyItem.stack + ")";
 					Main.toolTip = MyItem;
-					if (index <= 2) Main.toolTip.wornArmor = true;
-					if (index >= 8 && index <= 10) Main.toolTip.social = true;
 				}
 			}
 		}

@@ -19,6 +19,12 @@ namespace Shockah.AccSlots
 			this.customIndex = customIndex;
 		}
 
+		public override void Update(Vector2 offset)
+		{
+			base.Update(offset);
+			Main.toolTip.social = true;
+		}
+
 		public override bool AllowsItem(Item item)
 		{
 			bool? hb = Hooks.Interface.ItemSlotAllowsItem(this, item);
