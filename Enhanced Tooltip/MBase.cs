@@ -56,6 +56,13 @@ namespace Shockah.ETooltip
 		{
 			SBase.EventSTooltipDraw += () => { return tip; };
 
+			SBase.EventPreSTooltipDraw += (sb, tip, rect) =>
+			{
+				tip.scale = (float)options["ttipScale"].Value;
+				tip.alpha = null;
+				if ((bool)options["ttipBackground"].Value) tip.alpha = .785f;
+			};
+
 			SBase.EventPostSTooltipDraw += (sb, tip, rect) =>
 			{
 				int life = 0, lifeMax = 0;
@@ -103,10 +110,6 @@ namespace Shockah.ETooltip
 		{
 			bool b = oneTooltip;
 			oneTooltip = true;
-
-			tip.scale = (float)options["ttipScale"].Value;
-			tip.alpha = null;
-			if ((bool)options["ttipBackground"].Value) tip.alpha = .785f;
 
 			Main.localPlayer.showItemIcon = false;
 			return !b;
