@@ -12,7 +12,7 @@ namespace Shockah.Base
 			target.stack = source.stack;
 		}
 		
-		protected Item[] inventory = null, armor = null;
+		protected Item[] inventory = null, armor = null, dye = null;
 
 		public override void PostUpdate()
 		{
@@ -26,6 +26,8 @@ namespace Shockah.Base
 				for (int i = 0; i < inventory.Length; i++) inventory[i] = new Item();
 				armor = new Item[player.armor.Length];
 				for (int i = 0; i < armor.Length; i++) armor[i] = new Item();
+				dye = new Item[player.dye.Length];
+				for (int i = 0; i < dye.Length; i++) dye[i] = new Item();
 				wasNull = true;
 			}
 
@@ -43,6 +45,14 @@ namespace Shockah.Base
 				{
 					if (!wasNull) foreach (Action<Player, string, int, Item, Item> h in SBase.EventInventoryChange) h(player, "Armor", i, armor[i], player.armor[i]);
 					CopyFromItem(armor[i], player.armor[i]);
+				}
+			}
+			for (int i = 0; i < dye.Length; i++)
+			{
+				if (!player.dye[i].IsTheSameAs(dye[i]) || player.dye[i].stack != dye[i].stack || wasNull)
+				{
+					if (!wasNull) foreach (Action<Player, string, int, Item, Item> h in SBase.EventInventoryChange) h(player, "Dye", i, dye[i], player.dye[i]);
+					CopyFromItem(dye[i], player.dye[i]);
 				}
 			}
 		}
