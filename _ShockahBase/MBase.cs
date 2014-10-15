@@ -115,25 +115,25 @@ namespace Shockah.Base
 					case "IsBoss":
 					{
 						Func<NPC, bool> f = SBase.IsBoss;
-						return func ? f : f((NPC)args[2]);
+						return func ? f : f((NPC)args[1]);
 						break;
 					}
 					case "RequiresAttaching":
 					{
 						Func<NPC, bool> f = SBase.RequiresAttaching;
-						return func ? f : f((NPC)args[2]);
+						return func ? f : f((NPC)args[1]);
 						break;
 					}
 					case "IsUnsafeToSpawn":
 					{
 						Func<NPC, bool> f = SBase.IsUnsafeToSpawn;
-						return func ? f : f((NPC)args[2]);
+						return func ? f : f((NPC)args[1]);
 						break;
 					}
 					case "BuffHasTimer":
 					{
 						Func<int, bool> f = SBase.BuffHasTimer;
-						return func ? f : f((int)args[2]);
+						return func ? f : f((int)args[1]);
 						break;
 					}
 				}
