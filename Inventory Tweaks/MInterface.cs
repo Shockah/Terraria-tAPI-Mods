@@ -10,7 +10,7 @@ namespace Shockah.InvTweaks
 {
 	public class MInterface : ModInterface
 	{
-		private Texture2D texGlow = null, texCracked = null;
+		private Texture2D texGlow = null, texCracked = null, texQuest = null;
 
 		public override void PostDrawItemSlotBackground(SpriteBatch sb, ItemSlot slot)
 		{
@@ -22,11 +22,13 @@ namespace Shockah.InvTweaks
 					{
 						texGlow = modBase.textures["Images/ItemSlotGlow"];
 						texCracked = modBase.textures["Images/ItemSlotCracked"];
+						texQuest = modBase.textures["Images/ItemSlotQuest"];
 					}
-					Texture2D tex = slot.MyItem.rare >= 0 ? texGlow : texCracked;
+					Texture2D tex = slot.MyItem.questItem ? texQuest : (slot.MyItem.rare >= 0 ? texGlow : texCracked);
 					Color c = slot.MyItem.GetRarityColor();
 					if (slot.MyItem.rare == 0) c = Color.LightGray;
 					if (slot.MyItem.rare < 0) c = Color.Gray;
+					if (slot.MyItem.questItem) c = Color.White;
 					sb.Draw(tex, slot.pos, null, c * slot.alpha, 0f, default(Vector2), slot.scale, SpriteEffects.None, 0f);
 				}
 			}
