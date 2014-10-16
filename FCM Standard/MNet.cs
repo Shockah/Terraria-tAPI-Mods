@@ -37,7 +37,7 @@ namespace Shockah.FCM.Standard
 			NetMessage.SendModData(this, MBase.MSG_CHEAT, index, -1, bb);
 		}
 		
-		public override void NetReceive(BinBuffer bb, int msgType)
+		public override void NetReceive(BinBuffer bb, int msgType, MessageBuffer buffer)
 		{
 			int ignore;
 			BinBuffer copybb;
