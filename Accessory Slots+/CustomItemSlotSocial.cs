@@ -74,13 +74,13 @@ namespace Shockah.AccSlots
 		{
 			if (Hooks.Interface.PreItemSlotRightClick(this, ref release))
 			{
-				if (MyItem.CanEquip(Main.localPlayer, this))
+				if (release && MyItem.CanEquip(Main.localPlayer, this))
 				{
 					MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
-					Item result = mp.extraItem[index].Clone();
+					Item result = MInterface.layer.slotsItem[index].MyItem.Clone();
 					if (result.stack > 0) result.OnUnEquip(Main.localPlayer, this);
-					mp.extraItem[index] = MyItem.Clone();
-					mp.extraItem[index].OnEquip(Main.localPlayer, this);
+					MInterface.layer.slotsItem[index].MyItem = MyItem.Clone();
+					MInterface.layer.slotsItem[index].MyItem.OnEquip(Main.localPlayer, this);
 					MyItem = result;
 					Main.PlaySound(7, -1, -1, 1);
 				}
@@ -107,7 +107,7 @@ namespace Shockah.AccSlots
 
 			if (Hooks.Interface.PreDrawItemSlotItem(sb, this))
 			{
-				ItemSlot behind = MInterface.layer.slotsItem[customIndex];
+				ItemSlot behind = MInterface.layer.slotsItem[index];
 				if (!behind.MyItem.IsBlank())
 				{
 					float alpha = this.alpha * 0.4f;

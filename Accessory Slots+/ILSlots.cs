@@ -34,37 +34,37 @@ namespace Shockah.AccSlots
 
 			for (int i = 0; i < 5; i++)
 			{
-				slotsItem[i] = new CustomItemSlotAccessory(modBase, "Item", i, i, i,
-					(slot, item) => Main.localPlayer.armor[3 + slot.index] = item,
-					(slot) => Main.localPlayer.armor[3 + slot.index],
-					(slot, visible) => Main.localPlayer.hideVisual[3 + slot.index] = !visible,
-					(slot) => !Main.localPlayer.hideVisual[3 + slot.index]
+				slotsItem[i] = new CustomItemSlotAccessory(modBase, "EquipAccessory", i, i, i,
+					(slot, item) => Main.localPlayer.armor[3 + ((CustomItemSlotAccessory)slot).customIndex] = item,
+					(slot) => Main.localPlayer.armor[3 + ((CustomItemSlotAccessory)slot).customIndex],
+					(slot, visible) => Main.localPlayer.hideVisual[3 + ((CustomItemSlotAccessory)slot).customIndex] = !visible,
+					(slot) => !Main.localPlayer.hideVisual[3 + ((CustomItemSlotAccessory)slot).customIndex]
 				);
-				slotsSocial[i] = new CustomItemSlotSocial(modBase, "Social", i, i,
-					(slot, item) => Main.localPlayer.armor[11 + slot.index] = item,
-					(slot) => Main.localPlayer.armor[11 + slot.index]
+				slotsSocial[i] = new CustomItemSlotSocial(modBase, "EquipAccessoryVanity", i, i,
+					(slot, item) => Main.localPlayer.armor[11 + ((CustomItemSlotSocial)slot).customIndex] = item,
+					(slot) => Main.localPlayer.armor[11 + ((CustomItemSlotSocial)slot).customIndex]
 				);
 				slotsDye[i] = new CustomItemSlotDye(modBase, "Dye", i, i,
-					(slot, item) => Main.localPlayer.dye[3 + slot.index] = item,
-					(slot) => Main.localPlayer.dye[3 + slot.index]
+					(slot, item) => Main.localPlayer.dye[3 + ((CustomItemSlotDye)slot).customIndex] = item,
+					(slot) => Main.localPlayer.dye[3 + ((CustomItemSlotDye)slot).customIndex]
 				);
 			}
 			for (int i = 5; i < MAX_SLOTS; i++)
 			{
 				int j = i - 5;
-				slotsItem[i] = new CustomItemSlotAccessory(modBase, "Item", j, i, i,
-					(slot, item) => Main.localPlayer.GetSubClass<MPlayer>().extraItem[slot.index] = item,
-					(slot) => Main.localPlayer.GetSubClass<MPlayer>().extraItem[slot.index],
-					(slot, visible) => Main.localPlayer.GetSubClass<MPlayer>().visibility[slot.index] = visible,
-					(slot) => Main.localPlayer.GetSubClass<MPlayer>().visibility[slot.index]
+				slotsItem[i] = new CustomItemSlotAccessory(modBase, "Item", i, i, j,
+					(slot, item) => Main.localPlayer.GetSubClass<MPlayer>().extraItem[((CustomItemSlotAccessory)slot).customIndex] = item,
+					(slot) => Main.localPlayer.GetSubClass<MPlayer>().extraItem[((CustomItemSlotAccessory)slot).customIndex],
+					(slot, visible) => Main.localPlayer.GetSubClass<MPlayer>().visibility[((CustomItemSlotAccessory)slot).customIndex] = visible,
+					(slot) => Main.localPlayer.GetSubClass<MPlayer>().visibility[((CustomItemSlotAccessory)slot).customIndex]
 				);
-				slotsSocial[i] = new CustomItemSlotSocial(modBase, "Social", j, i,
-					(slot, item) => Main.localPlayer.GetSubClass<MPlayer>().extraSocial[slot.index] = item,
-					(slot) => Main.localPlayer.GetSubClass<MPlayer>().extraSocial[slot.index]
+				slotsSocial[i] = new CustomItemSlotSocial(modBase, "Social", i, j,
+					(slot, item) => Main.localPlayer.GetSubClass<MPlayer>().extraSocial[((CustomItemSlotSocial)slot).customIndex] = item,
+					(slot) => Main.localPlayer.GetSubClass<MPlayer>().extraSocial[((CustomItemSlotSocial)slot).customIndex]
 				);
-				slotsDye[i] = new CustomItemSlotDye(modBase, "Dye", j, i,
-					(slot, item) => Main.localPlayer.GetSubClass<MPlayer>().extraDye[slot.index] = item,
-					(slot) => Main.localPlayer.GetSubClass<MPlayer>().extraDye[slot.index]
+				slotsDye[i] = new CustomItemSlotDye(modBase, "Dye", i, j,
+					(slot, item) => Main.localPlayer.GetSubClass<MPlayer>().extraDye[((CustomItemSlotDye)slot).customIndex] = item,
+					(slot) => Main.localPlayer.GetSubClass<MPlayer>().extraDye[((CustomItemSlotDye)slot).customIndex]
 				);
 			}
 		}

@@ -45,10 +45,10 @@ namespace Shockah.AccSlots
 
 			if (Hooks.Interface.PreDrawItemSlotItem(sb, this))
 			{
-				ItemSlot behind = MInterface.layer.slotsSocial[customIndex];
+				ItemSlot behind = MInterface.layer.slotsSocial[index];
 				if (behind.MyItem.IsBlank())
 				{
-					behind = MInterface.layer.slotsItem[customIndex];
+					behind = MInterface.layer.slotsItem[index];
 				}
 				if (!behind.MyItem.IsBlank())
 				{
