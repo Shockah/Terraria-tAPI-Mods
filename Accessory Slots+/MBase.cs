@@ -58,6 +58,23 @@ namespace Shockah.AccSlots
 			{
 				counterSlot = 0;
 			};
+
+			EventExtraSlotChange += (player, type, index, oldItem, newItem) =>
+			{
+				BinBuffer bb = new BinBuffer();
+				bb.Write((byte)(type == "Item" ? ILSlots.MODE_ITEM : (type == "Social" ? ILSlots.MODE_SOCIAL : ILSlots.MODE_DYE)));
+				bb.Write((byte)index);
+				bb.Write(newItem);
+				NetMessage.SendModData(this, MNet.MSG_UPDATESLOT, -1, -1, bb);
+			};
+
+			EventExtraVisibilityChange += (player, index, state) =>
+			{
+				BinBuffer bb = new BinBuffer();
+				bb.Write((byte)index);
+				bb.Write(state);
+				NetMessage.SendModData(this, MNet.MSG_UPDATEVISIBILITY, -1, -1, bb);
+			};
 		}
 
 		public override void OptionChanged(Option option)

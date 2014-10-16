@@ -41,6 +41,8 @@ namespace Shockah.AccSlots
 						item2 = slot2.MyItem;
 						if (item2.IsBlank() && item.CanEquip(Main.localPlayer, slot2))
 						{
+							item2.OnUnEquip(Main.localPlayer, slot2);
+							item.OnEquip(Main.localPlayer, slot);
 							slot.MyItem = item2;
 							slot2.MyItem = item;
 							Main.PlaySound(7, -1, -1, 1);

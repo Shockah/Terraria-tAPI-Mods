@@ -63,8 +63,8 @@
     <Compile Include="ILSlots.cs" />
     <Compile Include="MBase.cs" />
     <Compile Include="MInterface.cs" />
-    <Compile Include="MItem.cs" />
     <Compile Include="MItemExtraSlot.cs" />
+    <Compile Include="MNet.cs" />
     <Compile Include="MNPC.cs" />
     <Compile Include="MPlayer.cs" />
     <Compile Include="PLDyeAccessories.cs" />

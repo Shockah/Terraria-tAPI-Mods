@@ -40,6 +40,7 @@ namespace Shockah.AccSlots
 		{
 			get { return currentSlots - 5; }
 		}
+		public Item[][] extraSlots;
 		public Item[] extraItem, extraSocial, extraDye;
 		public BitsBytes visibility;
 		public BitsByte boughtSlots;
@@ -61,13 +62,14 @@ namespace Shockah.AccSlots
 				extraDye[i] = new Item();
 				visibility[i] = true;
 			}
+			extraSlots = new Item[][] { extraItem, extraSocial, extraDye };
 		}
 
 		public override void Load(BinBuffer bb)
 		{
 			boughtSlots = bb.ReadByte();
 			visibility = bb.ReadBytes(2);
-			for (int i = 0; i < currentExtraSlots; i++)
+			for (int i = 0; i < MAX_EXTRA_SLOTS; i++)
 			{
 				extraItem[i] = bb.ReadItem();
 				extraSocial[i] = bb.ReadItem();
@@ -79,7 +81,7 @@ namespace Shockah.AccSlots
 		{
 			bb.Write(boughtSlots);
 			bb.Write(visibility);
-			for (int i = 0; i < currentExtraSlots; i++)
+			for (int i = 0; i < MAX_EXTRA_SLOTS; i++)
 			{
 				bb.Write(extraItem[i]);
 				bb.Write(extraSocial[i]);
