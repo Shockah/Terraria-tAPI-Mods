@@ -1,0 +1,10 @@
+{
+	"displayName": "My Favorite Weapon",
+	"author": "Shockah",
+	"info": "'You've grown very fond of your piece. You polish it all the time and talk nice to it, your precious.'\n\nAllows you to set a custom name for an item, keeping the stats from pre-naming and allowing to reforge it once again.",
+	"version": "r1",
+	"internalName": "Shockah.MyFavWeapon",
+	"modReferences": [
+		"Shockah.Base"
+	]
+}

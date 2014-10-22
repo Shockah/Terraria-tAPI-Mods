@@ -1,0 +1,20 @@
+﻿{
+	"displayName": "Symbol of Love",
+	"tooltip": [
+		"'You've grown very fond of your piece.'",
+		"'You polish it all the time and talk nice to it, your precious.'",
+		"Use on a weapon to rename it, keeping stats."
+	],
+	"value": [0, 25, 0, 0],
+	"size": [26, 26],
+	"maxStack": 1,
+
+	"recipes": [
+		{
+			"items": {
+				"Life Crystal": 4
+			},
+			"creates": 1
+		}
+	]
+}
