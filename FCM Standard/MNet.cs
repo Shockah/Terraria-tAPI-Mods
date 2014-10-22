@@ -86,10 +86,23 @@ namespace Shockah.FCM.Standard
 					MWorld mw = (MWorld)MBase.me.modWorld;
 					mw.blockNPCSpawn = bb.ReadBool();
 					mw.blockNPCSpawnSave = bb.ReadBool();
+
 					mw.lockDayTime = null;
 					if (bb.ReadBool()) mw.lockDayTime = bb.ReadBool();
 					mw.lockDayTimeSave = bb.ReadBool();
+
 					mw.lockDayRate = bb.ReadBool() ? new int?(Main.dayRate) : null;
+
+					mw.lockChristmas = null;
+					if (bb.ReadBool()) mw.lockChristmas = bb.ReadBool();
+					mw.lockChristmasSave = bb.ReadBool();
+
+					mw.lockHalloween = null;
+					if (bb.ReadBool()) mw.lockHalloween = bb.ReadBool();
+					mw.lockHalloweenSave = bb.ReadBool();
+
+					Main.checkXMas();
+					Main.checkHalloween();
 
 					if (Main.netMode == 2) NetMessage.SendModData(this, MBase.MSG_TIME, -1, ignore, copybb);
 					break;

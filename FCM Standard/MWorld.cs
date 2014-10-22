@@ -15,26 +15,48 @@ namespace Shockah.FCM.Standard
 		public bool lockDayTimeSave = false;
 		public bool blockNPCSpawn = false;
 		public bool blockNPCSpawnSave = false;
+		public bool? lockChristmas = null;
+		public bool lockChristmasSave = false;
+		public bool? lockHalloween = null;
+		public bool lockHalloweenSave = false;
 		
 		public override void Initialize()
 		{
 			lockDayTime = null;
 			lockDayRate = null;
+			lockChristmas = null;
+			lockHalloween = null;
 			lockDayTimeSave = false;
 			blockNPCSpawn = false;
 			blockNPCSpawnSave = false;
+			lockChristmasSave = false;
+			lockHalloweenSave = false;
 			SetupWorld();
 		}
 
 		public override void Load(BinBuffer bb)
 		{
-			if (bb.ReadBool())
+			try
 			{
-				lockDayTimeSave = true;
-				lockDayTime = bb.ReadBool();
+				if (bb.ReadBool())
+				{
+					lockDayTimeSave = true;
+					lockDayTime = bb.ReadBool();
+				}
+				if (bb.ReadBool()) lockDayRate = bb.ReadInt();
+				if (bb.ReadBool()) blockNPCSpawnSave = blockNPCSpawn = true;
+				if (bb.ReadBool())
+				{
+					lockChristmasSave = true;
+					lockChristmas = bb.ReadBool();
+				}
+				if (bb.ReadBool())
+				{
+					lockHalloweenSave = true;
+					lockHalloween = bb.ReadBool();
+				}
 			}
-			if (bb.ReadBool()) lockDayRate = bb.ReadInt();
-			if (bb.ReadBool()) blockNPCSpawnSave = blockNPCSpawn = true;
+			catch (Exception) { }
 			SetupWorld();
 		}
 		public override void Save(BinBuffer bb)
@@ -49,6 +71,20 @@ namespace Shockah.FCM.Standard
 			bb.Write(lockDayRate.HasValue);
 			if (lockDayRate.HasValue) bb.Write(lockDayRate.Value);
 			bb.Write(blockNPCSpawnSave && blockNPCSpawnSave);
+
+			if (lockChristmasSave && lockChristmas.HasValue)
+			{
+				bb.Write(true);
+				bb.Write(lockChristmas.Value);
+			}
+			else bb.Write(false);
+
+			if (lockHalloweenSave && lockHalloween.HasValue)
+			{
+				bb.Write(true);
+				bb.Write(lockHalloween.Value);
+			}
+			else bb.Write(false);
 		}
 
 		public void SetupWorld()
@@ -64,6 +100,15 @@ namespace Shockah.FCM.Standard
 				}
 			}
 			if (lockDayRate.HasValue) Main.dayRate = lockDayRate.Value;
+
+			if (lockChristmas.HasValue)
+			{
+				Main.xMas = lockChristmas.Value;
+			}
+			if (lockHalloween.HasValue)
+			{
+				Main.halloween = lockHalloween.Value;
+			}
 		}
 
 		public override void PostUpdate()
@@ -109,6 +154,15 @@ namespace Shockah.FCM.Standard
 					}
 				}
 			}
+		}
+
+		public override bool? CheckChristmas()
+		{
+			return lockChristmas;
+		}
+		public override bool? CheckHalloween()
+		{
+			return lockHalloween;
 		}
 	}
 }

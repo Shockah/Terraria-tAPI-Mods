@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enhanced Tooltip", "Enhance
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Accessory Slots+", "Accessory Slots+\Accessory Slots+.csproj", "{5045408C-A8CB-4A12-85B6-AEF2B8F803E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "My Favorite Weapon", "My Favorite Weapon\My Favorite Weapon.csproj", "{31461595-B160-4CB7-BAAF-31F2FC70F08E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -96,6 +98,10 @@ Global
 		{5045408C-A8CB-4A12-85B6-AEF2B8F803E2}.Debug|Any CPU.Build.0 = Release|Any CPU
 		{5045408C-A8CB-4A12-85B6-AEF2B8F803E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5045408C-A8CB-4A12-85B6-AEF2B8F803E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31461595-B160-4CB7-BAAF-31F2FC70F08E}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{31461595-B160-4CB7-BAAF-31F2FC70F08E}.Debug|Any CPU.Build.0 = Release|Any CPU
+		{31461595-B160-4CB7-BAAF-31F2FC70F08E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31461595-B160-4CB7-BAAF-31F2FC70F08E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -58,10 +58,20 @@ namespace Shockah.FCM.Standard
 			MWorld mw = (MWorld)MBase.me.modWorld;
 			bb.Write(mw.blockNPCSpawn);
 			bb.Write(mw.blockNPCSpawnSave);
+
 			bb.Write(mw.lockDayTime.HasValue);
 			if (mw.lockDayTime.HasValue) bb.Write(mw.lockDayTime.Value);
 			bb.Write(mw.lockDayTimeSave);
+
 			bb.Write(mw.lockDayRate.HasValue);
+
+			bb.Write(mw.lockChristmas.HasValue);
+			if (mw.lockChristmas.HasValue) bb.Write(mw.lockChristmas.Value);
+			bb.Write(mw.lockChristmasSave);
+
+			bb.Write(mw.lockHalloween.HasValue);
+			if (mw.lockHalloween.HasValue) bb.Write(mw.lockHalloween.Value);
+			bb.Write(mw.lockHalloweenSave);
 
 			bb.Pos = 0;
 			NetMessage.SendModData(MBase.me, MBase.MSG_TIME, remote, ignore, bb);
@@ -161,6 +171,7 @@ namespace Shockah.FCM.Standard
 		protected readonly ElButton
 			bLockDayTime, bLockDayTimeSave, bLockDayRate,
 			bHardmode, bBloodMoon, bEclipse,
+			bLockChristmas, bLockChristmasSave, bLockHalloween, bLockHalloweenSave,
 			bGodmode, bNoclip, bUsage,
 			bBlockSpawns, bBlockSpawnsSave,
 			bRange, bTileSpeed, bTileUsage,
@@ -330,6 +341,144 @@ namespace Shockah.FCM.Standard
 				{
 					StringBuilder sb = new StringBuilder();
 					sb.Append("Solar Eclipse: " + (Main.hardMode ? "On" : "Off"));
+					sb.Append("\nClick to toggle");
+					SBase.tip = sb.ToString();
+				}
+			);
+
+			bLockChristmas = new ElButton(
+				(b, mb) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					bool newVal = mb == 0;
+					if (mw.lockChristmas.HasValue)
+					{
+						mw.lockChristmas = newVal == mw.lockChristmas.Value ? null : new bool?(newVal);
+					}
+					else
+					{
+						mw.lockChristmas = newVal;
+					}
+					if (!mw.lockChristmas.HasValue) mw.lockChristmasSave = false;
+					Main.checkXMas();
+					QueueTimeUpdate();
+				},
+				(b, sb, mb) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					bool val = Main.xMas;
+					if (mw.lockChristmas.HasValue) val = mw.lockChristmas.Value;
+
+					Texture2D tex = Main.itemTexture[val ? 1867 : 58];
+					float tscale = 1f;
+					int dist = (tex.Width > tex.Height ? tex.Width : tex.Height);
+					if (dist > b.size.X - 4) tscale = (b.size.X - 4) / dist;
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White * (mw.lockChristmas.HasValue ? 1f : .5f), 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				},
+				(b) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					StringBuilder sb = new StringBuilder();
+					sb.Append(mw.lockChristmas.HasValue ? (mw.lockChristmas.Value ? "Christmas" : "No Christmas") : "System date based Christmas");
+					sb.Append("\nLeft click to " + (mw.lockChristmas.HasValue && mw.lockChristmas.Value ? "reset" : "force Christmas"));
+					sb.Append("\nRight click to " + (mw.lockChristmas.HasValue && !mw.lockChristmas.Value ? "reset" : "force to no Christmas"));
+					SBase.tip = sb.ToString();
+				}
+			);
+
+			bLockChristmasSave = new ElButton(
+				(b, mb) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					mw.lockChristmasSave = !mw.lockChristmasSave;
+					Main.checkXMas();
+					QueueTimeUpdate();
+				},
+				(b, sb, mb) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					if (!mw.lockChristmasSave) return;
+
+					Texture2D tex = Shockah.FCM.MBase.me.textures["Images/Tick"];
+					float tscale = 1f;
+					int dist = (tex.Width > tex.Height ? tex.Width : tex.Height);
+					if (dist > b.size.X - 4) tscale = (b.size.X - 4) / dist;
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				},
+				(b) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					StringBuilder sb = new StringBuilder();
+					sb.Append(mw.lockChristmasSave ? "Save Christmas forcing" : "Ignore Christmas forcing when saving");
+					sb.Append("\nClick to toggle");
+					SBase.tip = sb.ToString();
+				}
+			);
+
+			bLockHalloween = new ElButton(
+				(b, mb) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					bool newVal = mb == 0;
+					if (mw.lockHalloween.HasValue)
+					{
+						mw.lockHalloween = newVal == mw.lockHalloween.Value ? null : new bool?(newVal);
+					}
+					else
+					{
+						mw.lockHalloween = newVal;
+					}
+					if (!mw.lockHalloween.HasValue) mw.lockHalloweenSave = false;
+					Main.checkHalloween();
+					QueueTimeUpdate();
+				},
+				(b, sb, mb) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					bool val = Main.halloween;
+					if (mw.lockHalloween.HasValue) val = mw.lockHalloween.Value;
+
+					Texture2D tex = Main.itemTexture[val ? 1734 : 58];
+					float tscale = 1f;
+					int dist = (tex.Width > tex.Height ? tex.Width : tex.Height);
+					if (dist > b.size.X - 4) tscale = (b.size.X - 4) / dist;
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White * (mw.lockHalloween.HasValue ? 1f : .5f), 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				},
+				(b) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					StringBuilder sb = new StringBuilder();
+					sb.Append(mw.lockHalloween.HasValue ? (mw.lockHalloween.Value ? "Halloween" : "No Halloween") : "System date based Halloween");
+					sb.Append("\nLeft click to " + (mw.lockHalloween.HasValue && mw.lockHalloween.Value ? "reset" : "force Halloween"));
+					sb.Append("\nRight click to " + (mw.lockHalloween.HasValue && !mw.lockHalloween.Value ? "reset" : "force to no Halloween"));
+					SBase.tip = sb.ToString();
+				}
+			);
+
+			bLockHalloweenSave = new ElButton(
+				(b, mb) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					mw.lockHalloweenSave = !mw.lockHalloweenSave;
+					Main.checkHalloween();
+					QueueTimeUpdate();
+				},
+				(b, sb, mb) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					if (!mw.lockHalloweenSave) return;
+
+					Texture2D tex = Shockah.FCM.MBase.me.textures["Images/Tick"];
+					float tscale = 1f;
+					int dist = (tex.Width > tex.Height ? tex.Width : tex.Height);
+					if (dist > b.size.X - 4) tscale = (b.size.X - 4) / dist;
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+				},
+				(b) =>
+				{
+					MWorld mw = (MWorld)MBase.me.modWorld;
+					StringBuilder sb = new StringBuilder();
+					sb.Append(mw.lockHalloweenSave ? "Save Halloween forcing" : "Ignore Halloween forcing when saving");
 					sb.Append("\nClick to toggle");
 					SBase.tip = sb.ToString();
 				}
@@ -731,6 +880,22 @@ namespace Shockah.FCM.Standard
 			bEclipse.pos = new Vector2(POS_X + 80, POS_Y + 124);
 			bEclipse.size = new Vector2(32, 32);
 			blocked = bEclipse.Draw(sb, true, !blocked && dragging == null) || blocked;
+
+			bLockChristmas.pos = new Vector2(POS_X, POS_Y + 164);
+			bLockChristmas.size = new Vector2(32, 32);
+			blocked = bLockChristmas.Draw(sb, true, !blocked && dragging == null) || blocked;
+
+			bLockChristmasSave.pos = new Vector2(POS_X + 40, POS_Y + 164);
+			bLockChristmasSave.size = new Vector2(32, 32);
+			blocked = bLockChristmasSave.Draw(sb, true, !blocked && dragging == null) || blocked;
+
+			bLockHalloween.pos = new Vector2(POS_X + 100, POS_Y + 164);
+			bLockHalloween.size = new Vector2(32, 32);
+			blocked = bLockHalloween.Draw(sb, true, !blocked && dragging == null) || blocked;
+
+			bLockHalloweenSave.pos = new Vector2(POS_X + 140, POS_Y + 164);
+			bLockHalloweenSave.size = new Vector2(32, 32);
+			blocked = bLockHalloweenSave.Draw(sb, true, !blocked && dragging == null) || blocked;
 
 			drawSliderInt("PlayerLifeMax", "Max life", new Vector2(POS_X + 244, POS_Y), MBase.me.textures["Images/LifeMaxSlider"], Main.localPlayer.statLifeMax / 5, 1, 100,
 			(value) => { return "" + (value * 5); },
