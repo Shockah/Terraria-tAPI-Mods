@@ -19,14 +19,13 @@ namespace Shockah.FCM.Standard
 		public static InterfaceFCMMisc me = null;
 		public static int throttleTimeUpdate = 0;
 		public static bool timeUpdateSend = false;
-		public static bool freeCamera = false, fullBright = false, flashlight = false, flashlightOff = false;
+		public static bool freeCamera = false, fullBright = false, discount = false;
 
 		public static void Reset()
 		{
 			freeCamera = false;
 			fullBright = false;
-			flashlight = false;
-			flashlightOff = false;
+			discount = false;
 			throttleTimeUpdate = 0;
 			timeUpdateSend = false;
 		}
@@ -175,7 +174,7 @@ namespace Shockah.FCM.Standard
 			bGodmode, bNoclip, bUsage,
 			bBlockSpawns, bBlockSpawnsSave,
 			bRange, bTileSpeed, bTileUsage,
-			bCamera, bFullBright/*, bFlashlight*/;
+			bCamera, bFullBright, bDiscount;
 		protected string dragging = null;
 
 		public InterfaceFCMMisc()
@@ -742,29 +741,27 @@ namespace Shockah.FCM.Standard
 				}
 			);
 
-			/*bFlashlight = new ElButton(
+			bDiscount = new ElButton(
 				(b, mb) =>
 				{
-					flashlight = !flashlight;
-					flashlightOff = false;
+					discount = !discount;
 				},
 				(b, sb, mb) =>
 				{
-					Texture2D tex = Main.buffTexture[19];
+					Texture2D tex = Main.itemTexture[855];
 					float tscale = 1f;
 					if (tex.Width * tscale > b.size.X - 4) tscale = (b.size.X - 4) / (tex.Width * tscale);
 					if (tex.Height * tscale > b.size.Y - 4) tscale = (b.size.Y - 4) / (tex.Height * tscale);
-					sb.Draw(tex, b.pos + b.size / 2, null, Color.White * (flashlight ? 1f : .5f), 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+					sb.Draw(tex, b.pos + b.size / 2, null, Color.White * (discount ? 1f : .5f), 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
 				},
 				(b) =>
 				{
 					StringBuilder sb = new StringBuilder();
-					sb.Append("Flashlight: " + (flashlight ? "On" : "Off"));
-					if (flashlight) sb.Append("\nPress Tab to quick-toggle");
+					sb.Append("100% discount: " + (discount ? "On" : "Off"));
 					sb.Append("\nClick to toggle");
 					SBase.tip = sb.ToString();
 				}
-			);*/
+			);
 		}
 
 		public override void OnOpen()
@@ -885,17 +882,23 @@ namespace Shockah.FCM.Standard
 			bLockChristmas.size = new Vector2(32, 32);
 			blocked = bLockChristmas.Draw(sb, true, !blocked && dragging == null) || blocked;
 
-			bLockChristmasSave.pos = new Vector2(POS_X + 40, POS_Y + 164);
-			bLockChristmasSave.size = new Vector2(32, 32);
-			blocked = bLockChristmasSave.Draw(sb, true, !blocked && dragging == null) || blocked;
+			if (mw.lockChristmas.HasValue)
+			{
+				bLockChristmasSave.pos = new Vector2(POS_X + 40, POS_Y + 164);
+				bLockChristmasSave.size = new Vector2(32, 32);
+				blocked = bLockChristmasSave.Draw(sb, true, !blocked && dragging == null) || blocked;
+			}
 
 			bLockHalloween.pos = new Vector2(POS_X + 100, POS_Y + 164);
 			bLockHalloween.size = new Vector2(32, 32);
 			blocked = bLockHalloween.Draw(sb, true, !blocked && dragging == null) || blocked;
 
-			bLockHalloweenSave.pos = new Vector2(POS_X + 140, POS_Y + 164);
-			bLockHalloweenSave.size = new Vector2(32, 32);
-			blocked = bLockHalloweenSave.Draw(sb, true, !blocked && dragging == null) || blocked;
+			if (mw.lockHalloween.HasValue)
+			{
+				bLockHalloweenSave.pos = new Vector2(POS_X + 140, POS_Y + 164);
+				bLockHalloweenSave.size = new Vector2(32, 32);
+				blocked = bLockHalloweenSave.Draw(sb, true, !blocked && dragging == null) || blocked;
+			}
 
 			drawSliderInt("PlayerLifeMax", "Max life", new Vector2(POS_X + 244, POS_Y), MBase.me.textures["Images/LifeMaxSlider"], Main.localPlayer.statLifeMax / 5, 1, 100,
 			(value) => { return "" + (value * 5); },
@@ -945,9 +948,9 @@ namespace Shockah.FCM.Standard
 			bFullBright.size = new Vector2(32, 32);
 			blocked = bFullBright.Draw(sb, true, !blocked && dragging == null) || blocked;
 
-			/*bFlashlight.pos = new Vector2(POS_X + 514, POS_Y + 84);
-			bFlashlight.size = new Vector2(32, 32);
-			blocked = bFlashlight.Draw(sb, true, !blocked && dragging == null) || blocked;*/
+			bDiscount.pos = new Vector2(POS_X + 514, POS_Y + 84);
+			bDiscount.size = new Vector2(32, 32);
+			blocked = bDiscount.Draw(sb, true, !blocked && dragging == null) || blocked;
 
 			bBlockSpawns.pos = new Vector2(POS_X + 434, POS_Y + 124);
 			bBlockSpawns.size = new Vector2(32, 32);
