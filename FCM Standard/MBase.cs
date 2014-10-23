@@ -57,11 +57,6 @@ namespace Shockah.FCM.Standard
 				{
 					Lighting.fullBright = true;
 				}
-				if (InterfaceFCMMisc.flashlight)
-				{
-					if (Keys.Tab.Pressed()) InterfaceFCMMisc.flashlightOff = !InterfaceFCMMisc.flashlightOff;
-					if (!InterfaceFCMMisc.flashlightOff) Lighting.AddLight(Main.screenPosition + Main.mouse, 50f, 50f, 50f);
-				}
 			}
 		}
 	}
