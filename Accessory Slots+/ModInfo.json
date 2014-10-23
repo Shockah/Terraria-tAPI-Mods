@@ -3,6 +3,7 @@
     "author": "Shockah",
     "info": "Adds additional accessory slots.",
 	"version": "r1",
+	"icon": "Icon",
     "internalName": "Shockah.AccSlots",
 	"modReferences": [
 		"Shockah.Base"

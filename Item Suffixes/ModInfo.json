@@ -3,6 +3,7 @@
     "author": "Shockah",
     "info": "Adds suffixes to items, which work separately from prefixes.",
 	"version": "r2",
+	"icon": "Icon",
     "internalName": "Shockah.ItemSuffixes",
 	"modReferences": [
 		"Shockah.Base"

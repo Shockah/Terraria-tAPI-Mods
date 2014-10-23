@@ -3,6 +3,7 @@
     "author": "Shockah",
     "info": "Replaces vanilla tooltips, allowing for many more features.",
 	"version": "r1",
+	"icon": "Icon",
     "internalName": "Shockah.ETooltip",
 	"modReferences": [
 		"Shockah.Base"

@@ -7,7 +7,7 @@
 			"type": "Integer",
 			"minimum": 0,
 			"maximum": 15,
-			"default": 1,
+			"default": 2,
 			"sync": true,
 			"notify": true
 		},
