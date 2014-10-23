@@ -21,21 +21,29 @@ namespace Shockah.FCM.Standard
 		
 		public override void MidUpdate()
 		{
-			if (player.whoAmI == Main.myPlayer && InterfaceFCMMisc.freeCamera)
+			if (player.whoAmI == Main.myPlayer)
 			{
-				if (lastCameraPos.X == -1 && lastCameraPos.Y == -1) lastCameraPos = Main.screenPosition;
+				if (InterfaceFCMMisc.discount)
+				{
+					player.discount = 0f;
+				}
 
-				float speed = CAMERA_SPEED;
-				if (player.controlTorch) speed *= CAMERA_SPEED_MULTIPLIER;
-				if (player.controlLeft) lastCameraPos.X -= speed;
-				if (player.controlRight) lastCameraPos.X += speed;
-				if (player.controlUp) lastCameraPos.Y -= speed;
-				if (player.controlDown) lastCameraPos.Y += speed;
-				player.controlTorch = player.controlLeft = player.controlRight = player.controlUp = player.controlDown = false;
-			}
-			else
-			{
-				lastCameraPos = new Vector2(-1, -1);
+				if (InterfaceFCMMisc.freeCamera)
+				{
+					if (lastCameraPos.X == -1 && lastCameraPos.Y == -1) lastCameraPos = Main.screenPosition;
+
+					float speed = CAMERA_SPEED;
+					if (player.controlTorch) speed *= CAMERA_SPEED_MULTIPLIER;
+					if (player.controlLeft) lastCameraPos.X -= speed;
+					if (player.controlRight) lastCameraPos.X += speed;
+					if (player.controlUp) lastCameraPos.Y -= speed;
+					if (player.controlDown) lastCameraPos.Y += speed;
+					player.controlTorch = player.controlLeft = player.controlRight = player.controlUp = player.controlDown = false;
+				}
+				else
+				{
+					lastCameraPos = new Vector2(-1, -1);
+				}
 			}
 			
 			if (cheatGod)
@@ -69,6 +77,10 @@ namespace Shockah.FCM.Standard
 					if (player.controlDown) player.position.Y += speed;
 				}
 				oldPos = player.position;
+			}
+			else
+			{
+				oldPos = new Vector2(-1, -1);
 			}
 
 			if (cheatRange)
