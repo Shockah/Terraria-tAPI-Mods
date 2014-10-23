@@ -70,6 +70,10 @@ namespace Shockah.FCM.Standard
 				}
 				oldPos = player.position;
 			}
+			else
+			{
+				oldPos = new Vector2(-1, -1);
+			}
 
 			if (cheatRange)
 			{
