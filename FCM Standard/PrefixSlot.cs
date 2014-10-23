@@ -179,7 +179,7 @@ namespace Shockah.FCM.Standard
 		{
 			if (gui.slotItem.MyItem.IsBlank()) return false;
 			if ((MyPrefix == null || MyPrefix.type == 0) && (gui.slotItem.MyItem.prefix == null || gui.slotItem.MyItem.prefix.type == 0)) return true;
-			return gui.slotItem.MyItem.prefix == MyPrefix;
+			return gui.slotItem.MyItem.prefix.id == MyPrefix.id;
 		}
 	}
 }
