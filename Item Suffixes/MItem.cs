@@ -10,7 +10,7 @@ namespace Shockah.ItemSuffixes
 		
 		public static bool CanGetSuffixes(Item item)
 		{
-			return !item.IsBlank() && (((item.bodySlot != -1 || item.headSlot != -1 || item.legSlot != -1) && !item.vanity) || (item.accessory && item.createTile == -1)) && item.maxStack == 1;
+			return item != null && !item.IsBlank() && (((item.bodySlot != -1 || item.headSlot != -1 || item.legSlot != -1) && !item.vanity) || (item.accessory && item.createTile == -1)) && item.maxStack == 1;
 		}
 
 		public uint myId;
