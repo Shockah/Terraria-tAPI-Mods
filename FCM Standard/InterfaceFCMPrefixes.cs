@@ -38,7 +38,7 @@ namespace Shockah.FCM.Standard
 		internal ItemSlotPrefixFCM slotItem = null;
 		private int _Scroll = 0;
 		protected readonly Sorter<Prefix>
-			SID, SName;
+			SID, SName, SRarity, SDamage, SCrit, SKnockback, SUseTime, SManaCost, SDefense, SMoveSpeed, SMeleeSpeed, SVelocity, SSize;
 
 		protected int Scroll
 		{
@@ -64,18 +64,21 @@ namespace Shockah.FCM.Standard
 			me = this;
 			if (Main.dedServ) return;
 
-			SID = new Sorter<Prefix>("ID", (i1, i2) => { if (i1 == null || i1.type == 0) return reverseSort ? 1 : -1; if (i2 == null || i2.type == 0) return reverseSort ? -1 : 1; return i1.type.CompareTo(i2.type); }, (p) => true);
-			SName = new Sorter<Prefix>("Name",
-			(i1, i2) =>
-			{
-				if (i1 == null || i1.type == 0) return reverseSort ? 1 : -1;
-				if (i2 == null || i2.type == 0) return reverseSort ? -1 : 1;
-				string s1 = InterfaceFCMPrefixes.defsNames[InterfaceFCMPrefixes.defs.IndexOf(i1)];
-				string s2 = InterfaceFCMPrefixes.defsNames[InterfaceFCMPrefixes.defs.IndexOf(i2)];
-				return s1.CompareTo(s2);
-			}, (p) => p != null);
+			SID = new Sorter<Prefix>("ID", (i1, i2) => i1.type.CompareTo(i2.type), (p) => true);
+			SName = new Sorter<Prefix>("Name", (i1, i2) => InterfaceFCMPrefixes.defsNames[InterfaceFCMPrefixes.defs.IndexOf(i1)].CompareTo(InterfaceFCMPrefixes.defsNames[InterfaceFCMPrefixes.defs.IndexOf(i2)]), (p) => p != null);
+			SRarity = new Sorter<Prefix>("Rarity", (i1, i2) => i1.tier.CompareTo(i2.tier), (p) => p != null);
+			SDamage = new Sorter<Prefix>("Damage", (i1, i2) => Math2.Max(i1.damage, i1.meleeDamage, i1.rangedDamage, i1.magicDamage).CompareTo(Math2.Max(i2.damage, i2.meleeDamage, i2.rangedDamage, i2.magicDamage)), (p) => p != null);
+			SCrit = new Sorter<Prefix>("Crit", (i1, i2) => Math2.Max(i1.crit, i1.meleeCrit, i1.rangedCrit, i1.magicCrit).CompareTo(Math2.Max(i2.crit, i2.meleeCrit, i2.rangedCrit, i2.magicCrit)), (p) => p != null);
+			SKnockback = new Sorter<Prefix>("Knockback", (i1, i2) => i1.knockBack.CompareTo(i2.knockBack), (p) => p != null);
+			SUseTime = new Sorter<Prefix>("Use time", (i1, i2) => i1.useTime.CompareTo(i2.useTime), (p) => p != null);
+			SManaCost = new Sorter<Prefix>("Mana cost", (i1, i2) => i1.mana.CompareTo(i2.mana), (p) => p != null);
+			SDefense = new Sorter<Prefix>("Defense", (i1, i2) => i1.defense.CompareTo(i2.defense), (p) => p != null && p.defense != 0);
+			SMoveSpeed = new Sorter<Prefix>("Move speed", (i1, i2) => i1.moveSpeed.CompareTo(i2.moveSpeed), (p) => p != null && p.moveSpeed != 1f);
+			SMeleeSpeed = new Sorter<Prefix>("Speed", (i1, i2) => i1.meleeSpeed.CompareTo(i2.meleeSpeed), (p) => p != null && p.meleeSpeed != 1f);
+			SVelocity = new Sorter<Prefix>("Velocity", (i1, i2) => i1.shootSpeed.CompareTo(i2.shootSpeed), (p) => p != null && p.shootSpeed != 1f);
+			SSize = new Sorter<Prefix>("Size", (i1, i2) => i1.size.CompareTo(i2.size), (p) => p != null);
 
-			sorters.AddRange(new Sorter<Prefix>[] { SID, SName });
+			sorters.AddRange(new Sorter<Prefix>[] { SID, SName, SRarity, SDamage, SCrit, SKnockback, SUseTime, SManaCost, SDefense, SMoveSpeed, SMeleeSpeed, SVelocity, SSize });
 
 			slider = new ElSlider(
 				(scroll) => { if (Scroll != scroll) { Scroll = scroll; Refresh(false); } },
@@ -228,15 +231,26 @@ namespace Shockah.FCM.Standard
 		protected void RunFilters()
 		{
 			filtered.Clear();
+			string typing = this.typing == null ? filterText : this.typing;
+			if (typing != null) typing = typing.ToLower();
 			foreach (Prefix prefix in defs)
 			{
-				if ((typing != null || filterText != null) && (defsNames[defs.IndexOf(prefix)].ToLower().IndexOf((typing == null ? filterText : typing).ToLower()) == -1 || prefix.type == 0)) continue;
+				if (prefix.type == 0) continue;
+				string name = defsNames[defs.IndexOf(prefix)].ToLower();
+				if (typing != null && name.IndexOf(typing) == -1) continue;
 				if (!sorter.allow(prefix)) continue;
 				if (prefix.type != 0 && !slotItem.MyItem.IsBlank() && !prefix.CanApplyToItem(slotItem.MyItem)) continue;
 				filtered.Add(prefix);
 			}
 			filtered.Sort(sorter);
 			if (reverseSort) filtered.Reverse();
+			if (typing == null)
+			{
+				if (filtered.Count == 0)
+					filtered.Add(defs[0]);
+				else
+					filtered.Insert(0, defs[0]);
+			}
 		}
 	}
 }

@@ -63,8 +63,8 @@ namespace Shockah.ItemSuffixes
 			me = this;
 			if (Main.dedServ) return;
 
-			SID = new Sorter<ItemSuffix>("ID", (i1, i2) => { if (i1 == null || i1.displayName == null) return reverseSort ? 1 : -1; if (i2 == null || i2.displayName == null) return reverseSort ? -1 : 1; return i1.id.CompareTo(i2.id); }, (s) => true);
-			SName = new Sorter<ItemSuffix>("Name", (i1, i2) => { if (i1 == null || i1.displayName == null) return reverseSort ? 1 : -1; if (i2 == null || i2.displayName == null) return reverseSort ? -1 : 1; return i1.displayName.CompareTo(i2.displayName); }, (s) => true);
+			SID = new Sorter<ItemSuffix>("ID", (i1, i2) => i1.id.CompareTo(i2.id), (s) => true);
+			SName = new Sorter<ItemSuffix>("Name", (i1, i2) => i1.displayName.CompareTo(i2.displayName), (s) => true);
 
 			sorters.AddRange(new Sorter<ItemSuffix>[] { SID, SName });
 
@@ -217,15 +217,26 @@ namespace Shockah.ItemSuffixes
 		protected void RunFilters()
 		{
 			filtered.Clear();
+			string typing = this.typing == null ? filterText : this.typing;
+			if (typing != null) typing = typing.ToLower();
 			foreach (ItemSuffix suffix in defs)
 			{
-				if ((typing != null || filterText != null) && (defsNames[defs.IndexOf(suffix)].ToLower().IndexOf((typing == null ? filterText : typing).ToLower()) == -1)) continue;
+				if (suffix.id == 0) continue;
+				string name = defsNames[defs.IndexOf(suffix)].ToLower();
+				if (typing != null && name.IndexOf(typing) == -1) continue;
 				if (!sorter.allow(suffix)) continue;
-				if (!slotItem.MyItem.IsBlank() && !suffix.IsAllowed(slotItem.MyItem) && suffix.displayName != null) continue;
+				if (!slotItem.MyItem.IsBlank() && !suffix.IsAllowed(slotItem.MyItem)) continue;
 				filtered.Add(suffix);
 			}
 			filtered.Sort(sorter);
 			if (reverseSort) filtered.Reverse();
+			if (typing == null)
+			{
+				if (filtered.Count == 0)
+					filtered.Add(defs[0]);
+				else
+					filtered.Insert(0, defs[0]);
+			}
 		}
 	}
 }
