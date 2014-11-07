@@ -85,8 +85,17 @@ namespace Shockah.FCM.Standard
 
 			if (cheatRange)
 			{
-				player.tileRangeX = Main.maxTilesX;
-				player.tileRangeY = Main.maxTilesY;
+				if (InterfaceFCMMisc.freeCamera)
+				{
+					Main.smartDigEnabled = false;
+					player.tileRangeX = Main.maxTilesX;
+					player.tileRangeY = Main.maxTilesY;
+				}
+				else
+				{
+					player.tileRangeX = Main.screenWidth / 32 + 1;
+					player.tileRangeY = Main.screenHeight / 32 + 1;
+				}
 			}
 
 			if (cheatUsage)
@@ -103,7 +112,7 @@ namespace Shockah.FCM.Standard
 			if (cheatTileSpeed)
 			{
 				Item held = player.heldItem;
-				if (!held.IsBlank() && (held.createTile >= 0 || held.createWall > 0 || held.pick > 0 || held.axe > 0 || held.hammer > 0))
+				if (!held.IsBlank() && (held.createTile >= 0 || held.createWall > 0 || held.pick > 0 || held.axe > 0 || held.hammer > 0) && held.shoot == 0)
 				{
 					player.itemTime = 0;
 				}
