@@ -146,6 +146,8 @@ namespace Shockah.FCM.Standard
 
 			slotItem = new ItemSlotPrefixFCM(this);
 
+			sorter = sorters[0];
+			reverseSort = false;
 			Refresh(true);
 		}
 
@@ -153,9 +155,9 @@ namespace Shockah.FCM.Standard
 		{
 			base.OnOpen();
 			if (!resetInterface) { resetInterface = true; return; }
-			sorter = sorters[0];
+			/*sorter = sorters[0];
 			reverseSort = false;
-			//Refresh(true);
+			Refresh(true);*/
 		}
 
 		public override void OnClose()

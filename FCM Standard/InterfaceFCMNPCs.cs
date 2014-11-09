@@ -248,6 +248,9 @@ namespace Shockah.FCM.Standard
 				}
 			);
 
+			foreach (Filter<NPC> filter in filters) filter.mode = null;
+			sorter = sorters[0];
+			reverseSort = false;
 			Refresh(true);
 		}
 
@@ -255,10 +258,10 @@ namespace Shockah.FCM.Standard
 		{
 			base.OnOpen();
 			if (!resetInterface) { resetInterface = true; return; }
-			foreach (Filter<NPC> filter in filters) filter.mode = null;
+			/*foreach (Filter<NPC> filter in filters) filter.mode = null;
 			sorter = sorters[0];
 			reverseSort = false;
-			//Refresh(true);
+			Refresh(true);*/
 		}
 
 		public override void Draw(InterfaceLayer layer, SpriteBatch sb)
