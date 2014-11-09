@@ -133,13 +133,15 @@ namespace Shockah.ItemSuffixes
 			);
 
 			slotItem = new ItemSlotSuffixFCM(this);
+
+			Refresh(true);
 		}
 
 		public override void OnOpen()
 		{
 			base.OnOpen();
 			if (!resetInterface) { resetInterface = true; return; }
-			Refresh(true);
+			//Refresh(true);
 		}
 
 		public override void OnClose()

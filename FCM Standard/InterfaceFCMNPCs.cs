@@ -247,6 +247,8 @@ namespace Shockah.FCM.Standard
 					else Drawing.StringShadowed(sb, Main.fontMouseText, typing == null ? filterText : typing + "|", new Vector2(b.pos.X + 8, b.pos.Y + 4));
 				}
 			);
+
+			Refresh(true);
 		}
 
 		public override void OnOpen()
@@ -256,7 +258,7 @@ namespace Shockah.FCM.Standard
 			foreach (Filter<NPC> filter in filters) filter.mode = null;
 			sorter = sorters[0];
 			reverseSort = false;
-			Refresh(true);
+			//Refresh(true);
 		}
 
 		public override void Draw(InterfaceLayer layer, SpriteBatch sb)
