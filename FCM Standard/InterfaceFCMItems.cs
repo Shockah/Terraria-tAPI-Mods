@@ -11,6 +11,13 @@ namespace Shockah.FCM.Standard
 {
 	public class InterfaceFCMItems : InterfaceFCM<Item>
 	{
+		public enum EPage
+		{
+			Type,
+			Mod,
+			Tags
+		}
+		
 		public const int BASE_OFF_X = 56, BASE_OFF_Y = 56;
 		public const int COLS = 8, ROWS = 5, OFF_X = BASE_OFF_X - 6, OFF_Y = BASE_OFF_Y - 6, POS_X = 20, POS_Y = 306;
 		public const float FILTER_W = 140, FILTER_H = 25, FILTER_X_OFF = 4;
@@ -45,6 +52,7 @@ namespace Shockah.FCM.Standard
 		protected readonly ElSlider slider;
 		protected readonly ElChooser<Sorter<Item>> sortingChooser;
 		protected readonly ElButton bSearch, bSearchBar;
+		protected EPage page = EPage.Type;
 		protected ItemSlotFCM[] slots = new ItemSlotFCM[COLS * ROWS];
 		private int _Scroll = 0;
 		protected readonly Filter<Item>
@@ -188,7 +196,20 @@ namespace Shockah.FCM.Standard
 				}
 			);
 
+			List<string> contains = new List<string>();
+			foreach (Item def in defs)
+			{
+				ModBase modBase = def.def.modBase;
+				string modName = modBase == null ? "Vanilla" : modBase.mod.InternalName;
+				if (!contains.Contains(modName))
+				{
+					contains.Add(modName);
+					modFilters.Add(new Filter<Item>(modBase == null ? "Vanilla" : modBase.mod.DisplayName, modBase == null ? null : modBase.mod.Icon, (item) => item.def.modBase == modBase));
+				}
+			}
+
 			foreach (Filter<Item> filter in filters) filter.mode = null;
+			foreach (Filter<Item> filter in modFilters) filter.mode = null;
 			sorter = sorters[0];
 			reverseSort = false;
 			Refresh(true);
@@ -257,37 +278,110 @@ namespace Shockah.FCM.Standard
 			sortingChooser.size = new Vector2(96, 20);
 			blocked = sortingChooser.Draw(sb, false, !blocked) || blocked;
 
-			float filterW = FILTER_W * Main.inventoryScale;
-			float filterH = FILTER_H * Main.inventoryScale;
-			for (int i = 0; i < filters.Count; i++)
+			switch (page)
 			{
-				Filter<Item> filter = filters[i];
-				Vector2 pos = new Vector2(POS_X + 32 + COLS * OFF_X * Main.inventoryScale + (i / 10) * (filterW + FILTER_X_OFF * Main.inventoryScale), POS_Y + (i % 10) * filterH);
-				Drawing.DrawBox(sb, pos.X, pos.Y, filterW, filterH * Main.inventoryScale);
-				Texture2D tex = filter.mode == null ? filter.tex : (filter.mode.Value ? Shockah.FCM.MBase.me.textures["Images/Tick"] : Main.cdTexture);
-				float tscale = 1f;
-				if (tscale * tex.Width > filterH - 2f) tscale = (filterH - 2f) / tex.Width;
-				if (tscale * tex.Height > filterH - 2f) tscale = (filterH - 2f) / tex.Height;
-				sb.Draw(tex, pos + new Vector2(filterH / 2f + 2, filterH / 2f), null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
-				Vector2 measure = Main.fontMouseText.MeasureString(filter.name) * Main.inventoryScale;
-				Drawing.StringShadowed(sb, Main.fontMouseText, filter.name, pos + new Vector2(filterH + 4, (filterH - measure.Y) / 2), Color.White, Main.inventoryScale);
+				case EPage.Type:
+					{
+						float filterW = FILTER_W * Main.inventoryScale;
+						float filterH = FILTER_H * Main.inventoryScale;
+						for (int i = 0; i < filters.Count; i++)
+						{
+							Filter<Item> filter = filters[i];
+							Vector2 pos = new Vector2(POS_X + 32 + COLS * OFF_X * Main.inventoryScale + (i / 10) * (filterW + FILTER_X_OFF * Main.inventoryScale), POS_Y + (i % 10) * filterH);
+							Drawing.DrawBox(sb, pos.X, pos.Y, filterW, filterH * Main.inventoryScale);
+							Texture2D tex = filter.mode == null ? filter.tex : (filter.mode.Value ? Shockah.FCM.MBase.me.textures["Images/Tick"] : Main.cdTexture);
+							if (tex != null)
+							{
+								float tscale = 1f;
+								if (tscale * tex.Width > filterH - 2f) tscale = (filterH - 2f) / tex.Width;
+								if (tscale * tex.Height > filterH - 2f) tscale = (filterH - 2f) / tex.Height;
+								sb.Draw(tex, pos + new Vector2(filterH / 2f + 2, filterH / 2f), null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+							}
+							Vector2 measure = Main.fontMouseText.MeasureString(filter.name) * Main.inventoryScale;
+							Drawing.StringShadowed(sb, Main.fontMouseText, filter.name, pos + new Vector2(filterH + 4, (filterH - measure.Y) / 2), Color.White, Main.inventoryScale);
 
-				if (new Rectangle((int)pos.X, (int)pos.Y, (int)filterW, (int)filterH).Contains(Main.mouseX, Main.mouseY))
+							if (new Rectangle((int)pos.X, (int)pos.Y, (int)filterW, (int)filterH).Contains(Main.mouseX, Main.mouseY))
+							{
+								Main.localPlayer.mouseInterface = true;
+								if (Main.mouseLeft && Main.mouseLeftRelease)
+								{
+									if (!KState.Special.Ctrl.Down()) foreach (Filter<Item> filter2 in filters) if (!object.ReferenceEquals(filter, filter2)) filter2.mode = null;
+									if (filter.mode == null) filter.mode = true; else filter.mode = null;
+									Refresh(true);
+								}
+								if (Main.mouseRight && Main.mouseRightRelease)
+								{
+									if (!KState.Special.Ctrl.Down()) foreach (Filter<Item> filter2 in filters) if (!object.ReferenceEquals(filter, filter2)) filter2.mode = null;
+									if (filter.mode == null) filter.mode = false; else filter.mode = null;
+									Refresh(true);
+								}
+							}
+						}
+						break;
+					}
+				case EPage.Mod:
+					{
+						float filterW = (FILTER_W * Main.inventoryScale) * 2 + FILTER_X_OFF * Main.inventoryScale;
+						float filterH = FILTER_H * Main.inventoryScale;
+						for (int i = 0; i < modFilters.Count; i++)
+						{
+							Filter<Item> filter = modFilters[i];
+							Vector2 pos = new Vector2(POS_X + 32 + COLS * OFF_X * Main.inventoryScale, POS_Y + i * filterH);
+							Drawing.DrawBox(sb, pos.X, pos.Y, filterW, filterH * Main.inventoryScale);
+							Texture2D tex = filter.mode == null ? filter.tex : (filter.mode.Value ? Shockah.FCM.MBase.me.textures["Images/Tick"] : Main.cdTexture);
+							if (tex != null)
+							{
+								float tscale = 1f;
+								if (tscale * tex.Width > filterH - 2f) tscale = (filterH - 2f) / tex.Width;
+								if (tscale * tex.Height > filterH - 2f) tscale = (filterH - 2f) / tex.Height;
+								sb.Draw(tex, pos + new Vector2(filterH / 2f + 2, filterH / 2f), null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+							}
+							Vector2 measure = Main.fontMouseText.MeasureString(filter.name) * Main.inventoryScale;
+							Drawing.StringShadowed(sb, Main.fontMouseText, filter.name, pos + new Vector2(filterH + 4, (filterH - measure.Y) / 2), Color.White, Main.inventoryScale);
+
+							if (new Rectangle((int)pos.X, (int)pos.Y, (int)filterW, (int)filterH).Contains(Main.mouseX, Main.mouseY))
+							{
+								Main.localPlayer.mouseInterface = true;
+								if (Main.mouseLeft && Main.mouseLeftRelease)
+								{
+									if (!KState.Special.Ctrl.Down()) foreach (Filter<Item> filter2 in modFilters) if (!object.ReferenceEquals(filter, filter2)) filter2.mode = null;
+									if (filter.mode == null) filter.mode = true; else filter.mode = null;
+									Refresh(true);
+								}
+								if (Main.mouseRight && Main.mouseRightRelease)
+								{
+									if (!KState.Special.Ctrl.Down()) foreach (Filter<Item> filter2 in modFilters) if (!object.ReferenceEquals(filter, filter2)) filter2.mode = null;
+									if (filter.mode == null) filter.mode = false; else filter.mode = null;
+									Refresh(true);
+								}
+							}
+						}
+						break;
+					}
+			}
+
+			float pageW = (((FILTER_W * Main.inventoryScale) * 2 + FILTER_X_OFF * Main.inventoryScale) - 2 * FILTER_X_OFF * Main.inventoryScale) / 3;
+			float pageH = FILTER_H * Main.inventoryScale;
+			for (int i = 0; i < 3; i++)
+			{
+				bool onButton = (int)page == i;
+				Vector2 pos = new Vector2(POS_X + 32 + COLS * OFF_X * Main.inventoryScale + i * (pageW + FILTER_X_OFF * Main.inventoryScale), POS_Y + ROWS * OFF_Y * Main.inventoryScale + 34 - pageH);
+				if (new Rectangle((int)pos.X, (int)pos.Y, (int)pageW, (int)pageH).Contains(Main.mouse))
 				{
 					Main.localPlayer.mouseInterface = true;
 					if (Main.mouseLeft && Main.mouseLeftRelease)
 					{
-						if (!KState.Special.Ctrl.Down()) foreach (Filter<Item> filter2 in filters) if (!object.ReferenceEquals(filter, filter2)) filter2.mode = null;
-						if (filter.mode == null) filter.mode = true; else filter.mode = null;
-						Refresh(true);
+						page = (EPage)i;
+						Main.PlaySound(7);
 					}
-					if (Main.mouseRight && Main.mouseRightRelease)
-					{
-						if (!KState.Special.Ctrl.Down()) foreach (Filter<Item> filter2 in filters) if (!object.ReferenceEquals(filter, filter2)) filter2.mode = null;
-						if (filter.mode == null) filter.mode = false; else filter.mode = null;
-						Refresh(true);
-					}
+					onButton = true;
 				}
+				
+				string pageName = i == 0 ? "Type" : (i == 1 ? "Mod" : "Tag");
+				
+				Drawing.DrawBox(sb, pos.X, pos.Y, pageW, pageH, onButton ? 0.785f : 0.5f);
+				Vector2 measure = Main.fontMouseText.MeasureString(pageName) * Main.inventoryScale;
+				Drawing.StringShadowed(sb, Main.fontMouseText, pageName, pos + new Vector2((pageW - measure.X) / 2, (pageH - measure.Y) / 2), Color.White, Main.inventoryScale);
 			}
 
 			bSearch.Draw(sb, true, false);
@@ -310,6 +404,7 @@ namespace Shockah.FCM.Standard
 				if ((typing != null || filterText != null) && def.displayName.ToLower().IndexOf((typing == null ? filterText : typing).ToLower()) == -1) continue;
 				if (!sorter.allow(def)) continue;
 				foreach (Filter<Item> filter in filters) if (filter.mode != null) if (filter.mode == !filter.matches(def)) goto L;
+				foreach (Filter<Item> filter in modFilters) if (filter.mode != null) if (filter.mode == !filter.matches(def)) goto L;
 				filtered.Add(def);
 				L: { }
 			}
