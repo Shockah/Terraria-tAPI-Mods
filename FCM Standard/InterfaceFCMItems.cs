@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LitJson;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Shockah.Base;
@@ -25,6 +26,7 @@ namespace Shockah.FCM.Standard
 
 		public static InterfaceFCMItems me = null;
 		protected static List<Item> defs = new List<Item>();
+		protected static Dictionary<int, List<string>> tags = new Dictionary<int, List<string>>();
 		public static bool displayIds = false;
 
 		public static void Reset()
@@ -40,6 +42,30 @@ namespace Shockah.FCM.Standard
 				if (kvp.Value.type == 58 || kvp.Value.type == 184 || kvp.Value.type == 1734 || kvp.Value.type == 1735 || kvp.Value.type == 1867 || kvp.Value.type == 1868) continue;
 				if (kvp.Key.StartsWith("g:")) continue;
 				defs.Add(kvp.Value);
+				
+				ItemDef idef = kvp.Value.def;
+				if (idef.json != null)
+				{
+					JsonData j = idef.json;
+					if (j.Has("fcmtags"))
+					{
+						JsonData jTags = j["fcmtags"];
+						if (!jTags.IsArray)
+						{
+							throw new Exception(string.Format("%s: 'fcmtags' JSON property should be an array", kvp.Value.name));
+						}
+						else
+						{
+							if (jTags.Count != 0)
+							{
+								List<string> tags = new List<string>();
+								foreach (JsonData jTag in jTags)
+									tags.Add((string)jTag);
+								InterfaceFCMItems.tags[kvp.Value.netID] = tags;
+							}
+						}
+					}
+				}
 			}
 			defs.Sort((i1, i2) =>
 				{
@@ -53,6 +79,7 @@ namespace Shockah.FCM.Standard
 		protected readonly ElChooser<Sorter<Item>> sortingChooser;
 		protected readonly ElButton bSearch, bSearchBar;
 		protected EPage page = EPage.Type;
+		public readonly List<Filter<Item>> tagFilters = new List<Filter<Item>>();
 		protected ItemSlotFCM[] slots = new ItemSlotFCM[COLS * ROWS];
 		private int _Scroll = 0;
 		protected readonly Filter<Item>
@@ -208,8 +235,22 @@ namespace Shockah.FCM.Standard
 				}
 			}
 
+			contains.Clear();
+			foreach (KeyValuePair<int, List<string>> kvp in tags)
+			{
+				foreach (string stag in kvp.Value)
+				{
+					if (!contains.Contains(stag))
+					{
+						contains.Add(stag);
+						tagFilters.Add(new Filter<Item>(stag, null, (item) => tags.ContainsKey(item.netID) && tags[item.netID].Contains(stag)));
+					}
+				}
+			}
+
 			foreach (Filter<Item> filter in filters) filter.mode = null;
 			foreach (Filter<Item> filter in modFilters) filter.mode = null;
+			foreach (Filter<Item> filter in tagFilters) filter.mode = null;
 			sorter = sorters[0];
 			reverseSort = false;
 			Refresh(true);
@@ -278,6 +319,7 @@ namespace Shockah.FCM.Standard
 			sortingChooser.size = new Vector2(96, 20);
 			blocked = sortingChooser.Draw(sb, false, !blocked) || blocked;
 
+			bool hasTags = tags.Count != 0;
 			switch (page)
 			{
 				case EPage.Type:
@@ -358,11 +400,50 @@ namespace Shockah.FCM.Standard
 						}
 						break;
 					}
+				case EPage.Tags:
+					{
+						float filterW = (FILTER_W * Main.inventoryScale) * 2 + FILTER_X_OFF * Main.inventoryScale;
+						float filterH = FILTER_H * Main.inventoryScale;
+						for (int i = 0; i < modFilters.Count; i++)
+						{
+							Filter<Item> filter = tagFilters[i];
+							Vector2 pos = new Vector2(POS_X + 32 + COLS * OFF_X * Main.inventoryScale, POS_Y + i * filterH);
+							Drawing.DrawBox(sb, pos.X, pos.Y, filterW, filterH * Main.inventoryScale);
+							Texture2D tex = filter.mode == null ? filter.tex : (filter.mode.Value ? Shockah.FCM.MBase.me.textures["Images/Tick"] : Main.cdTexture);
+							if (tex != null)
+							{
+								float tscale = 1f;
+								if (tscale * tex.Width > filterH - 2f) tscale = (filterH - 2f) / tex.Width;
+								if (tscale * tex.Height > filterH - 2f) tscale = (filterH - 2f) / tex.Height;
+								sb.Draw(tex, pos + new Vector2(filterH / 2f + 2, filterH / 2f), null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
+							}
+							Vector2 measure = Main.fontMouseText.MeasureString(filter.name) * Main.inventoryScale;
+							Drawing.StringShadowed(sb, Main.fontMouseText, filter.name, pos + new Vector2(filterH + 4, (filterH - measure.Y) / 2), Color.White, Main.inventoryScale);
+
+							if (new Rectangle((int)pos.X, (int)pos.Y, (int)filterW, (int)filterH).Contains(Main.mouseX, Main.mouseY))
+							{
+								Main.localPlayer.mouseInterface = true;
+								if (Main.mouseLeft && Main.mouseLeftRelease)
+								{
+									if (!KState.Special.Ctrl.Down()) foreach (Filter<Item> filter2 in tagFilters) if (!object.ReferenceEquals(filter, filter2)) filter2.mode = null;
+									if (filter.mode == null) filter.mode = true; else filter.mode = null;
+									Refresh(true);
+								}
+								if (Main.mouseRight && Main.mouseRightRelease)
+								{
+									if (!KState.Special.Ctrl.Down()) foreach (Filter<Item> filter2 in tagFilters) if (!object.ReferenceEquals(filter, filter2)) filter2.mode = null;
+									if (filter.mode == null) filter.mode = false; else filter.mode = null;
+									Refresh(true);
+								}
+							}
+						}
+						break;
+					}
 			}
 
-			float pageW = (((FILTER_W * Main.inventoryScale) * 2 + FILTER_X_OFF * Main.inventoryScale) - 2 * FILTER_X_OFF * Main.inventoryScale) / 3;
+			float pageW = (((FILTER_W * Main.inventoryScale) * 2 + FILTER_X_OFF * Main.inventoryScale) - (hasTags ? 2 : 1) * FILTER_X_OFF * Main.inventoryScale) / (hasTags ? 3 : 2);
 			float pageH = FILTER_H * Main.inventoryScale;
-			for (int i = 0; i < 3; i++)
+			for (int i = 0; i < (hasTags ? 3 : 2); i++)
 			{
 				bool onButton = (int)page == i;
 				Vector2 pos = new Vector2(POS_X + 32 + COLS * OFF_X * Main.inventoryScale + i * (pageW + FILTER_X_OFF * Main.inventoryScale), POS_Y + ROWS * OFF_Y * Main.inventoryScale + 34 - pageH);
@@ -405,6 +486,7 @@ namespace Shockah.FCM.Standard
 				if (!sorter.allow(def)) continue;
 				foreach (Filter<Item> filter in filters) if (filter.mode != null) if (filter.mode == !filter.matches(def)) goto L;
 				foreach (Filter<Item> filter in modFilters) if (filter.mode != null) if (filter.mode == !filter.matches(def)) goto L;
+				foreach (Filter<Item> filter in tagFilters) if (filter.mode != null) if (filter.mode == !filter.matches(def)) goto L;
 				filtered.Add(def);
 				L: { }
 			}
