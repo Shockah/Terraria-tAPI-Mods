@@ -62,6 +62,8 @@ namespace Shockah.Base
 			if (npc.boss) return true;
 			if (npc.type >= 13 && npc.type <= 15) return true; //Eater of Worlds
 			if (npc.type >= 134 && npc.type <= 136) return true; //The Destroyer
+			if (npc.type == 325 || npc.type == 327) return true; //Mourning Wood, Pumpking
+			if (npc.type >= 344 && npc.type <= 346) return true; //Everscream, Ice Queen, Santa-NK1
 			return false;
 		}
 		public static bool RequiresAttaching(NPC npc)
