@@ -150,7 +150,9 @@ namespace Shockah.FCM.Standard
 		}
 		public virtual void OnRightClick(ref bool release)
 		{
-			
+			InterfaceFCMItems.me.filterText = "npc:" + MyNPC.name;
+			InterfaceFCMItems.me.Refresh(true);
+			InterfaceFCMItems.me.Open();
 		}
 
 		public NPC ShouldHold()

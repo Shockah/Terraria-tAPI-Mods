@@ -480,10 +480,90 @@ namespace Shockah.FCM.Standard
 		protected void RunFilters()
 		{
 			filtered.Clear();
+			string typing = this.typing == null ? filterText : this.typing;
+
+			NPC searchNPC = null;
+			List<Item> searchNPCItems = null;
+			if (typing != null)
+			{
+				if (typing.StartsWith("npc:"))
+				{
+					typing = typing.Substring(4).Trim();
+					if (NPCDef.byName.ContainsKey(typing))
+					{
+						searchNPC = NPCDef.byName[typing];
+						searchNPCItems = new List<Item>();
+						List<LootRule> rules = new List<LootRule>();
+						if (LootRule.rulesName.ContainsKey(searchNPC.name))
+							rules.AddRange(LootRule.rulesName[searchNPC.name]);
+						if (LootRule.rulesType.ContainsKey(searchNPC.type))
+							rules.AddRange(LootRule.rulesType[searchNPC.type]);
+						
+						while (rules.Count != 0)
+						{
+							LootRule rule = rules[0];
+							rules.RemoveAt(0);
+							if (rule.item.func == null && rule.item.value != null && !rule.item.value.IsBlank())
+							{
+								searchNPCItems.Add(rule.item.value);
+							}
+							rules.AddRange(rule.subrules);
+						}
+
+						rules.AddRange(LootRule.globalRules);
+
+						while (rules.Count != 0)
+						{
+							LootRule rule = rules[0];
+							rules.RemoveAt(0);
+							
+							bool fail = false;
+							foreach (Func<NPC, bool> coderule in rule.rules)
+							{
+								if (!coderule(searchNPC))
+								{
+									fail = true;
+									break;
+								}
+							}
+
+							if (!fail)
+							{
+								if (rule.item.func == null && rule.item.value != null && !rule.item.value.IsBlank())
+								{
+									searchNPCItems.Add(rule.item.value);
+								}
+								rules.AddRange(rule.subrules);
+							}
+						}
+					}
+				}
+				else
+				{
+					typing = typing.ToLower();
+				}
+			}
+
 			foreach (Item def in defs)
 			{
-				if ((typing != null || filterText != null) && def.displayName.ToLower().IndexOf((typing == null ? filterText : typing).ToLower()) == -1) continue;
 				if (!sorter.allow(def)) continue;
+				if (searchNPC != null)
+				{
+					bool fail = true;
+					foreach (Item lootitem in searchNPCItems)
+					{
+						if (lootitem.IsTheSameAs(def))
+						{
+							fail = false;
+							break;
+						}
+					}
+					if (fail) continue;
+				}
+				else
+				{
+					if (typing != null && def.displayName.ToLower().IndexOf(typing) == -1) continue;
+				}
 				foreach (Filter<Item> filter in filters) if (filter.mode != null) if (filter.mode == !filter.matches(def)) goto L;
 				foreach (Filter<Item> filter in modFilters) if (filter.mode != null) if (filter.mode == !filter.matches(def)) goto L;
 				foreach (Filter<Item> filter in tagFilters) if (filter.mode != null) if (filter.mode == !filter.matches(def)) goto L;

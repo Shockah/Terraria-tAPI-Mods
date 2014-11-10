@@ -14,7 +14,6 @@ namespace Shockah.FCM
 		public override void OnOpen()
 		{
 			typing = null;
-			filterText = null;
 		}
 
 		public override void Draw(InterfaceLayer layer, SpriteBatch sb)
