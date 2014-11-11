@@ -8,6 +8,7 @@ namespace Shockah.FCM
 	public class InterfaceFCMBase : Interface
 	{
 		public static bool resetInterface = true;
+		public static bool lockSlotInteraction = false;
 
 		public string typing = null, filterText = null;
 
@@ -18,6 +19,8 @@ namespace Shockah.FCM
 
 		public override void Draw(InterfaceLayer layer, SpriteBatch sb)
 		{
+			if (!Main.mouseLeft && !Main.mouseRight)
+				lockSlotInteraction = false;
 			if (Keys.Enter.Pressed())
 			{
 				Main.GetInputText("");

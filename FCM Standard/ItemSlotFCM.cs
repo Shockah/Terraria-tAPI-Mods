@@ -30,6 +30,7 @@ namespace Shockah.FCM.Standard
 
 		public override void OnLeftClick(ref bool release)
 		{
+			if (InterfaceFCMBase.lockSlotInteraction) return;
 			if (release && KState.Special.Shift.Down() && !MyItem.IsBlank())
 			{
 				Main.localPlayer.GetItem(Main.myPlayer, (Item)MyItem.Clone());
@@ -38,6 +39,11 @@ namespace Shockah.FCM.Standard
 			{
 				base.OnLeftClick(ref release);
 			}
+		}
+		public override void OnRightClick(ref bool release)
+		{
+			if (InterfaceFCMBase.lockSlotInteraction) return;
+			base.OnRightClick(ref release);
 		}
 
 		public Item ShouldHold()

@@ -29,12 +29,7 @@ namespace Shockah.FCM.Standard
 			InterfaceFCMPrefixes.Reset();
 			InterfaceFCMBuffs.Reset();
 			InterfaceFCMMisc.Reset();
-
-			new InterfaceFCMItems();
-			new InterfaceFCMNPCs();
-			new InterfaceFCMPrefixes();
-			new InterfaceFCMBuffs();
-			new InterfaceFCMMisc();
+			InterfaceFCMSnapshot.Reset();
 
 			FrameFCMButtons.EventCreatingButtonList += (list) =>
 			{
@@ -43,6 +38,20 @@ namespace Shockah.FCM.Standard
 				list.Add(new LittleButton("Prefixes", textures["Images/ModulePrefixes"], () => UICore.currentInterface is InterfaceFCMPrefixes, () => InterfaceFCMPrefixes.me.Open(), -2f));
 				list.Add(new LittleButton("Buffs", textures["Images/ModuleBuffs"], () => UICore.currentInterface is InterfaceFCMBuffs, () => InterfaceFCMBuffs.me.Open(), -3f));
 				list.Add(new LittleButton("Misc", textures["Images/ModuleMisc"], () => UICore.currentInterface is InterfaceFCMMisc, () => InterfaceFCMMisc.me.Open(), -4f));
+				list.Add(new LittleButton("Snapshots", textures["Images/ModuleSnapshot"], () => UICore.currentInterface is InterfaceFCMSnapshot, () => InterfaceFCMSnapshot.me.Open(), -5f));
+			};
+
+			SBase.EventMenuStateChange += (menu) =>
+			{
+				if (!menu)
+				{
+					new InterfaceFCMItems();
+					new InterfaceFCMNPCs();
+					new InterfaceFCMPrefixes();
+					new InterfaceFCMBuffs();
+					new InterfaceFCMMisc();
+					new InterfaceFCMSnapshot();
+				}
 			};
 		}
 
@@ -51,12 +60,11 @@ namespace Shockah.FCM.Standard
 			if (!Main.gameMenu)
 			{
 				MPlayer mp = (MPlayer)Main.localPlayer.GetSubClass<MPlayer>();
-				if (mp.lastCameraPos.X != -1 || mp.lastCameraPos.Y != -1) Main.screenPosition = mp.lastCameraPos;
+				if (mp.lastCameraPos.X != -1 || mp.lastCameraPos.Y != -1)
+					Main.screenPosition = mp.lastCameraPos;
 
 				if (InterfaceFCMMisc.fullBright)
-				{
 					Lighting.fullBright = true;
-				}
 			}
 		}
 	}

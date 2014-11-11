@@ -146,10 +146,13 @@ namespace Shockah.FCM.Standard
 
 		public virtual void OnLeftClick(ref bool release)
 		{
+			if (InterfaceFCMBase.lockSlotInteraction) return;
 			InterfaceFCMNPCs.spawning = MyNPC;
 		}
 		public virtual void OnRightClick(ref bool release)
 		{
+			if (InterfaceFCMBase.lockSlotInteraction) return;
+			InterfaceFCMBase.lockSlotInteraction = true;
 			InterfaceFCMItems.me.filterText = "npc:" + MyNPC.name;
 			InterfaceFCMItems.me.Refresh(true);
 			InterfaceFCMItems.me.Open();

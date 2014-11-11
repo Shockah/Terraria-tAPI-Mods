@@ -75,13 +75,13 @@ namespace Shockah.FCM.Standard
 			);
 		}
 
-		protected readonly ElSlider slider;
+		protected readonly ElSlider slider, slider2;
 		protected readonly ElChooser<Sorter<Item>> sortingChooser;
 		protected readonly ElButton bSearch, bSearchBar;
 		protected EPage page = EPage.Type;
 		public readonly List<Filter<Item>> tagFilters = new List<Filter<Item>>();
 		protected ItemSlotFCM[] slots = new ItemSlotFCM[COLS * ROWS];
-		private int _Scroll = 0;
+		private int _Scroll = 0, _Scroll2 = 0;
 		protected readonly Filter<Item>
 			FHead, FBody, FLegs, FVanity, FMelee, FRanged, FAmmo, FMagic, FSummon, FAccessory,
 			FPickaxe, FAxe, FHammer, FConsumable, FDye, FPaint, FTile, FWall, FPet, FOther;
@@ -104,6 +104,25 @@ namespace Shockah.FCM.Standard
 			get
 			{
 				return Math.Max((int)Math.Ceiling(1f * (filtered.Count - ROWS * COLS) / COLS), 0);
+			}
+		}
+
+		protected int Scroll2
+		{
+			get
+			{
+				return _Scroll2;
+			}
+			set
+			{
+				_Scroll2 = Math.Min(Math.Max(value, 0), Scroll2Max);
+			}
+		}
+		protected int Scroll2Max
+		{
+			get
+			{
+				return Math.Max((int)Math.Ceiling(1f * ((page == EPage.Mod ? modFilters.Count : tagFilters.Count) - 10)), 0);
 			}
 		}
 
@@ -164,6 +183,12 @@ namespace Shockah.FCM.Standard
 				() => { return Scroll; },
 				() => { return ROWS; },
 				() => { return (int)Math.Ceiling(1f * filtered.Count / COLS); }
+			);
+			slider2 = new ElSlider(
+				(scroll) => { if (Scroll2 != scroll) { Scroll2 = scroll; } },
+				() => { return Scroll2; },
+				() => { return 10; },
+				() => { return (int)Math.Ceiling(1f * (page == EPage.Mod ? modFilters.Count : tagFilters.Count)); }
 			);
 
 			sorter = sorters[0];
@@ -363,8 +388,14 @@ namespace Shockah.FCM.Standard
 					}
 				case EPage.Mod:
 					{
-						float filterW = (FILTER_W * Main.inventoryScale) * 2 + FILTER_X_OFF * Main.inventoryScale;
+						float sliderW = 16;
+						float filterW = (FILTER_W * Main.inventoryScale) * 2 + FILTER_X_OFF * Main.inventoryScale - sliderW - 4;
 						float filterH = FILTER_H * Main.inventoryScale;
+
+						slider2.pos = new Vector2(POS_X + 32 + COLS * OFF_X * Main.inventoryScale + filterW + 4, POS_Y);
+						slider2.size = new Vector2(sliderW, filterH * 10);
+						blocked = slider2.Draw(sb, true, !blocked) || blocked;
+						
 						for (int i = 0; i < modFilters.Count; i++)
 						{
 							Filter<Item> filter = modFilters[i];
@@ -379,7 +410,10 @@ namespace Shockah.FCM.Standard
 								sb.Draw(tex, pos + new Vector2(filterH / 2f + 2, filterH / 2f), null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
 							}
 							Vector2 measure = Main.fontMouseText.MeasureString(filter.name) * Main.inventoryScale;
-							Drawing.StringShadowed(sb, Main.fontMouseText, filter.name, pos + new Vector2(filterH + 4, (filterH - measure.Y) / 2), Color.White, Main.inventoryScale);
+							float txtscale = Main.inventoryScale;
+							if (measure.X * txtscale > filterW - filterH - 8)
+								txtscale = (filterW - filterH - 8) / measure.X;
+							Drawing.StringShadowed(sb, Main.fontMouseText, filter.name, pos + new Vector2(filterH + 4, (filterH - measure.Y) / 2), Color.White, txtscale);
 
 							if (new Rectangle((int)pos.X, (int)pos.Y, (int)filterW, (int)filterH).Contains(Main.mouseX, Main.mouseY))
 							{
@@ -402,8 +436,14 @@ namespace Shockah.FCM.Standard
 					}
 				case EPage.Tags:
 					{
-						float filterW = (FILTER_W * Main.inventoryScale) * 2 + FILTER_X_OFF * Main.inventoryScale;
+						float sliderW = 16;
+						float filterW = (FILTER_W * Main.inventoryScale) * 2 + FILTER_X_OFF * Main.inventoryScale - sliderW - 4;
 						float filterH = FILTER_H * Main.inventoryScale;
+
+						slider2.pos = new Vector2(POS_X + 32 + COLS * OFF_X * Main.inventoryScale + filterW + 4, POS_Y);
+						slider2.size = new Vector2(sliderW, filterH * 10);
+						blocked = slider2.Draw(sb, true, !blocked) || blocked;
+
 						for (int i = 0; i < modFilters.Count; i++)
 						{
 							Filter<Item> filter = tagFilters[i];
@@ -418,7 +458,10 @@ namespace Shockah.FCM.Standard
 								sb.Draw(tex, pos + new Vector2(filterH / 2f + 2, filterH / 2f), null, Color.White, 0f, tex.Size() / 2, tscale, SpriteEffects.None, 0f);
 							}
 							Vector2 measure = Main.fontMouseText.MeasureString(filter.name) * Main.inventoryScale;
-							Drawing.StringShadowed(sb, Main.fontMouseText, filter.name, pos + new Vector2(filterH + 4, (filterH - measure.Y) / 2), Color.White, Main.inventoryScale);
+							float txtscale = Main.inventoryScale;
+							if (measure.X * txtscale > filterW - filterH - 8)
+								txtscale = (filterW - filterH - 8) / measure.X;
+							Drawing.StringShadowed(sb, Main.fontMouseText, filter.name, pos + new Vector2(filterH + 4, (filterH - measure.Y) / 2), Color.White, txtscale);
 
 							if (new Rectangle((int)pos.X, (int)pos.Y, (int)filterW, (int)filterH).Contains(Main.mouseX, Main.mouseY))
 							{

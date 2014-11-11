@@ -120,6 +120,7 @@ namespace Shockah.FCM.Standard
 
 		public virtual void OnLeftClick(ref bool release)
 		{
+			if (InterfaceFCMBase.lockSlotInteraction) return;
 			if (MyPrefix == null || gui.slotItem.MyItem.IsBlank()) return;
 			if (release)
 			{
@@ -142,7 +143,7 @@ namespace Shockah.FCM.Standard
 		}
 		public virtual void OnRightClick(ref bool release)
 		{
-
+			if (InterfaceFCMBase.lockSlotInteraction) return;
 		}
 
 		public Prefix ShouldHold()

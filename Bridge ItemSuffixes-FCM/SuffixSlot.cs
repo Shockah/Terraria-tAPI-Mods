@@ -131,6 +131,7 @@ namespace Shockah.ItemSuffixes
 
 		public virtual void OnLeftClick(ref bool release)
 		{
+			if (InterfaceFCMBase.lockSlotInteraction) return;
 			if (MySuffix == null || gui.slotItem.MyItem.IsBlank()) return;
 			if (release)
 			{
@@ -151,7 +152,7 @@ namespace Shockah.ItemSuffixes
 		}
 		public virtual void OnRightClick(ref bool release)
 		{
-
+			if (InterfaceFCMBase.lockSlotInteraction) return;
 		}
 
 		public ItemSuffix ShouldHold()
