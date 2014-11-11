@@ -140,7 +140,7 @@ namespace Shockah.FCM.Standard
 					if (!snapshot.player.armor[i].IsBlank())
 						items.Add(snapshot.player.armor[i]);
 				}
-				for (int i = 0; i < 8; i++)
+				for (int i = 0; i < items.Count; i++)
 					DrawItem(sb, items[i], new Vector2(pos.X + (size.X - 14 - (items.Count - i - 1) * 24) * scale, pos.Y + (size.Y / 3 * 2 + 3) * scale), scale * .75f);
 			}
 		}
