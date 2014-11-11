@@ -63,6 +63,7 @@
     <Compile Include="BuffDefFCM.cs" />
     <Compile Include="InterfaceFCMBuffs.cs" />
     <Compile Include="InterfaceFCMItems.cs" />
+    <Compile Include="InterfaceFCMSnapshot.cs" />
     <Compile Include="InterfaceFCMMisc.cs" />
     <Compile Include="InterfaceFCMNPCs.cs" />
     <Compile Include="InterfaceFCMPrefixes.cs" />
@@ -75,8 +76,10 @@
     <Compile Include="MNPC.cs" />
     <Compile Include="MPlayer.cs" />
     <Compile Include="MWorld.cs" />
+    <Compile Include="SnapshotSlot.cs" />
     <Compile Include="NPCSlot.cs" />
     <Compile Include="BuffSlot.cs" />
+    <Compile Include="PlayerSnapshot.cs" />
     <Compile Include="PrefixSlot.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -84,21 +87,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="C3.XNA.Primitives2D.dll" />
-    <Content Include="Images\BuffPositive.png" />
-    <Content Include="Images\IconCheatTileUsage.png" />
-    <Content Include="Images\IconCheatUsage.png" />
-    <Content Include="Images\IconCheatRange.png" />
-    <Content Include="Images\IconCheatTileSpeed.png" />
-    <Content Include="Images\LifeMaxSlider.png" />
-    <Content Include="Images\LifeSlider.png" />
-    <Content Include="Images\ManaSlider.png" />
-    <Content Include="Images\ModuleBuffs.png" />
-    <Content Include="Images\ModuleItems.png" />
-    <Content Include="Images\ModuleMisc.png" />
-    <Content Include="Images\ModuleNPCs.png" />
-    <Content Include="Images\ModulePrefixes.png" />
-    <Content Include="Images\TimeRateSlider.png" />
-    <Content Include="Images\TimeSlider.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

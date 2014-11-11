@@ -72,12 +72,6 @@
   <ItemGroup>
     <None Include="ModInfo.json" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="Images\Arrow.png" />
-    <Content Include="Images\ArrowDecrease.png" />
-    <Content Include="Images\ArrowIncrease.png" />
-    <Content Include="Images\Tick.png" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
