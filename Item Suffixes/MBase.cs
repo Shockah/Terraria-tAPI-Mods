@@ -9,9 +9,17 @@ namespace Shockah.ItemSuffixes
 	{
 		public static ModBase me = null;
 
+		public static bool modAccSlots = false;
+		public static Func<Player, int> hookAccSlotsGetAvailableExtraSlots = null;
+		public static Func<Player, int, Item> hookAccSlotsGetExtraItemAt = null;
+
 		public override void OnLoad()
 		{
 			me = this;
+
+			modAccSlots = false;
+			hookAccSlotsGetAvailableExtraSlots = null;
+			hookAccSlotsGetExtraItemAt = null;
 		}
 		
 		public override void OnAllModsLoaded()
@@ -28,6 +36,14 @@ namespace Shockah.ItemSuffixes
 				if (mitem == null) return;
 				if (mitem.CanGetSuffixes()) mitem.SetRandomSuffix();
 			};
+
+			if (Mods.IsModLoaded("Shockah.AccSlots"))
+			{
+				modAccSlots = true;
+				object[] ret = (object[])CallInMod("Shockah.AccSlots");
+				hookAccSlotsGetAvailableExtraSlots = (Func<Player, int>)ret[1];
+				hookAccSlotsGetExtraItemAt = (Func<Player, int, Item>)ret[3];
+			}
 		}
 
 		public override object OnModCall(ModBase mod, params object[] args)
@@ -74,17 +90,7 @@ namespace Shockah.ItemSuffixes
 						Action<Item>,
 						Func<int, Tuple<string, string, int[], int[], int, int, int>>
 					>;
-					if (callback == null)
-					{
-						return new object[] {
-							getSuffixID,
-							hasSuffix,
-							canGetSuffixes,
-							setRandomSuffix,
-							getSuffixInfo
-						};
-					}
-					else
+					if (callback != null)
 					{
 						callback(
 							getSuffixID,
@@ -95,6 +101,14 @@ namespace Shockah.ItemSuffixes
 						);
 						return null;
 					}
+
+					return new object[] {
+						getSuffixID,
+						hasSuffix,
+						canGetSuffixes,
+						setRandomSuffix,
+						getSuffixInfo
+					};
 				}
 			}
 

@@ -1,4 +1,6 @@
-﻿using TAPI;
+﻿using System;
+using System.Collections.Generic;
+using TAPI;
 using Terraria;
 
 namespace Shockah.ItemSuffixes
@@ -40,10 +42,19 @@ namespace Shockah.ItemSuffixes
 					mtooltip.resetCrit = tooltip.crit;
 				}
 			}
-			
+
+			List<Item> armor = new List<Item>();
 			for (int i = 0; i < 8; i++)
+				armor.Add(player.armor[i]);
+			if (MBase.modAccSlots != null)
 			{
-				Item item = player.armor[i];
+				int exslots = MBase.hookAccSlotsGetAvailableExtraSlots(player);
+				for (int i = 0; i < exslots; i++)
+					armor.Add(MBase.hookAccSlotsGetExtraItemAt(player, i));
+			}
+
+			foreach (Item item in armor)
+			{
 				if (!item.IsBlank())
 				{
 					MItem mitem = item.GetSubClass<MItem>();
