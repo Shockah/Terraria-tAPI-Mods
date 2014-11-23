@@ -40,7 +40,7 @@ namespace Shockah.ItemSuffixes
 			if (Mods.IsModLoaded("Shockah.AccSlots"))
 			{
 				modAccSlots = true;
-				object[] ret = (object[])CallInMod("Shockah.AccSlots");
+				object[] ret = (object[])CallInMod("Shockah.AccSlots", "RequestHooks");
 				hookAccSlotsGetAvailableExtraSlots = (Func<Player, int>)ret[1];
 				hookAccSlotsGetExtraItemAt = (Func<Player, int, Item>)ret[3];
 			}
