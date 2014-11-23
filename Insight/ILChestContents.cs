@@ -63,7 +63,7 @@ namespace Shockah.Insight
 			else
 			{
 				Tile t = Main.tile[mtileX, mtileY];
-				if (t.active() && t.type == TILE_CHEST)
+				if (t != null && t.active() && t.type == TILE_CHEST)
 				{
 					for (int i = 0; i < Main.chest.Length; i++)
 					{
