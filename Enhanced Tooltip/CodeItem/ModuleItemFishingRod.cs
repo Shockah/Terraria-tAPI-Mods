@@ -15,19 +15,19 @@ namespace Shockah.ETooltip.ModuleItem
 		{
 			if (HideSocial(options, item)) return;
 			
-			if (item.pick > 0)
+			if (item.fishingPole > 0)
 			{
 				Color color = Color.White;
 				switch ((string)options["itemToolPowerColor"].Value)
 				{
 					case "Green": color = Color.Lime; break;
-					case "Power": float f = 1f * item.pick / MBase.me.maxPowerRod; color = DoubleLerp(Color.Red, Color.Yellow, Color.Lime, f); break;
+					case "Power": float f = 1f * item.fishingPole / MBase.me.maxPowerRod; color = DoubleLerp(Color.Red, Color.Yellow, Color.Lime, f); break;
 					default: break;
 				}
 				if (GraySocial(options, item)) color = Color.DarkGray;
 
-				if (style == ETipStyle.Vanilla) tip += CText(color, item.pick, "%#; fishing power");
-				if (style == ETipStyle.TwoCols) tip += new string[] { "Fishing power:", CText(color, item.pick, "%") };
+				if (style == ETipStyle.Vanilla) tip += CText(color, item.fishingPole, "%#; fishing power");
+				if (style == ETipStyle.TwoCols) tip += new string[] { "Fishing power:", CText(color, item.fishingPole, "%") };
 			}
 		}
 	}

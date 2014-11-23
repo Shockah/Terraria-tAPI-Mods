@@ -98,6 +98,8 @@ namespace Shockah.ETooltip
 				if (kvp.Value.pick > maxPowerPick) maxPowerPick = kvp.Value.pick;
 				if (kvp.Value.axe > maxPowerAxe) maxPowerAxe = kvp.Value.axe;
 				if (kvp.Value.hammer > maxPowerHammer) maxPowerHammer = kvp.Value.hammer;
+				if (kvp.Value.fishingPole > maxPowerRod) maxPowerRod = kvp.Value.fishingPole;
+				if (kvp.Value.bait > maxPowerBait) maxPowerBait = kvp.Value.bait;
 				if (kvp.Value.mana > maxManaCost) maxManaCost = kvp.Value.mana;
 			}
 		}
