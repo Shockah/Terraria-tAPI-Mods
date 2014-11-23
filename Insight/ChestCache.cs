@@ -40,7 +40,7 @@ namespace Shockah.Insight
 			if (Main.gameMenu) return true;
 
 			Tile t = Main.tile[x, y];
-			if (t.active() && t.type == ILChestContents.TILE_CHEST)
+			if (t != null && t.active() && t.type == ILChestContents.TILE_CHEST)
 			{
 				for (int i = 0; i < Main.chest.Length; i++)
 				{
