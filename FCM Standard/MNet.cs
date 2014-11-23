@@ -39,7 +39,6 @@ namespace Shockah.FCM.Standard
 		
 		public override void NetReceive(BinBuffer bb, int msgType, MessageBuffer buffer)
 		{
-			int ignore;
 			BinBuffer copybb;
 
 			switch (msgType)
@@ -49,13 +48,9 @@ namespace Shockah.FCM.Standard
 					InterfaceFCMNPCs.SpawnNPCs(bb.ReadShort(), bb.ReadInt(), bb.ReadInt(), bb.ReadFloat(), bb.ReadUShort(), bb.ReadInt());
 					break;
 				case MBase.MSG_CHEAT:
-					ignore = 0;
 					copybb = null;
 					if (Main.netMode == 2)
-					{
-						ignore = bb.ReadByte();
 						copybb = SBase.CopyFurther(bb);
-					}
 
 					int count = bb.ReadByte();
 					while (count-- > 0)
@@ -66,16 +61,13 @@ namespace Shockah.FCM.Standard
 						if (m != null) bbyte.Retrieve(ref m.cheatGod, ref m.cheatNoclip, ref m.cheatUsage, ref m.cheatRange, ref m.cheatTileSpeed, ref m.cheatTileUsage);
 					}
 
-					if (Main.netMode == 2) NetMessage.SendModData(this, MBase.MSG_CHEAT, -1, ignore, copybb);
+					if (Main.netMode == 2)
+						NetMessage.SendModData(this, MBase.MSG_CHEAT, -1, buffer.whoAmI, copybb);
 					break;
 				case MBase.MSG_TIME:
-					ignore = 0;
 					copybb = null;
 					if (Main.netMode == 2)
-					{
-						ignore = bb.ReadByte();
 						copybb = SBase.CopyFurther(bb);
-					}
 
 					Main.dayTime = bb.ReadBool();
 					Main.time = bb.ReadFloat();
@@ -104,7 +96,8 @@ namespace Shockah.FCM.Standard
 					Main.checkXMas();
 					Main.checkHalloween();
 
-					if (Main.netMode == 2) NetMessage.SendModData(this, MBase.MSG_TIME, -1, ignore, copybb);
+					if (Main.netMode == 2)
+						NetMessage.SendModData(this, MBase.MSG_TIME, -1, buffer.whoAmI, copybb);
 					break;
 				default: break;
 			}

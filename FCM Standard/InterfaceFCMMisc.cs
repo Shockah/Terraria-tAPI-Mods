@@ -37,16 +37,10 @@ namespace Shockah.FCM.Standard
 			throttleTimeUpdate = 5;
 			timeUpdateSend = true;
 		}
-		public static void SendTimeUpdate(int player, int ignorePlayer)
-		{
-			SendTimeUpdate(player, ignorePlayer, Main.netMode == 1);
-		}
-		public static void SendTimeUpdate(int remote, int ignore, bool addMyId)
+		public static void SendTimeUpdate(int remote, int ignore)
 		{
 			if (Main.netMode == 0) return;
-
 			BinBuffer bb = new BinBuffer();
-			if (addMyId) bb.Write((byte)Main.myPlayer);
 
 			bb.Write(Main.dayTime);
 			bb.Write((float)Main.time);
@@ -75,16 +69,10 @@ namespace Shockah.FCM.Standard
 			bb.Pos = 0;
 			NetMessage.SendModData(MBase.me, MBase.MSG_TIME, remote, ignore, bb);
 		}
-		public static void SendCheatUpdate(int player, int ignorePlayer)
-		{
-			SendCheatUpdate(player, ignorePlayer, Main.netMode == 1);
-		}
-		public static void SendCheatUpdate(int remote, int ignore, bool addMyId)
+		public static void SendCheatUpdate(int remote, int ignore)
 		{
 			if (Main.netMode == 0) return;
-
 			BinBuffer bb = new BinBuffer();
-			if (addMyId) bb.Write((byte)Main.myPlayer);
 
 			MPlayer mp = Main.localPlayer.GetSubClass<MPlayer>();
 			bb.Write((byte)1);
