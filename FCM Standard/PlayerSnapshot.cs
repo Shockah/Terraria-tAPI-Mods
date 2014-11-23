@@ -32,10 +32,10 @@ namespace Shockah.FCM.Standard
 			return snap;
 		}
 
-		public static void Restore(PlayerSnapshot snap)
+		public static void Restore(Player player, PlayerSnapshot snap)
 		{
 			PlayerSnapshot temp = new PlayerSnapshot(null);
-			temp.player = Main.localPlayer;
+			temp.player = player;
 			BinBuffer bb = new BinBuffer();
 			snap.Save(bb);
 

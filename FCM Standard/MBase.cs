@@ -13,7 +13,8 @@ namespace Shockah.FCM.Standard
 		public const int
 			MSG_SPAWN_NPCS = 1,
 			MSG_CHEAT = 2,
-			MSG_TIME = 3;
+			MSG_TIME = 3,
+			MSG_SNAPSHOT = 4;
 		
 		public static ModBase me { get; private set; }
 		

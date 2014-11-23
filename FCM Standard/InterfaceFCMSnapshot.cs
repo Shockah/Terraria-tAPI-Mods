@@ -86,7 +86,17 @@ namespace Shockah.FCM.Standard
 				(b, mb) =>
 				{
 					if (selected == -1) return;
-					PlayerSnapshot.Restore(snapshots[selected]);
+					PlayerSnapshot snap = snapshots[selected];
+					PlayerSnapshot.Restore(Main.localPlayer, snap);
+
+					BinBuffer bb = new BinBuffer();
+
+					bb.Write(snap.name);
+					bb.Write(snap.date.ToBinary());
+					snap.Save(bb);
+
+					bb.Pos = 0;
+					NetMessage.SendModData(MBase.me, MBase.MSG_SNAPSHOT, -1, -1, bb);
 				},
 				(b, sb, mb) =>
 				{

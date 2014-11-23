@@ -99,6 +99,26 @@ namespace Shockah.FCM.Standard
 					if (Main.netMode == 2)
 						NetMessage.SendModData(this, MBase.MSG_TIME, -1, buffer.whoAmI, copybb);
 					break;
+				case MBase.MSG_SNAPSHOT:
+					copybb = null;
+					if (Main.netMode == 2)
+					{
+						copybb = new BinBuffer();
+						copybb.Write((byte)buffer.whoAmI);
+						int _pos = bb.Pos;
+						copybb.Write(bb);
+						bb.Pos = _pos;
+						copybb.Pos = 0;
+					}
+					
+					int target = Main.netMode == 1 ? bb.ReadByte() : buffer.whoAmI;
+					PlayerSnapshot snapshot = new PlayerSnapshot(bb.ReadString(), DateTime.FromBinary(bb.ReadLong()));
+					snapshot.Load(bb);
+					PlayerSnapshot.Restore(Main.player[target], snapshot);
+
+					if (Main.netMode == 2)
+						NetMessage.SendModData(this, MBase.MSG_TIME, -1, buffer.whoAmI, copybb);
+					break;
 				default: break;
 			}
 		}
