@@ -35,6 +35,22 @@ namespace Shockah.ETooltip
 			else if (s == "Hold Alt") return KState.Special.Alt.Down() ? 1 : 2;
 			return 2;
 		}
+
+		public static bool HideSocial(OptionList options, Item item)
+		{
+			string val = (string)options["itemSocialStyle"].Value;
+			return item.social && val == "Replace with tip";
+		}
+		public static bool GraySocial(OptionList options, Item item)
+		{
+			string val = (string)options["itemSocialStyle"].Value;
+			return item.social && (val == "Gray stats" || val == "Extra tip + gray stats");
+		}
+		public static bool TipSocial(OptionList options, Item item)
+		{
+			string val = (string)options["itemSocialStyle"].Value;
+			return item.social && (val == "Extra tip" || val == "Extra tip + gray stats");
+		}
 		
 		public abstract void ModifyTip(ETipStyle style, OptionList options, STooltip tip, T t);
 	}

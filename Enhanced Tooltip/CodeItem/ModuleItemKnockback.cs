@@ -13,6 +13,8 @@ namespace Shockah.ETooltip.ModuleItem
 	{
 		public override void ModifyTip(ETipStyle style, OptionList options, STooltip tip, Item item)
 		{
+			if (HideSocial(options, item)) return;
+			
 			if (item.damage > 0 && !item.notAmmo)
 			{
 				Item itemDef = item.def.item;
@@ -26,16 +28,16 @@ namespace Shockah.ETooltip.ModuleItem
 
 				int bstats = BaseStats(options, itemDef.knockBack == knockback);
 				StringBuilder sbv = new StringBuilder();
-				if ((bstats & 1) != 0) FormatValue(sbv, itemDef.knockBack, style, options);
+				if ((bstats & 1) != 0) FormatValue(sbv, itemDef.knockBack, style, options, item);
 				if (bstats == 3) sbv.Append("#; -> ");
-				if ((bstats & 2) != 0) FormatValue(sbv, knockback, style, options);
+				if ((bstats & 2) != 0) FormatValue(sbv, knockback, style, options, item);
 
 				if (style == ETipStyle.Vanilla) tip += "" + sbv + "#; knockback";
 				if (style == ETipStyle.TwoCols) tip += new string[] { "Knockback:", "" + sbv };
 			}
 		}
 
-		private void FormatValue(StringBuilder sb, float v, ETipStyle style, OptionList options)
+		private void FormatValue(StringBuilder sb, float v, ETipStyle style, OptionList options, Item item)
 		{
 			string knockbackText = null;
 			if (v == 0f) knockbackText = "No";
@@ -55,6 +57,7 @@ namespace Shockah.ETooltip.ModuleItem
 				case "Knockback": float f = Math.Min(v, 11f) / 11f; color = DoubleLerp(Color.Red, Color.Yellow, Color.Lime, f); break;
 				default: break;
 			}
+			if (GraySocial(options, item)) color = Color.DarkGray;
 
 			switch ((string)options["itemKnockbackDetails"].Value)
 			{

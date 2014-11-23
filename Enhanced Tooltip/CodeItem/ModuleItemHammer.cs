@@ -13,6 +13,8 @@ namespace Shockah.ETooltip.ModuleItem
 	{
 		public override void ModifyTip(ETipStyle style, OptionList options, STooltip tip, Item item)
 		{
+			if (HideSocial(options, item)) return;
+			
 			if (item.hammer > 0)
 			{
 				Color color = Color.White;
@@ -22,6 +24,7 @@ namespace Shockah.ETooltip.ModuleItem
 					case "Power": float f = 1f * item.hammer / MBase.me.maxPowerHammer; color = DoubleLerp(Color.Red, Color.Yellow, Color.Lime, f); break;
 					default: break;
 				}
+				if (GraySocial(options, item)) color = Color.DarkGray;
 
 				if (style == ETipStyle.Vanilla) tip += CText(color, item.hammer, "%#; hammer power");
 				if (style == ETipStyle.TwoCols) tip += new string[] { "Hammer power:", CText(color, item.hammer, "%") };

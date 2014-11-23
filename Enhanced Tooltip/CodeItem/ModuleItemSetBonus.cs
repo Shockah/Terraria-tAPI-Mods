@@ -17,6 +17,8 @@ namespace Shockah.ETooltip.ModuleItem
 
 		public override void ModifyTip(ETipStyle style, OptionList options, STooltip tip, Item item)
 		{
+			if (HideSocial(options, item)) return;
+			
 			Player player = Main.localPlayer;
 			if (Main.toolTip.wornArmor && player.setBonus != "")
 			{

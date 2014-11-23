@@ -13,17 +13,20 @@ namespace Shockah.ETooltip.ModuleItem
 	{
 		public override void ModifyTip(ETipStyle style, OptionList options, STooltip tip, Item item)
 		{
-			bool optToolRangeColorEffect = (bool)options["itemRestoreColor"].Value;
-			bool optToolRangeColorType = (bool)options["itemRestoreTypeColor"].Value;
+			if (HideSocial(options, item)) return;
+			
+			bool optRestoreColorEffect = (bool)options["itemRestoreColor"].Value;
+			bool optRestoreColorType = (bool)options["itemRestoreTypeColor"].Value;
+			bool gray = GraySocial(options, item);
 			if (item.healLife > 0)
 			{
-				if (style == ETipStyle.Vanilla) tip += CText("Restores ", optToolRangeColorEffect ? Color.Lime : Color.White, item.healLife, optToolRangeColorType ? Color.Red : Color.White, " life");
-				if (style == ETipStyle.TwoCols) tip += new string[] { CText(optToolRangeColorType ? Color.Red : Color.White, "Life#; restore:"), CText(optToolRangeColorEffect ? Color.Lime : Color.White, item.healLife) };
+				if (style == ETipStyle.Vanilla) tip += CText("Restores ", gray ? Color.DarkGray : (optRestoreColorEffect ? Color.Lime : Color.White), item.healLife, optRestoreColorType ? Color.Red : Color.White, " life");
+				if (style == ETipStyle.TwoCols) tip += new string[] { CText(optRestoreColorType ? Color.Red : Color.White, "Life#; restore:"), CText(gray ? Color.DarkGray : (optRestoreColorEffect ? Color.Lime : Color.White), item.healLife) };
 			}
 			if (item.healMana > 0)
 			{
-				if (style == ETipStyle.Vanilla) tip += CText("Restores ", optToolRangeColorEffect ? Color.Lime : Color.White, item.healMana, optToolRangeColorType ? Color.DeepSkyBlue : Color.White, " mana");
-				if (style == ETipStyle.TwoCols) tip += new string[] { CText(optToolRangeColorType ? Color.DeepSkyBlue : Color.White, "Mana#; restore:"), CText(optToolRangeColorEffect ? Color.Lime : Color.White, item.healMana) };
+				if (style == ETipStyle.Vanilla) tip += CText("Restores ", gray ? Color.DarkGray : (optRestoreColorEffect ? Color.Lime : Color.White), item.healMana, optRestoreColorType ? Color.DeepSkyBlue : Color.White, " mana");
+				if (style == ETipStyle.TwoCols) tip += new string[] { CText(optRestoreColorType ? Color.DeepSkyBlue : Color.White, "Mana#; restore:"), CText(gray ? Color.DarkGray : (optRestoreColorEffect ? Color.Lime : Color.White), item.healMana) };
 			}
 		}
 	}

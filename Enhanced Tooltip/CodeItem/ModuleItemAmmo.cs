@@ -13,6 +13,8 @@ namespace Shockah.ETooltip.ModuleItem
 	{
 		public override void ModifyTip(ETipStyle style, OptionList options, STooltip tip, Item item)
 		{
+			if (HideSocial(options, item)) return;
+			
 			if (item.createWall <= 0 && item.createTile <= -1 && item.name != "Xmas decorations" && item.ammo > 0 && !item.notAmmo)
 			{
 				if (item.ammo == 1 || item.ammo == 323) tip += "Ammo (arrow)";

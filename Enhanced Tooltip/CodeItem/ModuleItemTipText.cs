@@ -19,7 +19,7 @@ namespace Shockah.ETooltip.ModuleItem
 				float tipScale = (float)options["itemTipScale"].Value;
 				List<string> effective = new List<string>(item.tooltips);
 				if (item.modEntities.Count != 0) item.ModifyToolTip(player, effective);
-				foreach (string tt in effective) tip += new STooltip.Line(tt, tipScale);
+				foreach (string tt in effective) tip += new STooltip.Line(tt, GraySocial(options, item) ? Color.DarkGray : Color.White, tipScale);
 			}
 		}
 	}

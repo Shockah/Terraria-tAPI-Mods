@@ -13,6 +13,8 @@ namespace Shockah.ETooltip.ModuleItem
 	{
 		public override void ModifyTip(ETipStyle style, OptionList options, STooltip tip, Item item)
 		{
+			if (HideSocial(options, item)) return;
+			
 			if (item.defense != 0)
 			{
 				Color color = Color.White;
@@ -21,6 +23,7 @@ namespace Shockah.ETooltip.ModuleItem
 					case "Green/Red": color = item.defense > 0 ? Color.Lime : Color.Red; break;
 					default: break;
 				}
+				if (GraySocial(options, item)) color = Color.DarkGray;
 
 				if (style == ETipStyle.Vanilla) tip += CText(color, item.defense, "#; defense");
 				if (style == ETipStyle.TwoCols) tip += new string[] { "Defense:", CText(color, item.defense) };

@@ -13,22 +13,24 @@ namespace Shockah.ETooltip.ModuleItem
 	{
 		public override void ModifyTip(ETipStyle style, OptionList options, STooltip tip, Item item)
 		{
+			if (HideSocial(options, item)) return;
+			
 			if (item.damage > 0 && !item.notAmmo && item.useStyle > 0 && item.useAnimation > 0)
 			{
 				Item itemDef = item.def.item;
 				
 				int bstats = BaseStats(options, itemDef.useAnimation == item.useAnimation);
 				StringBuilder sbv = new StringBuilder();
-				if ((bstats & 1) != 0) FormatValue(sbv, itemDef.useAnimation, style, options);
+				if ((bstats & 1) != 0) FormatValue(sbv, itemDef.useAnimation, style, options, item);
 				if (bstats == 3) sbv.Append("#; -> ");
-				if ((bstats & 2) != 0) FormatValue(sbv, item.useAnimation, style, options);
+				if ((bstats & 2) != 0) FormatValue(sbv, item.useAnimation, style, options, item);
 
 				if (style == ETipStyle.Vanilla) tip += "" + sbv + "#; speed";
 				if (style == ETipStyle.TwoCols) tip += new string[] { "Speed:", "" + sbv };
 			}
 		}
 
-		private void FormatValue(StringBuilder sb, float v, ETipStyle style, OptionList options)
+		private void FormatValue(StringBuilder sb, float v, ETipStyle style, OptionList options, Item item)
 		{
 			string speedText = null;
 			if (v <= 8) speedText = "Insanely fast";
@@ -47,6 +49,7 @@ namespace Shockah.ETooltip.ModuleItem
 				case "Speed": float f = 1f * Math.Min(v, 55) / 55; color = DoubleLerp(Color.Lime, Color.Yellow, Color.Red, f); break;
 				default: break;
 			}
+			if (GraySocial(options, item)) color = Color.DarkGray;
 
 			switch ((string)options["itemSpeedDetails"].Value)
 			{

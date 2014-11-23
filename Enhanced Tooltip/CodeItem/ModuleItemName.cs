@@ -30,6 +30,7 @@ namespace Shockah.ETooltip.ModuleItem
 				case "Stack": float f = 1f * item.stack / item.maxStack; color = DoubleLerp(Color.Red, Color.Yellow, Color.Lime, f); break;
 				default: break;
 			}
+			if (GraySocial(options, item)) color = Color.DarkGray;
 
 			float scale = (float)options["itemNameScale"].Value;
 			if (style == ETipStyle.Vanilla) tip += new STooltip.Line(CText(item.GetRarityColor(), item.AffixName(), stackText == null ? "" : CText(" ", color, stackText)), scale);

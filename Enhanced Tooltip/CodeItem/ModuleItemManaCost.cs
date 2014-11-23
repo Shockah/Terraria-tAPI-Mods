@@ -13,6 +13,8 @@ namespace Shockah.ETooltip.ModuleItem
 	{
 		public override void ModifyTip(ETipStyle style, OptionList options, STooltip tip, Item item)
 		{
+			if (HideSocial(options, item)) return;
+			
 			if (item.mana > 0)
 			{
 				Player player = Main.localPlayer;
@@ -25,9 +27,9 @@ namespace Shockah.ETooltip.ModuleItem
 					{
 						int bstats = BaseStats(options, (int)itemMana == itemDef.mana);
 						StringBuilder sbv = new StringBuilder();
-						if ((bstats & 1) != 0) FormatValue(sbv, itemDef.mana, player, style, options);
+						if ((bstats & 1) != 0) FormatValue(sbv, itemDef.mana, player, style, options, item);
 						if (bstats == 3) sbv.Append("#; -> ");
-						if ((bstats & 2) != 0) FormatValue(sbv, (int)itemMana, player, style, options);
+						if ((bstats & 2) != 0) FormatValue(sbv, (int)itemMana, player, style, options, item);
 						
 						Color color = Color.White;
 						float f;
@@ -46,7 +48,7 @@ namespace Shockah.ETooltip.ModuleItem
 			}
 		}
 
-		private void FormatValue(StringBuilder sb, int v, Player player, ETipStyle style, OptionList options)
+		private void FormatValue(StringBuilder sb, int v, Player player, ETipStyle style, OptionList options, Item item)
 		{
 			Color color = Color.White;
 			float f;
@@ -57,6 +59,7 @@ namespace Shockah.ETooltip.ModuleItem
 				case "Max mana": f = 1f * v / (player.statManaMax2 / 5); color = DoubleLerp(Color.Lime, Color.Yellow, Color.Red, Math.Min(f, 1f)); break;
 				default: break;
 			}
+			if (GraySocial(options, item)) color = Color.DarkGray;
 
 			sb.Append(CText(color, v));
 		}

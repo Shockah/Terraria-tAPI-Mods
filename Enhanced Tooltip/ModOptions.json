@@ -17,7 +17,7 @@
 		
 		{
 			"name": "itemStyle",
-			"displayName": "Item: Style",
+			"displayName": "Style",
 			"type": "List",
 			"list": [
 				"Vanilla",
@@ -27,7 +27,7 @@
 		},
 		{
 			"name": "itemBaseStats",
-			"displayName": "Item: Base stats",
+			"displayName": "Base stats",
 			"type": "List",
 			"list": [
 				"Off",
@@ -39,7 +39,7 @@
 		
 		{
 			"name": "itemNameScale",
-			"displayName": "Item: Name scale",
+			"displayName": "Name scale",
 			"type": "Float",
 			"minimum": 0.5,
 			"maximum": 1.5,
@@ -47,7 +47,7 @@
 		},
 		{
 			"name": "itemNameStackFormat",
-			"displayName": "Item: Amount format",
+			"displayName": "Amount format",
 			"type": "List",
 			"list": [
 				"(100)",
@@ -59,7 +59,7 @@
 		},
 		{
 			"name": "itemNameStackColor",
-			"displayName": "Item: Amount coloring",
+			"displayName": "Amount coloring",
 			"type": "List",
 			"list": [
 				"White",
@@ -68,10 +68,22 @@
 			],
 			"default": 0
 		},
+		{
+			"name": "itemSocialStyle",
+			"displayName": "Social slot style",
+			"type": "List",
+			"list": [
+				"Replace with tip",
+				"Extra tip",
+				"Gray stats",
+				"Extra tip + gray stats"
+			],
+			"default": 2
+		},
 
 		{
 			"name": "itemTipScale",
-			"displayName": "Item: Tip lines scale",
+			"displayName": "Tip lines scale",
 			"type": "Float",
 			"minimum": 0.5,
 			"maximum": 1.5,
@@ -79,7 +91,7 @@
 		},
 		{
 			"name": "itemSetBonusScale",
-			"displayName": "Item: Set bonus scale",
+			"displayName": "Set bonus scale",
 			"type": "Float",
 			"minimum": 0.5,
 			"maximum": 1.5,
@@ -88,7 +100,7 @@
 
 		{
 			"name": "itemDamageColor",
-			"displayName": "Item: Damage coloring",
+			"displayName": "Damage coloring",
 			"type": "List",
 			"list": [
 				"White",
@@ -98,7 +110,7 @@
 		},
 		{
 			"name": "itemCritColor",
-			"displayName": "Item: Crit chance coloring",
+			"displayName": "Crit chance coloring",
 			"type": "List",
 			"list": [
 				"White",
@@ -108,7 +120,7 @@
 		},
 		{
 			"name": "itemSpeedColor",
-			"displayName": "Item: Speed coloring",
+			"displayName": "Speed coloring",
 			"type": "List",
 			"list": [
 				"White",
@@ -118,7 +130,7 @@
 		},
 		{
 			"name": "itemSpeedDetails",
-			"displayName": "Item: Speed details",
+			"displayName": "Speed details",
 			"type": "List",
 			"list": [
 				"Text",
@@ -131,7 +143,7 @@
 		},
 		{
 			"name": "itemKnockbackColor",
-			"displayName": "Item: Knockback coloring",
+			"displayName": "Knockback coloring",
 			"type": "List",
 			"list": [
 				"White",
@@ -141,7 +153,7 @@
 		},
 		{
 			"name": "itemKnockbackDetails",
-			"displayName": "Item: Knockback details",
+			"displayName": "Knockback details",
 			"type": "List",
 			"list": [
 				"Text",
@@ -152,7 +164,7 @@
 		},
 		{
 			"name": "itemManaCostColor",
-			"displayName": "Item: Mana cost coloring",
+			"displayName": "Mana cost coloring",
 			"type": "List",
 			"list": [
 				"White",
@@ -164,21 +176,21 @@
 		},
 		{
 			"name": "itemManaCostTypeColor",
-			"displayName": "Item: Mana cost coloring",
+			"displayName": "Mana cost coloring",
 			"type": "Boolean",
 			"default": true
 		},
 
 		{
 			"name": "itemWandItemColor",
-			"displayName": "Item: Color wand consumed item",
+			"displayName": "Color wand consumed item",
 			"type": "Boolean",
 			"default": true
 		},
 
 		{
 			"name": "itemDefenseColor",
-			"displayName": "Item: Defense coloring",
+			"displayName": "Defense coloring",
 			"type": "List",
 			"list": [
 				"White",
@@ -189,7 +201,7 @@
 
 		{
 			"name": "itemToolPowerColor",
-			"displayName": "Item: Tool power coloring",
+			"displayName": "Tool power coloring",
 			"type": "List",
 			"list": [
 				"White",
@@ -200,7 +212,7 @@
 		},
 		{
 			"name": "itemToolRangeColor",
-			"displayName": "Item: Tool range coloring",
+			"displayName": "Tool range coloring",
 			"type": "List",
 			"list": [
 				"White",
@@ -211,19 +223,19 @@
 
 		{
 			"name": "itemRestoreColor",
-			"displayName": "Item: Restore effect coloring",
+			"displayName": "Restore effect coloring",
 			"type": "Boolean",
 			"default": true
 		},
 		{
 			"name": "itemRestoreTypeColor",
-			"displayName": "Item: Restore type coloring",
+			"displayName": "Restore type coloring",
 			"type": "Boolean",
 			"default": true
 		},
 		{
 			"name": "itemBuffDurationColor",
-			"displayName": "Item: Buff duration coloring",
+			"displayName": "Buff duration coloring",
 			"type": "List",
 			"list": [
 				"White",
@@ -234,13 +246,13 @@
 
 		{
 			"name": "itemAlwaysDisplayPrice",
-			"displayName": "Item: Always display price",
+			"displayName": "Always display price",
 			"type": "Boolean",
 			"default": true
 		},
 		{
 			"name": "itemPriceStyle",
-			"displayName": "Item: Price style",
+			"displayName": "Price style",
 			"type": "List",
 			"list": [
 				"One color",
@@ -251,7 +263,7 @@
 
 		{
 			"name": "itemOwnerStyle",
-			"displayName": "Item: Owner style",
+			"displayName": "Owner style",
 			"type": "List",
 			"list": [
 				"Merge with name",
@@ -261,7 +273,7 @@
 		},
 		{
 			"name": "itemOwnerColor",
-			"displayName": "Item: Owner coloring",
+			"displayName": "Owner coloring",
 			"type": "List",
 			"list": [
 				"White",

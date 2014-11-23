@@ -16,7 +16,7 @@ namespace Shockah.ETooltip
 		public static MBase me { get; private set; }
 		public static STooltip tip = new STooltip();
 
-		public int maxPowerPick = 0, maxPowerAxe = 0, maxPowerHammer = 0, maxManaCost = 0;
+		public int maxPowerPick = 0, maxPowerAxe = 0, maxPowerHammer = 0, maxPowerRod = 0, maxPowerBait = 0, maxManaCost = 0;
 		public List<Module<Item>> modulesItems = new List<Module<Item>>();
 		public bool oneTooltip = false;
 		public Player cachePlayer = null;
@@ -27,11 +27,15 @@ namespace Shockah.ETooltip
 			me = this;
 
 			modulesItems.Add(new ModuleItemName());
+			modulesItems.Add(new ModuleItemQuest());
+			modulesItems.Add(new ModuleItemSocialSlot());
 			modulesItems.Add(new ModuleItemDamage());
 			modulesItems.Add(new ModuleItemCrit());
 			modulesItems.Add(new ModuleItemSpeed());
 			modulesItems.Add(new ModuleItemKnockback());
 			modulesItems.Add(new ModuleItemHook());
+			modulesItems.Add(new ModuleItemFishingRod());
+			modulesItems.Add(new ModuleItemBait());
 			modulesItems.Add(new ModuleItemEquipable());
 			modulesItems.Add(new ModuleItemWand());
 			modulesItems.Add(new ModuleItemDefense());

@@ -13,6 +13,8 @@ namespace Shockah.ETooltip.ModuleItem
 	{
 		public override void ModifyTip(ETipStyle style, OptionList options, STooltip tip, Item item)
 		{
+			if (HideSocial(options, item)) return;
+			
 			if (item.damage > 0 && !item.notAmmo)
 			{
 				Item itemDef = item.def.item;
@@ -107,6 +109,7 @@ namespace Shockah.ETooltip.ModuleItem
 					break;
 				default: break;
 			}
+			if (GraySocial(options, item)) color = Color.DarkGray;
 
 			sb.Append(CText(color, (int)v));
 		}

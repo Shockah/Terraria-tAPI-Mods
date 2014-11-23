@@ -17,11 +17,13 @@ namespace Shockah.ETooltip.ModuleItem
 		
 		public override void ModifyTip(ETipStyle style, OptionList options, STooltip tip, Item item)
 		{
+			if (HideSocial(options, item)) return;
+			
 			if (!item.prefix.Equals(Prefix.None))
 			{
 				foreach (Tuple<string, bool> t in item.prefix.TooltipText(item))
 				{
-					tip += CText(t.Item2 ? COLOR_POSITIVE : COLOR_NEGATIVE, t.Item1);
+					tip += CText(GraySocial(options, item) ? Color.DarkGray : (t.Item2 ? COLOR_POSITIVE : COLOR_NEGATIVE), t.Item1);
 				}
 			}
 		}

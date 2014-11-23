@@ -13,6 +13,8 @@ namespace Shockah.ETooltip.ModuleItem
 	{
 		public override void ModifyTip(ETipStyle style, OptionList options, STooltip tip, Item item)
 		{
+			if (HideSocial(options, item)) return;
+			
 			if (item.shoot > 0 && ProjDef.byType[item.shoot].aiStyle == 7)
 			{
 				tip += "Hook";

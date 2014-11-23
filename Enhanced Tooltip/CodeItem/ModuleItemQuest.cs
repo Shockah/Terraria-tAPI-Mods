@@ -9,15 +9,13 @@ using Terraria;
 
 namespace Shockah.ETooltip.ModuleItem
 {
-	public class ModuleItemConsumable : Module<Item>
+	public class ModuleItemQuest : Module<Item>
 	{
 		public override void ModifyTip(ETipStyle style, OptionList options, STooltip tip, Item item)
 		{
-			if (HideSocial(options, item)) return;
-			
-			if (item.createWall <= 0 && item.createTile <= -1 && item.name != "Xmas decorations" && (item.ammo <= 0 || item.notAmmo) && item.consumable)
+			if (item.questItem)
 			{
-				tip += "Consumable";
+				tip += new STooltip.Line("Quest Item", item.GetRarityColor());
 			}
 		}
 	}
