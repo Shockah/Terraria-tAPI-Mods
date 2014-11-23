@@ -61,39 +61,42 @@ namespace Shockah.ItemSuffixes
 
 			//Melee
 			fs = new Func<Item, bool>[]{
-				(item) => { return (item.type >= 100 && item.type <= 102) || (item.type >= 956 && item.type <= 958); }, //Shadow set
-				(item) => { return item.type >= 231 && item.type <= 233; }, //Molten set
-				(item) => { return new List<int>(new int[] { 372, 1205, 377, 1210, 401, 1215, 559, 1001 }).Contains(item.type); }, //Cobalt / Palladium / Mythril / Orichalcum / Adamantite / Titanium / Hallowed / Chlorophyte set
-				(item) => { return item.type >= 1316 && item.type <= 1318; }, //Turtle set
-				(item) => { return new List<int>(new int[] { 211, 490, 536, 485, 897, 936, 1322, 1343 }).Contains(item.type); }, //accessories
+				(item) => (item.type >= 100 && item.type <= 102) || (item.type >= 956 && item.type <= 958), //Shadow set
+				(item) => item.type >= 231 && item.type <= 233, //Molten set
+				(item) => new List<int>(new int[] { 372, 1205, 377, 1210, 401, 1215, 559, 1001 }).Contains(item.type), //Cobalt / Palladium / Mythril / Orichalcum / Adamantite / Titanium / Hallowed / Chlorophyte set
+				(item) => item.type >= 1316 && item.type <= 1318, //Turtle set
+				(item) => item.type >= 2199 && item.type <= 2202, //Beetle set
+				(item) => new List<int>(new int[] { 211, 490, 536, 485, 897, 936, 1322, 1343 }).Contains(item.type) //accessories
 			};
 			foreach (Func<Item, bool> f in fs) { blacklistRanged.Add(f); blacklistMagic.Add(f); }
 
 			//Ranged
 			fs = new Func<Item, bool>[]{
-				(item) => { return (item.type >= 151 && item.type <= 153) || item.type == 959; }, //Necro set
-				(item) => { return new List<int>(new int[] { 373, 1206, 378, 1211, 402, 1216, 553, 1002 }).Contains(item.type); }, //Cobalt / Palladium / Mythril / Orichalcum / Adamantite / Titanium / Hallowed / Chlorophyte set
-				(item) => { return item.type >= 1546 && item.type <= 1550; }, //Shroomite set
-				(item) => { return new List<int>(new int[] { 491, 1300, 1321, 1858 }).Contains(item.type); }, //accessories
+				(item) => (item.type >= 151 && item.type <= 153) || item.type == 959, //Necro set
+				(item) => new List<int>(new int[] { 373, 1206, 378, 1211, 402, 1216, 553, 1002 }).Contains(item.type), //Cobalt / Palladium / Mythril / Orichalcum / Adamantite / Titanium / Hallowed / Chlorophyte set
+				(item) => item.type >= 1546 && item.type <= 1550, //Shroomite set
+				(item) => new List<int>(new int[] { 491, 1300, 1321, 1858 }).Contains(item.type) //accessories
 			};
 			foreach (Func<Item, bool> f in fs) { blacklistMelee.Add(f); blacklistMagic.Add(f); }
 
 			//Magic
 			fs = new Func<Item, bool>[]{
-				(item) => { return (item.type >= 228 && item.type <= 230) || (item.type >= 960 && item.type <= 962); }, //Jungle set
-				(item) => { return item.type >= 123 && item.type <= 125; }, //Meteor set
-				(item) => { return new List<int>(new int[] { 371, 1207, 376, 1212, 400, 1217, 558, 1003 }).Contains(item.type); }, //Cobalt / Palladium / Mythril / Orichalcum / Adamantite / Titanium / Hallowed / Chlorophyte set
-				(item) => { return item.type >= 1832 && item.type <= 1834; }, //Spooky set
-				(item) => { return item.type >= 1159 && item.type <= 1161; }, //Tiki set
-				(item) => { return item.type >= 1503 && item.type <= 1505; }, //Spectre set
-				(item) => { return new List<int>(new int[] { 111, 223, 489, 555, 982, 1158, 1167, 1595, 1845, 1864 }).Contains(item.type); }, //accessories
-				(item) => { return new List<int>(new int[] { 238, 1282, 1283, 1284, 1285, 1286, 1287 }).Contains(item.type); }, //armor parts
+				(item) => (item.type >= 228 && item.type <= 230) || (item.type >= 960 && item.type <= 962), //Jungle set
+				(item) => item.type >= 123 && item.type <= 125, //Meteor set
+				(item) => new List<int>(new int[] { 371, 1207, 376, 1212, 400, 1217, 558, 1003 }).Contains(item.type), //Cobalt / Palladium / Mythril / Orichalcum / Adamantite / Titanium / Hallowed / Chlorophyte set
+				(item) => item.type >= 1832 && item.type <= 1834, //Spooky set
+				(item) => item.type >= 1159 && item.type <= 1161, //Tiki set
+				(item) => (item.type >= 1503 && item.type <= 1505) || item.type == 2189, //Spectre set
+				(item) => item.type >= 2361 && item.type <= 2363, //Bee set
+				(item) => item.type >= 2370 && item.type <= 2372, //Spider set
+				(item) => new List<int>(new int[] { 111, 223, 489, 555, 982, 1158, 1167, 1595, 1845, 1864, 2219, 2220, 2221 }).Contains(item.type), //accessories
+				(item) => new List<int>(new int[] { 238, 1282, 1283, 1284, 1285, 1286, 1287, 2275, 2279 }).Contains(item.type) //armor parts
 			};
 			foreach (Func<Item, bool> f in fs) { blacklistMelee.Add(f); blacklistRanged.Add(f); }
 
 			//Melee + Ranged
 			fs = new Func<Item, bool>[]{
-				(item) => { return item.type >= 684 && item.type <= 686; }, //Frost set
+				(item) => item.type >= 684 && item.type <= 686 //Frost set
 			};
 			foreach (Func<Item, bool> f in fs) { blacklistMagic.Add(f); }
 		}
