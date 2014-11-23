@@ -134,7 +134,7 @@ namespace Shockah.FCM.Standard
 			FHead = new Filter<Item>("Head", ItemDef.byName["Vanilla:Adamantite Helmet"].GetTexture(), (item) => item.headSlot != -1);
 			FBody = new Filter<Item>("Body", ItemDef.byName["Vanilla:Hallowed Plate Mail"].GetTexture(), (item) => item.bodySlot != -1);
 			FLegs = new Filter<Item>("Legs", ItemDef.byName["Vanilla:Titanium Leggings"].GetTexture(), (item) => item.legSlot != -1);
-			FVanity = new Filter<Item>("Vanity", ItemDef.byName["Vanilla:Clown Shirt"].GetTexture(), (item) => item.vanity);
+			FVanity = new Filter<Item>("Vanity", ItemDef.byName["Vanilla:Clown Shirt"].GetTexture(), (item) => item.vanity || (item.accessory && item.displayName.StartsWith("Music Box (") && item.displayName.EndsWith(")")));
 			FMelee = new Filter<Item>("Melee", ItemDef.byName["Vanilla:Terra Blade"].GetTexture(), (item) => item.damage > 0 && item.melee);
 			FRanged = new Filter<Item>("Ranged", ItemDef.byName["Vanilla:S.D.M.G."].GetTexture(), (item) => item.damage > 0 && item.ranged && (item.ammo == 0));
 			FAmmo = new Filter<Item>("Ammo", ItemDef.byName["Vanilla:Chlorophyte Bullet"].GetTexture(), (item) => item.damage > 0 && item.ranged && item.ammo != 0 && !item.notAmmo);
