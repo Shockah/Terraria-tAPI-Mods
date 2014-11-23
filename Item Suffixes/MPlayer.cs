@@ -9,9 +9,9 @@ namespace Shockah.ItemSuffixes
 	{
 		public override void MidUpdate()
 		{
-			Item heldItem = player.heldItem, tooltip = Main.toolTip;
-			MItem mheldItem = null, mtooltip = null;
-			if (heldItem != null && !heldItem.IsBlank())
+			Item heldItem = player.heldItem;
+			MItem mheldItem = null;
+			if (heldItem != null && !heldItem.IsBlank() && heldItem.damage > 0)
 			{
 				mheldItem = heldItem.GetSubClass<MItem>();
 				if (mheldItem != null)
@@ -24,22 +24,6 @@ namespace Shockah.ItemSuffixes
 
 					mheldItem.resetDamage = heldItem.damage;
 					mheldItem.resetCrit = heldItem.crit;
-				}
-			}
-
-			if (tooltip != null && !tooltip.IsBlank())
-			{
-				mtooltip = tooltip.GetSubClass<MItem>();
-				if (mtooltip != null)
-				{
-					if (mtooltip.resetDamage != 0)
-					{
-						tooltip.damage = mheldItem.resetDamage;
-						tooltip.crit = mheldItem.resetCrit;
-					}
-
-					mtooltip.resetDamage = tooltip.damage;
-					mtooltip.resetCrit = tooltip.crit;
 				}
 			}
 
@@ -62,7 +46,7 @@ namespace Shockah.ItemSuffixes
 					{
 						if (mitem.suffix != null)
 						{
-							if (!heldItem.IsBlank() && mheldItem != null)
+							if (!heldItem.IsBlank() && mheldItem != null && heldItem.damage > 0)
 							{
 								if (heldItem.damage > 0)
 								{
@@ -80,27 +64,6 @@ namespace Shockah.ItemSuffixes
 									{
 										heldItem.damage = mitem.suffix.BonusDamageMagic(heldItem.damage);
 										heldItem.crit = mitem.suffix.BonusCritMagic(heldItem.crit);
-									}
-								}
-							}
-							if (!tooltip.IsBlank() && mtooltip != null)
-							{
-								if (tooltip.damage > 0)
-								{
-									if (tooltip.melee)
-									{
-										tooltip.damage = mtooltip.suffix.BonusDamageMelee(tooltip.damage);
-										tooltip.crit = mtooltip.suffix.BonusCritMelee(tooltip.crit);
-									}
-									if (tooltip.ranged)
-									{
-										tooltip.damage = mtooltip.suffix.BonusDamageRanged(tooltip.damage);
-										tooltip.crit = mtooltip.suffix.BonusCritRanged(tooltip.crit);
-									}
-									if (tooltip.magic || tooltip.summon)
-									{
-										tooltip.damage = mtooltip.suffix.BonusDamageMagic(tooltip.damage);
-										tooltip.crit = mtooltip.suffix.BonusCritMagic(tooltip.crit);
 									}
 								}
 							}
