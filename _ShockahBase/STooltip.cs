@@ -78,6 +78,8 @@ namespace Shockah.Base
 		{
 			//if (!Main.toolTip.item.IsBlank() || !string.IsNullOrEmpty(Main.buffString) || !string.IsNullOrEmpty(Main.drawingTooltip)) return;
 			if (lines.Count == 0) return;
+			pos.X = (int)pos.X;
+			pos.Y = (int)pos.Y;
 			bool hasBg = background != new Color(0, 0, 0, 0) || alpha.HasValue;
 			Vector2 sizeCalc = ActualDraw(null, default(Vector2));
 			if (pos.X + sizeCalc.X > Main.screenWidth - (hasBg ? 6 : 2)) pos.X = Main.screenWidth - sizeCalc.X - (hasBg ? 6 : 2);
@@ -95,6 +97,8 @@ namespace Shockah.Base
 		public virtual Vector2 ActualDraw(SpriteBatch sb, Vector2 pos, Vector2 sizeCalc = default(Vector2))
 		{
 			if (lines.Count == 0) return default(Vector2);
+			pos.X = (int)pos.X;
+			pos.Y = (int)pos.Y;
 			Vector2 size = new Vector2();
 			Vector2 sizeL, sizeR;
 
