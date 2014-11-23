@@ -68,11 +68,15 @@
     <Compile Include="CodeItem\ModuleItemDamage.cs" />
     <Compile Include="CodeItem\ModuleItemDefense.cs" />
     <Compile Include="CodeItem\ModuleItemEquipable.cs" />
+    <Compile Include="CodeItem\ModuleItemBait.cs" />
     <Compile Include="CodeItem\ModuleItemHammer.cs" />
     <Compile Include="CodeItem\ModuleItemHook.cs" />
     <Compile Include="CodeItem\ModuleItemManaCost.cs" />
+    <Compile Include="CodeItem\ModuleItemSocialSlot.cs" />
+    <Compile Include="CodeItem\ModuleItemQuest.cs" />
     <Compile Include="CodeItem\ModuleItemMaterial.cs" />
     <Compile Include="CodeItem\ModuleItemName.cs" />
+    <Compile Include="CodeItem\ModuleItemFishingRod.cs" />
     <Compile Include="CodeItem\ModuleItemPickaxe.cs" />
     <Compile Include="CodeItem\ModuleItemPlaceable.cs" />
     <Compile Include="CodeItem\ModuleItemPrefix.cs" />
