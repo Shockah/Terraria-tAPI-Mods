@@ -174,26 +174,7 @@ namespace Shockah.AccSlots
 						Func<Player, int, bool>,
 						Func<Player, int, bool>
 					>;
-					if (callback == null)
-					{
-						return new object[] {
-							getAvailableSlots,
-							getAvailableExtraSlots,
-
-							getItemAt,
-							getExtraItemAt,
-
-							getSocialItemAt,
-							getExtraSocialItemAt,
-
-							getDyeItemAt,
-							getExtraDyeItemAt,
-
-							isVisibleAt,
-							isExtraVisibleAt
-						};
-					}
-					else
+					if (callback != null)
 					{
 						callback(
 							getAvailableSlots,
@@ -214,6 +195,23 @@ namespace Shockah.AccSlots
 						return null;
 					}
 				}
+
+				return new object[] {
+					getAvailableSlots,
+					getAvailableExtraSlots,
+
+					getItemAt,
+					getExtraItemAt,
+
+					getSocialItemAt,
+					getExtraSocialItemAt,
+
+					getDyeItemAt,
+					getExtraDyeItemAt,
+
+					isVisibleAt,
+					isExtraVisibleAt
+				};
 			}
 
 			return base.OnModCall(mod, args);
