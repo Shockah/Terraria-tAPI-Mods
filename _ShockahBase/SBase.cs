@@ -88,12 +88,18 @@ namespace Shockah.Base
 			return true;
 		}
 
-        public static bool PutItem(ref Item item, Item[] items)
+		public static bool PutItem(ref Item item, Item[] items, int rangeStart, int rangeEnd)
+		{
+			return PutItem(ref item, items, new Tuple<int,int>(rangeStart, rangeEnd));
+		}
+        public static bool PutItem(ref Item item, Item[] items, Tuple<int, int> range = null)
         {
             if (item.IsBlank()) return false;
-            foreach (Item item2 in items)
+			if (range == null) range = new Tuple<int,int>(0, items.Length - 1);
+			for (int i = range.Item1; i <= range.Item2; i++)
             {
-                if (!item2.IsBlank() && item2.IsTheSameAs(item) && item2.stack < item2.maxStack)
+                Item item2 = items[i];
+				if (!item2.IsBlank() && item2.IsTheSameAs(item) && item2.stack < item2.maxStack)
                 {
                     int diff = Math.Min(item2.maxStack - item2.stack, item.stack);
                     item2.stack += diff;
@@ -105,7 +111,7 @@ namespace Shockah.Base
                     }
                 }
             }
-            for (int item2id = 0; item2id < items.Length; item2id++)
+            for (int item2id = range.Item1; item2id <= range.Item2; item2id++)
             {
                 if (items[item2id].IsBlank())
                 {
