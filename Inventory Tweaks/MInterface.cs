@@ -49,9 +49,23 @@ namespace Shockah.InvTweaks
 				else if (slot.type == "Chest")
 				{
 					Item myItem = slot.MyItem;
-					if (!myItem.IsBlank() && myItem.type >= 71 && myItem.type <= 74) SBase.PutItem(ref myItem, Main.localPlayer.inventory, 50, 53);
-					if (!myItem.IsBlank() && myItem.ammo > 0 && !myItem.notAmmo) SBase.PutItem(ref myItem, Main.localPlayer.inventory, 54, 57);
-					if (!myItem.IsBlank()) SBase.PutItem(ref myItem, Main.localPlayer.inventory, 0, 49);
+					if (Main.localPlayer.chest >= 0)
+					{
+						if (!myItem.IsBlank() && myItem.type >= 71 && myItem.type <= 74) SBase.PutItem(ref myItem, Main.localPlayer.inventory, 50, 53);
+						if (!myItem.IsBlank() && myItem.ammo > 0 && !myItem.notAmmo) SBase.PutItem(ref myItem, Main.localPlayer.inventory, 54, 57);
+						if (!myItem.IsBlank()) SBase.PutItem(ref myItem, Main.localPlayer.inventory, 0, 49);
+					}
+					else
+					{
+						Item[] container = null;
+						switch (Main.localPlayer.chest)
+						{
+							case -2: container = Main.localPlayer.bank.item; break;
+							case -3: container = Main.localPlayer.bank2.item; break;
+						}
+						if (container != null)
+							SBase.PutItem(ref myItem, container);
+					}
 					Main.PlaySound(7, -1, -1, 1);
 					slot.MyItem = myItem;
 				}
