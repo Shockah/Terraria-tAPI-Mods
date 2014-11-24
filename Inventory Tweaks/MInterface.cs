@@ -39,23 +39,21 @@ namespace Shockah.InvTweaks
 			if (!(bool)modBase.options["bindShiftMove"].Value) return true;
 			if (slot.modBase == null && Main.localPlayer.chestObj != null && release && KState.Special.Shift.Down())
 			{
-				if (slot.type == "Inventory")
+				if (slot.type == "Inventory" || slot.type == "Coin" || slot.type == "Ammo")
 				{
 					Item myItem = slot.MyItem;
-					if (SBase.PutItem(ref myItem, Main.localPlayer.chestItems))
-					{
-						Main.PlaySound(7, -1, -1, 1);
-						slot.MyItem = myItem;
-					}
+					SBase.PutItem(ref myItem, Main.localPlayer.chestItems);
+					Main.PlaySound(7, -1, -1, 1);
+					slot.MyItem = myItem;
 				}
 				else if (slot.type == "Chest")
 				{
 					Item myItem = slot.MyItem;
-					if (SBase.PutItem(ref myItem, Main.localPlayer.inventory))
-					{
-						Main.PlaySound(7, -1, -1, 1);
-						slot.MyItem = myItem;
-					}
+					if (!myItem.IsBlank() && myItem.type >= 71 && myItem.type <= 74) SBase.PutItem(ref myItem, Main.localPlayer.inventory, 50, 53);
+					if (!myItem.IsBlank() && myItem.ammo > 0 && !myItem.notAmmo) SBase.PutItem(ref myItem, Main.localPlayer.inventory, 54, 57);
+					if (!myItem.IsBlank()) SBase.PutItem(ref myItem, Main.localPlayer.inventory, 0, 49);
+					Main.PlaySound(7, -1, -1, 1);
+					slot.MyItem = myItem;
 				}
 				return false;
 			}
