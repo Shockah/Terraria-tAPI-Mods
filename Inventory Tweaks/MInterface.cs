@@ -37,7 +37,7 @@ namespace Shockah.InvTweaks
 			}
 		}
 
-		public bool HandleActions(ItemSlot slot, ref bool release, SlotAction.MButton mbutton)
+		public bool HandleActions(ItemSlot slot, bool release, SlotAction.MButton mbutton)
 		{
 			SlotAction.KKeys kkeys = SlotAction.KKeys.None;
 			if (KState.Special.Ctrl.Down())
