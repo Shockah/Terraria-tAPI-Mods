@@ -6,13 +6,13 @@ using TAPI;
 using TAPI.UIKit;
 using Terraria;
 using Shockah.InvTweaks.SlotActions;
+using System.Collections.Generic;
 
 namespace Shockah.InvTweaks
 {
 	public class MInterface : ModInterface
 	{
-		public static readonly List<SlotAction> actions = new List<SlotAction>();
-
+		public readonly List<SlotAction> actions = new List<SlotAction>();
 		private Texture2D texGlow = null, texCracked = null, texQuest = null;
 
 		public override void PostDrawItemSlotBackground(SpriteBatch sb, ItemSlot slot)

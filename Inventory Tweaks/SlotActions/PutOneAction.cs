@@ -13,7 +13,7 @@ namespace Shockah.InvTweaks.SlotActions
 
 		public override bool Applies(ItemSlot slot, bool release)
 		{
-			return (slot.MyItem.IsBlank() || slot.MyItem.IsTheSameAs(Main.mouseItem) && !Main.mouseItem.IsBlank() && slot.AllowsItem(Main.mouseItem) && release;
+			return (slot.MyItem.IsBlank() || slot.MyItem.IsTheSameAs(Main.mouseItem)) && !Main.mouseItem.IsBlank() && slot.AllowsItem(Main.mouseItem) && release;
 		}
 
 		public override bool Call(ItemSlot slot, bool release)
@@ -21,7 +21,7 @@ namespace Shockah.InvTweaks.SlotActions
 			if (slot.MyItem.IsBlank())
 			{
 				slot.MyItem = (Item)Main.mouseItem.Clone();
-				slot.stack = 0;
+				slot.MyItem.stack = 0;
 			}
 			slot.MyItem.stack++;
 			Main.mouseItem.stack--;

@@ -23,6 +23,7 @@ namespace Shockah.InvTweaks.SlotActions
 				SBase.PutItem(ref myItem, Main.localPlayer.chestItems);
 				Main.PlaySound(7, -1, -1, 1);
 				slot.MyItem = myItem;
+				return true;
 			}
 			else if (slot.type == "Chest")
 			{
@@ -32,7 +33,9 @@ namespace Shockah.InvTweaks.SlotActions
 				if (!myItem.IsBlank()) SBase.PutItem(ref myItem, Main.localPlayer.inventory, 0, 49);
 				Main.PlaySound(7, -1, -1, 1);
 				slot.MyItem = myItem;
+				return true;
 			}
+			return base.Call(slot, release);
 		}
 	}
 }

@@ -50,7 +50,13 @@
     <None Include="ModOptions.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MBase.cs" />
     <Compile Include="MInterface.cs" />
+    <Compile Include="SlotAction.cs" />
+    <Compile Include="SlotActions\PutOneAction.cs" />
+    <Compile Include="SlotActions\QuickMoveAction.cs" />
+    <Compile Include="SlotActions\TakeHalfAction.cs" />
+    <Compile Include="SlotActions\TrashAction.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\_ShockahBase\_ShockahBase.csproj">

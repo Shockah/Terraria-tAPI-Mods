@@ -11,14 +11,14 @@ namespace Shockah.InvTweaks
 			Disabled,
 			Left,
 			Right,
-			Middle;
+			Middle
 		}
 		public enum KKeys
 		{
 			None,
 			Ctrl,
 			Shift,
-			Both;
+			Both
 		}
 
 		public MButton mbutton;
