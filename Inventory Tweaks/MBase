@@ -1,0 +1,20 @@
+using Shockah.Base;
+using TAPI;
+using TAPI.UIKit;
+using Terraria;
+using Shockah.InvTweaks.SlotActions;
+
+namespace Shockah.InvTweaks
+{
+	public class MBase : ModBase
+	{
+		public override void OnLoad()
+		{
+			modInterface.actions.Add(new QuickMoveAction(SlotAction.MButton.Left, SlotAction.KKeys.Shift));
+			modInterface.actions.Add(new TrashAction(SlotAction.MButton.Left, SlotAction.KKeys.Shift));
+
+			modInterface.actions.Add(new TakeHalfAction(SlotAction.MButton.Right, SlotAction.KKeys.None));
+			modInterface.actions.Add(new PutOneAction(SlotAction.MButton.Right, SlotAction.KKeys.None));
+		}
+	}
+}

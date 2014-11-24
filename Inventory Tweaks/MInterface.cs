@@ -5,11 +5,14 @@ using Shockah.Base;
 using TAPI;
 using TAPI.UIKit;
 using Terraria;
+using Shockah.InvTweaks.SlotActions;
 
 namespace Shockah.InvTweaks
 {
 	public class MInterface : ModInterface
 	{
+		public static readonly List<SlotAction> actions = new List<SlotAction>();
+
 		private Texture2D texGlow = null, texCracked = null, texQuest = null;
 
 		public override void PostDrawItemSlotBackground(SpriteBatch sb, ItemSlot slot)
@@ -34,30 +37,29 @@ namespace Shockah.InvTweaks
 			}
 		}
 
-		public override bool PreItemSlotLeftClick(ItemSlot slot, ref bool release)
+		public bool HandleActions(ItemSlot slot, ref bool release, SlotAction.MButton mbutton)
 		{
-			if (!(bool)modBase.options["bindShiftMove"].Value) return true;
-			if (slot.modBase == null && Main.localPlayer.chestItems != null && release && KState.Special.Shift.Down())
+			SlotAction.KKeys kkeys = SlotAction.KKeys.None;
+			if (KState.Special.Ctrl.Down())
+				kkeys = (SlotAction.KKeys)(((int)kkeys) | ((int)SlotAction.KKeys.Ctrl));
+			if (KState.Special.Shift.Down())
+				kkeys = (SlotAction.KKeys)(((int)kkeys) | ((int)SlotAction.KKeys.Shift));
+
+			foreach (SlotAction action in actions)
 			{
-				if (slot.type == "Inventory" || slot.type == "Coin" || slot.type == "Ammo")
-				{
-					Item myItem = slot.MyItem;
-					SBase.PutItem(ref myItem, Main.localPlayer.chestItems);
-					Main.PlaySound(7, -1, -1, 1);
-					slot.MyItem = myItem;
-				}
-				else if (slot.type == "Chest")
-				{
-					Item myItem = slot.MyItem;
-					if (!myItem.IsBlank() && myItem.type >= 71 && myItem.type <= 74) SBase.PutItem(ref myItem, Main.localPlayer.inventory, 50, 53);
-					if (!myItem.IsBlank() && myItem.ammo > 0 && !myItem.notAmmo) SBase.PutItem(ref myItem, Main.localPlayer.inventory, 54, 57);
-					if (!myItem.IsBlank()) SBase.PutItem(ref myItem, Main.localPlayer.inventory, 0, 49);
-					Main.PlaySound(7, -1, -1, 1);
-					slot.MyItem = myItem;
-				}
-				return false;
+				if (action.mbutton == mbutton && action.kkeys == kkeys && action.Applies(slot, release))
+					return !action.Call(slot, release);
 			}
 			return true;
+		}
+
+		public override bool PreItemSlotLeftClick(ItemSlot slot, ref bool release)
+		{
+			return HandleActions(slot, release, SlotAction.MButton.Left);
+		}
+		public override bool PreItemSlotRightClick(ItemSlot slot, ref bool release)
+		{
+			return HandleActions(slot, release, SlotAction.MButton.Right);
 		}
 	}
 }
