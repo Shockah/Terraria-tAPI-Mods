@@ -1,16 +1,114 @@
 ﻿{
 	"options": [
 		{
-			"name": "colorRarity",
-			"displayName": "Color by rarity",
+			"name": "QuickMoveAction_mouse",
+			"displayName": "Quick Move",
+			"type": "List",
+			"list": [
+				"Disabled",
+				"Left",
+				"Right"
+			],
+			"default": 1
+		},
+		{
+			"name": "QuickMoveAction_keys",
+			"displayName": "Quick Move: Mod",
+			"type": "List",
+			"list": [
+				"None",
+				"Ctrl",
+				"Shift",
+				"Both"
+			],
+			"default": 2
+		},
+
+		{
+			"name": "TrashAction_mouse",
+			"displayName": "Trash",
+			"type": "List",
+			"list": [
+				"Disabled",
+				"Left",
+				"Right"
+			],
+			"default": 1
+		},
+		{
+			"name": "TrashAction_keys",
+			"displayName": "Trash: Mod",
+			"type": "List",
+			"list": [
+				"None",
+				"Ctrl",
+				"Shift",
+				"Both"
+			],
+			"default": 2
+		},
+
+		{
+			"name": "TakeHalfAction_mouse",
+			"displayName": "Take Half",
+			"type": "List",
+			"list": [
+				"Disabled",
+				"Left",
+				"Right"
+			],
+			"default": 2
+		},
+		{
+			"name": "TakeHalfAction_keys",
+			"displayName": "Take Half: Mod",
+			"type": "List",
+			"list": [
+				"None",
+				"Ctrl",
+				"Shift",
+				"Both"
+			],
+			"default": 0
+		},
+
+		{
+			"name": "PutOneAction_mouse",
+			"displayName": "Put One",
+			"type": "List",
+			"list": [
+				"Disabled",
+				"Left",
+				"Right"
+			],
+			"default": 2
+		},
+		{
+			"name": "PutOneAction_keys",
+			"displayName": "Put One: Mod",
+			"type": "List",
+			"list": [
+				"None",
+				"Ctrl",
+				"Shift",
+				"Both"
+			],
+			"default": 0
+		},
+
+
+		{
+			"name": "OverrideTrashAction",
+			"displayName": "Override trash action",
+			"tooltip": "Disables the vanilla trash action",
 			"type": "Boolean",
 			"default": true
 		},
 		{
-            "name": "bindShiftMove",
-            "displayName": "Shift-move items",
-            "type": "Boolean",
-            "default": true
-        }
+			"name": "colorRarity",
+			"displayName": "Color by rarity",
+			"type": "Boolean",
+			"default": true
+		}
 	]
 }

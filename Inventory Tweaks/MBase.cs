@@ -12,11 +12,13 @@ namespace Shockah.InvTweaks
 		{
 			MInterface minterface = (MInterface)modInterface;
 
-			minterface.actions.Add(new QuickMoveAction(SlotAction.MButton.Left, SlotAction.KKeys.Shift));
-			minterface.actions.Add(new TrashAction(SlotAction.MButton.Left, SlotAction.KKeys.Shift));
+			minterface.actions.Add(new QuickMoveAction());
+			minterface.actions.Add(new TrashAction());
 
-			minterface.actions.Add(new TakeHalfAction(SlotAction.MButton.Right, SlotAction.KKeys.None));
-			minterface.actions.Add(new PutOneAction(SlotAction.MButton.Right, SlotAction.KKeys.None));
+			minterface.actions.Add(new TakeHalfAction());
+			minterface.actions.Add(new PutOneAction());
+
+			minterface.actions.Add(new OverrideTrashAction());
 		}
 	}
 }

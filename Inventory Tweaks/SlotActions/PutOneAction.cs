@@ -9,8 +9,6 @@ namespace Shockah.InvTweaks.SlotActions
 {
 	public class PutOneAction : SlotAction
 	{
-		public PutOneAction(MButton mouseButton, KKeys kboardKeys) : base(mouseButton, kboardKeys) { }
-
 		public override bool Applies(ItemSlot slot, bool release)
 		{
 			return (slot.MyItem.IsBlank() || slot.MyItem.IsTheSameAs(Main.mouseItem)) && !Main.mouseItem.IsBlank() && slot.AllowsItem(Main.mouseItem) && release;

@@ -9,8 +9,6 @@ namespace Shockah.InvTweaks.SlotActions
 {
 	public class TakeHalfAction : SlotAction
 	{
-		public TakeHalfAction(MButton mouseButton, KKeys kboardKeys) : base(mouseButton, kboardKeys) { }
-
 		public override bool Applies(ItemSlot slot, bool release)
 		{
 			return !slot.MyItem.IsBlank() && Main.mouseItem.IsBlank() && slot.AllowsItem(Main.mouseItem) && release;

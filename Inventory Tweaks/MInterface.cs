@@ -14,6 +14,7 @@ namespace Shockah.InvTweaks
 	{
 		public readonly List<SlotAction> actions = new List<SlotAction>();
 		private Texture2D texGlow = null, texCracked = null, texQuest = null;
+		private bool lockLeft = false, lockRight = false;
 
 		public override void PostDrawItemSlotBackground(SpriteBatch sb, ItemSlot slot)
 		{
@@ -55,11 +56,19 @@ namespace Shockah.InvTweaks
 
 		public override bool PreItemSlotLeftClick(ItemSlot slot, ref bool release)
 		{
-			return HandleActions(slot, release, SlotAction.MButton.Left);
+			if (release) lockLeft = false;
+			if (lockLeft && !release) return false;
+			bool b = HandleActions(slot, release, SlotAction.MButton.Left);
+			if (release && !b) lockLeft = true;
+			return b;
 		}
 		public override bool PreItemSlotRightClick(ItemSlot slot, ref bool release)
 		{
-			return HandleActions(slot, release, SlotAction.MButton.Right);
+			if (release) lockRight = false;
+			if (lockRight && !release) return false;
+			bool b = HandleActions(slot, release, SlotAction.MButton.Right);
+			if (release && !b) lockRight = true;
+			return b;
 		}
 	}
 }

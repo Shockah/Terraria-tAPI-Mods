@@ -6,7 +6,7 @@ using Shockah.InvTweaks;
 
 namespace Shockah.InvTweaks.SlotActions
 {
-	public class TrashAction : SlotAction
+	public class OverrideTrashAction : SlotAction
 	{
 		public override bool Applies(ItemSlot slot, bool release)
 		{
@@ -15,10 +15,14 @@ namespace Shockah.InvTweaks.SlotActions
 
 		public override bool Call(ItemSlot slot, bool release)
 		{
-			Main.trashItem = (Item)slot.MyItem.Clone();
-			slot.MyItem.SetDefaults(0);
-			Main.PlaySound(7, -1, -1, 1);
 			return true;
+		}
+
+		public override void Load(OptionList options)
+		{
+			bool enabled = (bool)options[GetType().Name].Value;
+			mbutton = enabled ? MButton.Left : MButton.Disabled;
+			if (enabled) kkeys = KKeys.Shift;
 		}
 	}
 }

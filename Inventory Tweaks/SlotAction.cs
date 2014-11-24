@@ -1,3 +1,4 @@
+using System;
 using TAPI;
 using TAPI.UIKit;
 using Terraria;
@@ -10,8 +11,7 @@ namespace Shockah.InvTweaks
 		{
 			Disabled,
 			Left,
-			Right,
-			Middle
+			Right
 		}
 		public enum KKeys
 		{
@@ -21,14 +21,8 @@ namespace Shockah.InvTweaks
 			Both
 		}
 
-		public MButton mbutton;
-		public KKeys kkeys;
-
-		public SlotAction(MButton mouseButton, KKeys kboardKeys)
-		{
-			mbutton = mouseButton;
-			kkeys = kboardKeys;
-		}
+		public MButton mbutton = MButton.Disabled;
+		public KKeys kkeys = KKeys.None;
 
 		public virtual bool Applies(ItemSlot slot, bool release)
 		{
@@ -38,6 +32,12 @@ namespace Shockah.InvTweaks
 		public virtual bool Call(ItemSlot slot, bool release)
 		{
 			return false;
+		}
+
+		public virtual void Load(OptionList options)
+		{
+			mbutton = (MButton)Enum.Parse(typeof(MButton), (string)options[GetType().Name + "_mouse"].Value);
+			kkeys = (KKeys)Enum.Parse(typeof(KKeys), (string)options[GetType().Name + "_keys"].Value);
 		}
 	}
 }
