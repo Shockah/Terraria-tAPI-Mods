@@ -37,7 +37,7 @@ namespace Shockah.InvTweaks
 		public override bool PreItemSlotLeftClick(ItemSlot slot, ref bool release)
 		{
 			if (!(bool)modBase.options["bindShiftMove"].Value) return true;
-			if (slot.modBase == null && Main.localPlayer.chestObj != null && release && KState.Special.Shift.Down())
+			if (slot.modBase == null && Main.localPlayer.chestItems != null && release && KState.Special.Shift.Down())
 			{
 				if (slot.type == "Inventory" || slot.type == "Coin" || slot.type == "Ammo")
 				{
@@ -49,23 +49,9 @@ namespace Shockah.InvTweaks
 				else if (slot.type == "Chest")
 				{
 					Item myItem = slot.MyItem;
-					if (Main.localPlayer.chest >= 0)
-					{
-						if (!myItem.IsBlank() && myItem.type >= 71 && myItem.type <= 74) SBase.PutItem(ref myItem, Main.localPlayer.inventory, 50, 53);
-						if (!myItem.IsBlank() && myItem.ammo > 0 && !myItem.notAmmo) SBase.PutItem(ref myItem, Main.localPlayer.inventory, 54, 57);
-						if (!myItem.IsBlank()) SBase.PutItem(ref myItem, Main.localPlayer.inventory, 0, 49);
-					}
-					else
-					{
-						Item[] container = null;
-						switch (Main.localPlayer.chest)
-						{
-							case -2: container = Main.localPlayer.bank.item; break;
-							case -3: container = Main.localPlayer.bank2.item; break;
-						}
-						if (container != null)
-							SBase.PutItem(ref myItem, container);
-					}
+					if (!myItem.IsBlank() && myItem.type >= 71 && myItem.type <= 74) SBase.PutItem(ref myItem, Main.localPlayer.inventory, 50, 53);
+					if (!myItem.IsBlank() && myItem.ammo > 0 && !myItem.notAmmo) SBase.PutItem(ref myItem, Main.localPlayer.inventory, 54, 57);
+					if (!myItem.IsBlank()) SBase.PutItem(ref myItem, Main.localPlayer.inventory, 0, 49);
 					Main.PlaySound(7, -1, -1, 1);
 					slot.MyItem = myItem;
 				}
