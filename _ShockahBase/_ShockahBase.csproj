@@ -48,23 +48,26 @@
     <None Include="ModInfo.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Old\ILFrames.cs" />
+    <Compile Include="Old\IlPopupMenus.cs" />
+    <Compile Include="Old\ILTooltip.cs" />
+    <Compile Include="Old\MInterface.cs" />
+    <Compile Include="Old\SFrame.cs" />
+    <Compile Include="Old\SPopupMenu.cs" />
+    <Compile Include="Old\STooltip.cs" />
+    <Compile Include="Texture2DData.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="IlPopupMenus.cs" />
-    <Compile Include="ILFrames.cs" />
-    <Compile Include="Math2.cs" />
     <Compile Include="MBase.cs" />
-    <Compile Include="MInterface.cs" />
+    <Compile Include="SEvent.cs" />
+    <Compile Include="SEventHandler.cs" />
+    <Compile Include="SFuncHandler.cs" />
+    <Compile Include="SActionHandler.cs" />
+    <Compile Include="SExternalHandler.cs" />
+    <Compile Include="MPlayer.cs" />
     <Compile Include="MItem.cs" />
     <Compile Include="MNPC.cs" />
     <Compile Include="MTileType.cs" />
-    <Compile Include="SEvent.cs" />
-    <Compile Include="MPlayer.cs" />
-    <Compile Include="SBase.cs" />
-    <Compile Include="ILTooltip.cs" />
-    <Compile Include="SFrame.cs" />
-    <Compile Include="SPopupMenu.cs" />
-    <Compile Include="STooltip.cs" />
-    <Compile Include="Texture2DData.cs" />
+    <Compile Include="Math2.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="C3.XNA.Primitives2D.dll" />
@@ -78,4 +81,13 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Old\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\tAPI\tAPI\tAPI.csproj">
+      <Project>{94109DD7-1D98-43B1-8A52-1DBA4DFD1DCB}</Project>
+      <Name>tAPI</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

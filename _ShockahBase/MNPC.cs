@@ -10,13 +10,14 @@ namespace Shockah.Base
 
 		public override bool PreNPCLoot()
 		{
+			SEvent<NPC, int, Item> ev = ((MBase)modBase).handler.events["NPCLoot"];
+			if (ev.Count == 0) return;
+
 			cacheItems = new uint[Main.item.Length - 1];
 			for (int i = 0; i < cacheItems.Length; i++)
 			{
 				if (Main.item[i].IsBlank()) continue;
-				MItem mitem = Main.item[i].GetSubClass<MItem>();
-				if (mitem == null) continue;
-				cacheItems[i] = mitem.myId;
+				cacheItems[i] = Main.item[i].GetSubClass<MItem>().myId;
 			}
 
 			return true;
@@ -24,15 +25,14 @@ namespace Shockah.Base
 
 		public override void PostNPCLoot()
 		{
+			SEvent<NPC, int, Item> ev = ((MBase)modBase).handler.events["NPCLoot"];
+			if (ev.Count == 0) return;
+
 			for (int i = 0; i < cacheItems.Length; i++)
 			{
 				if (Main.item[i].IsBlank()) continue;
-				MItem mitem = Main.item[i].GetSubClass<MItem>();
-				if (mitem == null) continue;
-				if (mitem.myId != cacheItems[i])
-				{
-					foreach (Action<NPC, Item> h in SBase.EventNPCLoot) h(npc, Main.item[i]);
-				}
+				if (Main.item[i].GetSubClass<MItem>().myId != cacheItems[i])
+					ev.Call(npc, i, Main.item[i]);
 			}
 		}
 	}

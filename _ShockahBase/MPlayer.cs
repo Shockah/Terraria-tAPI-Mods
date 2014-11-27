@@ -6,7 +6,7 @@ namespace Shockah.Base
 {
 	public class MPlayer : ModPlayer
 	{
-		private static void CopyFromItem(Item target, Item source)
+		protected static void CopyFromItem(Item target, Item source)
 		{
 			target.netDefaults(source.netID);
 			target.stack = source.stack;
@@ -17,12 +17,13 @@ namespace Shockah.Base
 		public override void PostUpdate()
 		{
 			if (Main.netMode == 2 || player.whoAmI != Main.myPlayer) return;
-			if (SBase.EventInventoryChange.Count == 0) return;
+			SEvent<Player, string, int, Item, Item> ev = ((MBase)modBase).handler.events["InventoryChanged"];
+			if (ev.Count == 0) return;
 
 			bool wasNull = false;
 			if (inventory == null)
 			{
-				inventory = new Item[player.inventory.Length - 1]; //without the mouse item in last (fake) slot
+				inventory = new Item[player.inventory.Length - 1]; //without the mouse item in the last (fake) slot
 				for (int i = 0; i < inventory.Length; i++) inventory[i] = new Item();
 				armor = new Item[player.armor.Length];
 				for (int i = 0; i < armor.Length; i++) armor[i] = new Item();
@@ -35,7 +36,7 @@ namespace Shockah.Base
 			{
 				if (!player.inventory[i].IsTheSameAs(inventory[i]) || player.inventory[i].stack != inventory[i].stack || wasNull)
 				{
-					if (!wasNull) foreach (Action<Player, string, int, Item, Item> h in SBase.EventInventoryChange) h(player, "Inventory", i, inventory[i], player.inventory[i]);
+					if (!wasNull) ev.Call(player, "Inventory", i, inventory[i], player.inventory[i]);
 					CopyFromItem(inventory[i], player.inventory[i]);
 				}
 			}
@@ -43,7 +44,7 @@ namespace Shockah.Base
 			{
 				if (!player.armor[i].IsTheSameAs(armor[i]) || player.armor[i].stack != armor[i].stack || wasNull)
 				{
-					if (!wasNull) foreach (Action<Player, string, int, Item, Item> h in SBase.EventInventoryChange) h(player, "Armor", i, armor[i], player.armor[i]);
+					if (!wasNull) ev.Call(player, "Armor", i, armor[i], player.armor[i]);
 					CopyFromItem(armor[i], player.armor[i]);
 				}
 			}
@@ -51,7 +52,7 @@ namespace Shockah.Base
 			{
 				if (!player.dye[i].IsTheSameAs(dye[i]) || player.dye[i].stack != dye[i].stack || wasNull)
 				{
-					if (!wasNull) foreach (Action<Player, string, int, Item, Item> h in SBase.EventInventoryChange) h(player, "Dye", i, dye[i], player.dye[i]);
+					if (!wasNull) ev.Call(player, "Dye", i, dye[i], player.dye[i]);
 					CopyFromItem(dye[i], player.dye[i]);
 				}
 			}
