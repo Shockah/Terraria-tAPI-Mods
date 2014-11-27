@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{15080914-EB18-496A-ADF3-F513D23ADF13}</ProjectGuid>
     <OutputType>Exe</OutputType>
@@ -24,25 +24,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Microsoft.Xna.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Microsoft.Xna.Framework.Game.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Microsoft.Xna.Framework.Graphics.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Microsoft.Xna.Framework.Xact.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="tAPI">
       <HintPath>D:\Steam\steamapps\common\Terraria\tAPI.exe</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework">
+      <HintPath>..\Microsoft.Xna.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game">
+      <HintPath>..\Microsoft.Xna.Framework.Game.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics">
+      <HintPath>..\Microsoft.Xna.Framework.Graphics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Xact">
+      <HintPath>..\Microsoft.Xna.Framework.Xact.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -50,15 +46,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FCM Base\FCM Base.csproj">
-      <Project>{dbf4e2f5-ed07-4051-8258-5c37d2454929}</Project>
+      <Project>{DBF4E2F5-ED07-4051-8258-5C37D2454929}</Project>
       <Name>FCM Base</Name>
     </ProjectReference>
     <ProjectReference Include="..\Item Suffixes\Item Suffixes.csproj">
-      <Project>{b9a646ab-bf12-4be3-884b-8cbe837190ec}</Project>
+      <Project>{B9A646AB-BF12-4BE3-884B-8CBE837190EC}</Project>
       <Name>Item Suffixes</Name>
     </ProjectReference>
     <ProjectReference Include="..\_ShockahBase\_ShockahBase.csproj">
-      <Project>{f3bb15ae-9643-451e-baf4-fd29cd42798b}</Project>
+      <Project>{F3BB15AE-9643-451E-BAF4-FD29CD42798B}</Project>
       <Name>_ShockahBase</Name>
     </ProjectReference>
   </ItemGroup>
