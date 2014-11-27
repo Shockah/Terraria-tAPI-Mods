@@ -7,13 +7,13 @@ namespace Shockah.Base
 	public class SActionHandler
 	{
 		protected Dictionary<string, Delegate> actions = new Dictionary<string, Delegate>();
-		protected Dictionary<string, Action<object>> actions0 = new Dictionary<string, Action<object>>();
-		protected Dictionary<string, Action<object, object>> actions1 = new Dictionary<string, Action<object, object>>();
-		protected Dictionary<string, Action<object, object, object>> actions2 = new Dictionary<string, Action<object, object, object>>();
-		protected Dictionary<string, Action<object, object, object, object>> actions3 = new Dictionary<string, Action<object, object, object, object>>();
-		protected Dictionary<string, Action<object, object, object, object, object>> actions4 = new Dictionary<string, Action<object, object, object, object, object>>();
-		protected Dictionary<string, Action<object, object, object, object, object, object>> actions5 = new Dictionary<string, Action<object, object, object, object, object, object>>();
-		protected Dictionary<string, Action<object, object, object, object, object, object, object>> actions6 = new Dictionary<string, Action<object, object, object, object, object, object, object>>();
+		protected Dictionary<string, Action> actions0 = new Dictionary<string, Action>();
+		protected Dictionary<string, Action<object>> actions1 = new Dictionary<string, Action<object>>();
+		protected Dictionary<string, Action<object, object>> actions2 = new Dictionary<string, Action<object, object>>();
+		protected Dictionary<string, Action<object, object, object>> actions3 = new Dictionary<string, Action<object, object, object>>();
+		protected Dictionary<string, Action<object, object, object, object>> actions4 = new Dictionary<string, Action<object, object, object, object>>();
+		protected Dictionary<string, Action<object, object, object, object, object>> actions5 = new Dictionary<string, Action<object, object, object, object, object>>();
+		protected Dictionary<string, Action<object, object, object, object, object, object>> actions6 = new Dictionary<string, Action<object, object, object, object, object, object>>();
 		public int Count { get { return actions.Count; } }
 
 		public Delegate this[string name]
@@ -24,13 +24,13 @@ namespace Shockah.Base
 				actions[name] = value;
 				switch (value.Method.GetParameters().Length)
 				{
-					case 0: actions0[name] = (Action<object>)value; break;
-					case 1: actions1[name] = (Action<object, object>)value; break;
-					case 2: actions2[name] = (Action<object, object, object>)value; break;
-					case 3: actions3[name] = (Action<object, object, object, object>)value; break;
-					case 4: actions4[name] = (Action<object, object, object, object, object>)value; break;
-					case 5: actions5[name] = (Action<object, object, object, object, object, object>)value; break;
-					case 6: actions6[name] = (Action<object, object, object, object, object, object, object>)value; break;
+					case 0: actions0[name] = (Action)value; break;
+					case 1: actions1[name] = (Action<object>)value; break;
+					case 2: actions2[name] = (Action<object, object>)value; break;
+					case 3: actions3[name] = (Action<object, object, object>)value; break;
+					case 4: actions4[name] = (Action<object, object, object, object>)value; break;
+					case 5: actions5[name] = (Action<object, object, object, object, object>)value; break;
+					case 6: actions6[name] = (Action<object, object, object, object, object, object>)value; break;
 				}
 			}
 		}

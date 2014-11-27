@@ -5,29 +5,33 @@ using TAPI;
 
 namespace Shockah.Base
 {
-	public class SEventBase<T> : IEnumerable<T> where T : Delegate
+	public class SEventBase<T> where T : Delegate
 	{
-		protected List<Tuple<T, double>> handlers = new List<Tuple<T, double>>();
+		public readonly List<Tuple<T, double>> handlers = new List<Tuple<T, double>>();
 		public int Count { get { return handlers.Count; } }
 		protected bool dirty = true;
 
-		public IEnumerator<T> GetEnumerator()
-		{
-			return handlers.GetEnumerator();
-		}
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return this.GetEnumerator();
-		}
-
 		public void Add(T a)
 		{
-			handlers.Add(a);
+			Add(a, 0d);
+		}
+		public void Add(T a, double priority)
+		{
+			Add(new Tuple<T, double>(a, priority));
+		}
+		public void Add(Tuple<T, double> tuple)
+		{
+			handlers.Add(tuple);
 			dirty = true;
 		}
 		public void Remove(T a)
 		{
-			handlers.Remove(a);
+			for (int i = 0; i < handlers.Count; i++)
+				if (handlers[i].Item1 == a)
+				{
+					handlers.RemoveAt(i);
+					break;
+				}
 			dirty = true;
 		}
 		public void Clear()
@@ -46,25 +50,23 @@ namespace Shockah.Base
 		public static SEventBase<T> operator +(SEventBase<T> ev, T a)
 		{
 			ev.handlers.Add(new Tuple<T, double>(a, 0d));
-			dirty = true;
+			ev.dirty = true;
 			return ev;
 		}
 		public static SEventBase<T> operator +(SEventBase<T> ev, Tuple<T, double> tuple)
 		{
 			ev.handlers.Add(tuple);
-			dirty = true;
+			ev.dirty = true;
 			return ev;
 		}
 		public static SEventBase<T> operator -(SEventBase<T> ev, T a)
 		{
-			ev.handlers.Remove(a);
-			dirty = true;
+			ev.Remove(a);
 			return ev;
 		}
 		public static SEventBase<T> operator -(SEventBase<T> ev, Tuple<T, double> tuple)
 		{
-			ev.handlers.Remove(tuple.Item1);
-			dirty = true;
+			ev.Remove(tuple.Item1);
 			return ev;
 		}
 	}
