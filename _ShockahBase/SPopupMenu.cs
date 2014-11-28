@@ -59,46 +59,36 @@ namespace Shockah.Base
 			}
 		}
 
-		public static List<SPopupMenu> menus = new List<SPopupMenu>();
-
-		public static void RenderAll(SpriteBatch sb)
-		{
-			if (menus.Count == 0) return;
-			Main.localPlayer.mouseInterface = true;
-
-			bool mouseHover = false, destroyMe;
-			SPopupMenu menuToDestroy = null;
-			foreach (SPopupMenu menu in menus)
-			{
-				mouseHover |= menu.Render(sb, out destroyMe);
-				if (destroyMe && menuToDestroy == null) menuToDestroy = menu;
-			}
-			if (menuToDestroy != null) menuToDestroy.Destroy();
-			if (!mouseHover && Main.mouseLeft && Main.mouseLeftRelease) menus.Clear();
-		}
-		
+		public readonly SPopupMenuManager manager;
 		public float scale = .75f;
 		public List<Element> elements = new List<Element>();
 		public Vector2 pos;
 
+		public SPopupMenu(SPopupMenuManager manager)
+		{
+			this.manager = manager;
+		}
+
 		public SPopupMenu Add(params Element[] elements)
 		{
-			foreach (Element element in elements) this.elements.Add(element);
+			foreach (Element element in elements)
+				this.elements.Add(element);
 			return this;
 		}
 
 		public void Create()
 		{
 			if (elements.Count == 0) return;
-			menus.Add(this);
+			manager.menus.Add(this);
 			pos = Main.mouse;
 		}
 
 		public void Destroy()
 		{
-			int index = menus.IndexOf(this);
+			int index = manager.menus.IndexOf(this);
 			if (index < 0) return;
-			while (menus.Count > index) menus.RemoveAt(index);
+			while (manager.menus.Count > index)
+				manager.menus.RemoveAt(index);
 		}
 
 		public bool Render(SpriteBatch sb, out bool destroyMe)

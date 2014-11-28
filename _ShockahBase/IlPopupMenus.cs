@@ -14,7 +14,7 @@ namespace Shockah.Base
 
 		protected override void OnDraw(SpriteBatch sb)
 		{
-			SPopupMenu.RenderAll(sb);
+			MBase.me.popupMenuManager.DrawAll(sb);
 		}
 	}
 }

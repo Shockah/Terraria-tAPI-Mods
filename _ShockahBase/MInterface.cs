@@ -16,9 +16,9 @@ namespace Shockah.Base
 				LayerFrames = new ILFrames();
 				LayerPopupMenus = new IlPopupMenus();
 			}
-			SBase.InsertAfter(list, (il) => { return il == InterfaceLayer.LayerMouseText; }, LayerTooltip);
-			SBase.InsertAfter(list, (il) => { return il == InterfaceLayer.LayerCurrentInterface; }, LayerPopupMenus);
-			SBase.InsertAfter(list, (il) => { return il == InterfaceLayer.LayerCurrentInterface; }, LayerFrames);
+			list.InsertAfter(InterfaceLayer.LayerMouseText, LayerTooltip);
+			list.InsertAfter(InterfaceLayer.LayerCurrentInterface, LayerPopupMenus);
+			list.InsertAfter(InterfaceLayer.LayerCurrentInterface, LayerFrames);
 
 			LayerTooltip.visible = LayerPopupMenus.visible = LayerFrames.visible = !Main.hideUI;
 		}

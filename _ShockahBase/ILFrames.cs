@@ -14,8 +14,8 @@ namespace Shockah.Base
 
 		protected override void OnDraw(SpriteBatch sb)
 		{
-			SFrame.UpdateAll();
-			SFrame.RenderAll(sb);
+			MBase.me.frameManager.UpdateAll();
+			MBase.me.frameManager.DrawAll(sb);
 		}
 	}
 }

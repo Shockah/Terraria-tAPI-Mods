@@ -1,14 +1,10 @@
-﻿using C3.XNA;
-using LitJson;
+﻿using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using TAPI;
+using LitJson;
 using Terraria;
+using Microsoft.Xna.Framework.Graphics;
+using TAPI;
+using C3.XNA;
 
 namespace Shockah.Base
 {
@@ -46,7 +42,7 @@ namespace Shockah.Base
 			}
 		}
 	}
-	
+
 	public class SFrame
 	{
 		public enum Anchor
@@ -59,7 +55,7 @@ namespace Shockah.Base
 			public static Resizable NewNot() { return new ResizableNot(); }
 			public static Resizable NewRatio(float ratio = 1f) { return new ResizableRatio(ratio); }
 			public static Resizable NewFree(bool horizontal = true, bool vertical = true) { return new ResizableFree(horizontal, vertical); }
-			
+
 			internal Resizable() { }
 			public virtual bool AnchorResizable(Anchor anchor) { return !(anchor == Anchor.Center || (int)anchor > (int)Anchor.BottomRight || (int)anchor < 0); }
 			public bool AnchorResizable(Anchor myAnchor, Anchor anchor) { if (anchor == myAnchor) return false; return AnchorResizable(anchor); }
@@ -100,90 +96,8 @@ namespace Shockah.Base
 				}
 			}
 		}
-		
-		internal static JsonData data;
-		public static List<SFrame> frames;
-		private static List<SFrame> framesAdd, framesRemove;
-		public static SFrame actionOn;
-		public static bool parentAnchorMode;
 
-		static SFrame()
-		{
-			Clear();
-		}
-
-		internal static void Clear()
-		{
-			data = JsonData.Object();
-			frames = new List<SFrame>();
-			framesAdd = new List<SFrame>();
-			framesRemove = new List<SFrame>();
-			actionOn = null;
-			parentAnchorMode = false;
-		}
-
-		public static void SaveAll()
-		{
-			File.WriteAllText(Main.SavePath + "/Mods/Shockah.Base.SFrame.json", JsonMapper.ToJson(data));
-		}
-		public static void LoadAll()
-		{
-			if (File.Exists(Main.SavePath + "/Mods/Shockah.Base.SFrame.json")) data = JsonMapper.ToObject(File.ReadAllText(Main.SavePath + "/Mods/Shockah.Base.SFrame.json"));
-		}
-
-		public static void DestroyAll(bool force = false)
-		{
-			if (force)
-			{
-				framesAdd.Clear();
-				framesRemove.Clear();
-				frames.Clear();
-			}
-			else
-			{
-				foreach (SFrame sf in frames) sf.Destroy();
-			}
-		}
-
-		public static void UpdateAll()
-		{
-			foreach (SFrame sf in framesRemove) frames.Remove(sf);
-			foreach (SFrame sf in framesAdd) frames.Add(sf);
-			framesAdd.Clear();
-			framesRemove.Clear();
-			foreach (SFrame sf in frames) sf.Update();
-
-			if (!Main.hideUI && Main.playerInventory && frames.Count != 0 && Math2.InRegion(Main.mouse, new Vector2(0, Main.screenHeight - 16), new Vector2(16, Main.screenHeight)))
-			{
-				Main.localPlayer.mouseInterface = true;
-				SBase.tip = "Left click to (un)lock all frames\nRight click to switch anchor setting mode";
-				if (Main.mouseLeft && Main.mouseLeftRelease)
-				{
-					bool allLocked = true;
-					foreach (SFrame sf in frames) if (!sf.locked) allLocked = false;
-					foreach (SFrame sf in frames) sf.locked = !allLocked;
-					parentAnchorMode = false;
-					Main.PlaySound(22, -1, -1, 1);
-				}
-				if (Main.mouseRight && Main.mouseRightRelease)
-				{
-					parentAnchorMode = !parentAnchorMode;
-				}
-			}
-		}
-		public static void RenderAll(SpriteBatch sb)
-		{
-			foreach (SFrame sf in frames) sf.Render(sb);
-			foreach (SFrame sf in frames) sf.Render2(sb);
-			foreach (SFrame sf in frames) sf.Render3(sb);
-
-			if (!Main.hideUI && Main.playerInventory && frames.Count != 0)
-			{
-				sb.Draw(Main.HBLockTexture[frames[0].locked ? 0 : 1], new Vector2(8, Main.screenHeight - 8), null, parentAnchorMode ? Color.Red : Color.White, 0f, Main.HBLockTexture[0].Size() / 2, 1f, SpriteEffects.None, 0f);
-			}
-		}
-		
-		public readonly ModBase modBase;
+		public readonly SFrameManager manager;
 		public readonly string tag;
 		public Vector2 pos, size;
 		public bool locked = true;
@@ -193,10 +107,10 @@ namespace Shockah.Base
 		public Anchor anchor = Anchor.TopLeft, parentAnchor = Anchor.TopLeft;
 		public Resizable resizable;
 
-		public SFrame(ModBase modBase, string tag, Anchor parentAnchor = Anchor.TopLeft, Anchor defaultAnchor = Anchor.TopLeft, Vector2 defaultPos = default(Vector2), Vector2 defaultSize = default(Vector2)) : this(modBase, tag, parentAnchor, defaultAnchor, defaultPos, defaultSize, Resizable.NewNot()) { }
-		public SFrame(ModBase modBase, string tag, Anchor parentAnchor, Anchor defaultAnchor, Vector2 defaultPos, Vector2 defaultSize, Resizable resizable)
+		public SFrame(SFrameManager manager, string tag, Anchor parentAnchor = Anchor.TopLeft, Anchor defaultAnchor = Anchor.TopLeft, Vector2 defaultPos = default(Vector2), Vector2 defaultSize = default(Vector2)) : this(modBase, tag, parentAnchor, defaultAnchor, defaultPos, defaultSize, Resizable.NewNot()) { }
+		public SFrame(SFrameManager manager, string tag, Anchor parentAnchor, Anchor defaultAnchor, Vector2 defaultPos, Vector2 defaultSize, Resizable resizable)
 		{
-			this.modBase = modBase;
+			this.manager = manager;
 			this.tag = tag;
 			pos = defaultPos;
 			size = defaultSize;
@@ -207,9 +121,9 @@ namespace Shockah.Base
 
 		public void Create()
 		{
-			if (data.Has(modBase.mod.InternalName))
+			if (manager.data.Has(manager.modBase.mod.InternalName))
 			{
-				JsonData j = data[modBase.mod.InternalName];
+				JsonData j = manager.data[manager.modBase.mod.InternalName];
 				if (j.Has(tag))
 				{
 					JsonData j2 = j[tag];
@@ -222,16 +136,16 @@ namespace Shockah.Base
 				}
 			}
 			
-			framesAdd.Add(this);
+			manager.framesAdd.Add(this);
 			OnCreate();
 		}
 		public void Destroy()
 		{
 			OnDestroy();
-			framesRemove.Add(this);
+			manager.framesRemove.Add(this);
 
-			if (!data.Has(modBase.mod.InternalName)) data[modBase.mod.InternalName] = JsonData.Object();
-			JsonData j = data[modBase.mod.InternalName];
+			if (!manager.data.Has(manager.modBase.mod.InternalName)) manager.data[manager.modBase.mod.InternalName] = JsonData.Object();
+			JsonData j = manager.data[manager.modBase.mod.InternalName];
 
 			j[tag] = JsonData.Object(
 				"pos", JsonData.List((int)pos.X, (int)pos.Y),
@@ -241,11 +155,11 @@ namespace Shockah.Base
 				"anchor", Enum.GetName(typeof(Anchor), anchor)
 			);
 			OnSave(j[tag]);
-			data[modBase.mod.InternalName] = j;
+			manager.data[manager.modBase.mod.InternalName] = j;
 		}
 		public void Update()
 		{
-			if (!locked && (actionOn == null || object.ReferenceEquals(actionOn, this)))
+			if (!locked && (manager.actionOn == null || object.ReferenceEquals(manager.actionOn, this)))
 			{
 				if (Math2.InRegion(Main.mouse, FramePos1() - new Vector2(12, 12), FramePos2() + new Vector2(12, 12)) && !Math2.InRegion(Main.mouse, FrameLockPos() - new Vector2(8, 8), FrameLockPos() + new Vector2(8, 8)) && Main.mouseRight && Main.mouseRightRelease)
 				{
@@ -272,7 +186,7 @@ namespace Shockah.Base
 						if (!Main.mouseLeft)
 						{
 							dragging = null;
-							actionOn = null;
+							manager.actionOn = null;
 						}
 					}
 					else
@@ -280,7 +194,7 @@ namespace Shockah.Base
 						if (Math2.InRegion(Main.mouse, FrameLockPos() - new Vector2(8, 8), FrameLockPos() + new Vector2(8, 8)))
 						{
 							Main.localPlayer.mouseInterface = true;
-							SBase.tip = "Left click to lock\nRight click to switch " + (parentAnchorMode ? "outer" : "inner") + " anchor";
+							manager.modBase.tip = string.Format("Left click to lock\nRight click to switch %s anchor", manager.parentAnchorMode ? "outer" : "inner");
 							if (Main.mouseLeft && Main.mouseLeftRelease)
 							{
 								locked = true;
@@ -288,7 +202,7 @@ namespace Shockah.Base
 							}
 							else if (Main.mouseRight && Main.mouseRightRelease)
 							{
-								if (parentAnchorMode)
+								if (manager.parentAnchorMode)
 								{
 									Vector2 paOrigin = parentAnchor.Origin();
 									parentAnchor = (Anchor)(((int)parentAnchor + 1) % 9);
@@ -296,9 +210,7 @@ namespace Shockah.Base
 									pos -= parentAnchor.Origin();
 								}
 								else
-								{
 									anchor = (Anchor)(((int)anchor + 1) % 9);
-								}
 								Main.PlaySound(22, -1, -1, 1);
 							}
 						}
@@ -324,13 +236,9 @@ namespace Shockah.Base
 										modSizeY = -1;
 									}
 									if (resizing.Value == Anchor.TopRight || resizing.Value == Anchor.Right || resizing.Value == Anchor.BottomRight)
-									{
 										modSizeX = 1;
-									}
 									if (resizing.Value == Anchor.BottomLeft || resizing.Value == Anchor.Bottom || resizing.Value == Anchor.BottomRight)
-									{
 										modSizeY = 1;
-									}
 									pos.X += (Main.mouse.X - resizingMouse.Value.X) * modPosX;
 									pos.Y += (Main.mouse.Y - resizingMouse.Value.Y) * modPosY;
 									size.X += (Main.mouse.X - resizingMouse.Value.X) * modSizeX;
@@ -355,12 +263,12 @@ namespace Shockah.Base
 									if (resizable.AnchorResizable(anchor, _anchor) && _corners && Math2.InRegion(Main.mouse, _p - new Vector2(8, 8), 16, 16))
 									{
 										Main.localPlayer.mouseInterface = true;
-										SBase.tip = "Drag to resize";
+										manager.modBase.tip = "Drag to resize";
 										if (Main.mouseLeft)
 										{
 											resizing = _anchor;
 											resizingMouse = Main.mouse;
-											actionOn = this;
+											manager.actionOn = this;
 										}
 										return true;
 									}
@@ -384,7 +292,7 @@ namespace Shockah.Base
 										if (Main.mouseLeft)
 										{
 											dragging = Main.mouse;
-											actionOn = this;
+											manager.actionOn = this;
 										}
 									}
 								}
@@ -403,9 +311,9 @@ namespace Shockah.Base
 
 			if (Main.playerInventory && ShouldRenderFrame()) Drawing.DrawBox(sb, p1.X - 12, p1.Y - 12, p2.X - p1.X + 24, p2.Y - p1.Y + 24);
 			OnRender(sb);
-			if (!locked && Main.playerInventory && !parentAnchorMode)
+			if (!locked && Main.playerInventory && !manager.parentAnchorMode)
 			{
-				Texture2D texResizer = MBase.me.textures["Resizer"];
+				Texture2D texResizer = manager.modBase.textures["Resizer"];
 				bool corners = size.X >= 32 && size.Y >= 32;
 				if (resizable.AnchorResizable(anchor, Anchor.TopLeft) && corners) sb.Draw(texResizer, p1, null, Color.White, Math2.ToRadians(-45f), texResizer.Size() / 2, 1f, SpriteEffects.None, 0f);
 				if (resizable.AnchorResizable(anchor, Anchor.Top)) sb.Draw(texResizer, new Vector2((p1.X + p2.X) / 2, p1.Y), null, Color.White, Math2.ToRadians(0f), texResizer.Size() / 2, 1f, SpriteEffects.None, 0f);
@@ -420,7 +328,7 @@ namespace Shockah.Base
 		public void Render2(SpriteBatch sb)
 		{
 			if (Main.hideUI || !IsVisible()) return;
-			if (!locked && Main.playerInventory && parentAnchorMode)
+			if (!locked && Main.playerInventory && manager.parentAnchorMode)
 			{
 				sb.DrawCircle(parentAnchor.ParentAnchorDrawPoint(), 12f, 16, Color.Red);
 				sb.DrawCircle(parentAnchor.ParentAnchorDrawPoint(), 11f, 16, Color.Red);
@@ -443,9 +351,7 @@ namespace Shockah.Base
 		{
 			if (Main.hideUI || !IsVisible()) return;
 			if (!locked && Main.playerInventory)
-			{
-				sb.Draw(Main.HBLockTexture[locked ? 0 : 1], FrameLockPos(), null, parentAnchorMode ? Color.Red : Color.White, 0f, Main.HBLockTexture[0].Size() / 2, 1f, SpriteEffects.None, 0f);
-			}
+				sb.Draw(Main.HBLockTexture[locked ? 0 : 1], FrameLockPos(), null, manager.parentAnchorMode ? Color.Red : Color.White, 0f, Main.HBLockTexture[0].Size() / 2, 1f, SpriteEffects.None, 0f);
 		}
 
 		public Vector2 FramePos1()

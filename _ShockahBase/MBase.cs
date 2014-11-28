@@ -3,26 +3,51 @@ using System;
 using System.Collections.Generic;
 using TAPI;
 using Terraria;
+using Microsoft.Xna.Framework;
 
 namespace Shockah.Base
 {
 	public class MBase : ModBase
 	{
+		internal static MBase me { get; set; }
+
 		public readonly SExternalHandler handler = new SExternalHandler();
+		public readonly SFrameManager frameManager;
+		public readonly SPopupMenuManager popupMenuManager;
+		public string tip = null;
+		public STooltip globalTip = new STooltip();
 		protected bool wasInMenu = true;
-		protected readonly List<int> noTimerBuffs = new List<int>(new int[] {19, 27, 28, 34, 37, 38, 40, 41, 42, 43, 45, 49, 60, 62, 64, 67, 68, 81, 82, 83, 90});
+		protected readonly List<int> noTimerBuffs = new List<int>(new int[] { 19, 27, 28, 34, 37, 38, 40, 41, 42, 43, 45, 49, 60, 62, 64, 67, 68, 81, 82, 83, 90 });
+
+		public SEvent<bool> evMenuStateChanged;
+		public SEvent<Player, string, int, Item, Item> evInventoryChanged;
+		public SEvent<NPC, int, Item> evNPCLoot;
+		public SEvent<int, int, int, Item> evTileLoot;
+		public SEvent<SpriteBatch, STooltip, Rectangle> evPreSTooltipDraw, evPostSTooltipDraw;
+		public SEventFBool<NPC> evIsBoss, evRequiresAttaching, evIsUnsafeToSpawn, evBuffHasTimer;
+
+		public MBase()
+		{
+			frameManager = new SFrameManager(this);
+			popupMenuManager = new SPopupMenuManager(this);
+		}
 
 		public override void OnLoad()
 		{
-			handler.events["MenuStateChanged"] = new SEvent<bool>();
-			handler.events["InventoryChanged"] = new SEvent<Player, string, int, Item, Item>();
-			handler.events["NPCLoot"] = new SEvent<NPC, int, Item>();
-			handler.events["TileLoot"] = new SEvent<int, int, int, Item>();
+			me = this;
 
-			handler.events["IsBoss"] = new SEventFBool<NPC>();
-			handler.events["RequiresAttaching"] = new SEventFBool<NPC>();
-			handler.events["IsUnsafeToSpawn"] = new SEventFBool<NPC>();
-			handler.events["BuffHasTimer"] = new SEventFBool<int>();
+			handler.events["MenuStateChanged"] = evMenuStateChanged = new SEvent<bool>();
+			handler.events["InventoryChanged"] = evInventoryChanged = new SEvent<Player, string, int, Item, Item>();
+			handler.events["NPCLoot"] = evNPCLoot = new SEvent<NPC, int, Item>();
+			handler.events["TileLoot"] = evTileLoot = new SEvent<int, int, int, Item>();
+
+			handler.events["PreSTooltipDraw"] = evPreSTooltipDraw = new SEvent<SpriteBatch, STooltip, Rectangle>();
+			handler.events["PostSTooltipDraw"] = evPostSTooltipDraw = new SEvent<SpriteBatch, STooltip, Rectangle>();
+
+			handler.events["IsBoss"] = evIsBoss = new SEventFBool<NPC>();
+			handler.events["RequiresAttaching"] = evRequiresAttaching = new SEventFBool<NPC>();
+			handler.events["IsUnsafeToSpawn"] = evIsUnsafeToSpawn = new SEventFBool<NPC>();
+			handler.events["BuffHasTimer"] = evBuffHasTimer = new SEventFBool<int>();
 
 			handler.funcs["IsBoss"] = new Func<NPC, bool>(IsBoss);
 			handler.funcs["RequiresAttaching"] = new Func<NPC, bool>(RequiresAttaching);
@@ -40,9 +65,14 @@ namespace Shockah.Base
 			//SFrame.LoadAll();
 		}
 
+		public override void OnUnload()
+		{
+			me = null;
+		}
+
 		public override void OnAllModsLoaded()
 		{
-			handler.events["MenuStateChanged"] += new Action<bool>((menu) => {
+			evMenuStateChanged += new Action<bool>((menu) => {
 				/*if (menu)
 				{
 					SFrame.DestroyAll(false);
@@ -52,7 +82,7 @@ namespace Shockah.Base
 				}*/
 			});
 
-			handler.events["IsBoss"] += new Func<NPC, bool?>((npc) => {
+			evIsBoss += new Func<NPC, bool?>((npc) => {
 				if (npc.boss) return true;
 				if (npc.type >= 13 && npc.type <= 15) return true; //Eater of Worlds
 				if (npc.type >= 134 && npc.type <= 136) return true; //The Destroyer
@@ -60,15 +90,15 @@ namespace Shockah.Base
 				if (npc.type >= 344 && npc.type <= 346) return true; //Everscream, Ice Queen, Santa-NK1
 				return null;
 			});
-			handler.events["RequiresAttaching"] += new Func<NPC, bool?>((npc) => {
+			evRequiresAttaching += new Func<NPC, bool?>((npc) => {
 				if (npc.type == 43 || npc.type == 56 || npc.type == 101 || npc.type == 175 || npc.type == 259 || npc.type == 260) return true;
 				return null;
 			});
-			handler.events["IsUnsafeToSpawn"] += new Func<NPC, bool?>((npc) => {
+			evIsUnsafeToSpawn += new Func<NPC, bool?>((npc) => {
 				if (npc.type == 263) return true;
 				return null;
 			});
-			handler.events["BuffHasTimer"] += new Func<int, bool?>((type) => {
+			evBuffHasTimer += new Func<int, bool?>((type) => {
 				if (Main.buffNoTimeDisplay[type]) return false;
 				if (Main.vanityPet[type] || Main.lightPet[type]) return false;
 				if (noTimerBuffs.Contains(type)) return false;
@@ -82,7 +112,7 @@ namespace Shockah.Base
 			if (wasInMenu != Main.gameMenu)
 			{
 				wasInMenu = Main.gameMenu;
-				((SEvent<bool>)handler.events["MenuStateChanged"]).Call(wasInMenu);
+				evMenuStateChanged.Call(wasInMenu);
 			}
 		}
 
@@ -93,19 +123,19 @@ namespace Shockah.Base
 
 		public bool IsBoss(NPC npc)
 		{
-			return ((SEventFBool<NPC>)handler.events["IsBoss"]).Call(npc) ?? false;
+			return evIsBoss.Call(npc) ?? false;
 		}
 		public bool RequiresAttaching(NPC npc)
 		{
-			return ((SEventFBool<NPC>)handler.events["RequiresAttaching"]).Call(npc) ?? false;
+			return evRequiresAttaching.Call(npc) ?? false;
 		}
 		public bool IsUnsafeToSpawn(NPC npc)
 		{
-			return ((SEventFBool<NPC>)handler.events["IsUnsafeToSpawn"]).Call(npc) ?? false;
+			return evIsUnsafeToSpawn.Call(npc) ?? false;
 		}
 		public bool BuffHasTimer(int type)
 		{
-			return ((SEventFBool<int>)handler.events["BuffHasTimer"]).Call(type) ?? true;
+			return evBuffHasTimer.Call(type) ?? true;
 		}
 
 		public bool PutItem(ref Item item, Item[] items, int rangeStart, int rangeEnd)

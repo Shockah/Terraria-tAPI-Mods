@@ -10,6 +10,26 @@ namespace Shockah.Base
 {
 	public static class Extensions
 	{
+		public static void InsertAfter<T>(this List<T> list, T after, T add)
+		{
+			InsertAfter(list, (el) => el == after, add);
+		}
+		public static void InsertAfter<T>(this List<T> list, Func<T, bool> comparator, T add)
+		{
+			for (int i = 0; i < list.Count; i++)
+			{
+				if (comparator(list[i]))
+				{
+					if (i != list.Count - 1)
+					{
+						list.Insert(i + 1, add);
+						return;
+					}
+				}
+			}
+			list.Add(add);
+		}
+
 		public static void DrawFull(this Player player)
 		{
 			if (player.ghost)

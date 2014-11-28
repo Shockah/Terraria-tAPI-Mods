@@ -13,7 +13,7 @@ namespace Shockah.Base
 		protected override void OnDraw(SpriteBatch sb)
 		{
 			STooltip ttip = null;
-			foreach (Func<STooltip> h in SBase.EventSTooltipDraw)
+			foreach (Func<STooltip> h in MBase.me.evSTooltipDraw)
 			{
 				STooltip ttip2 = h();
 				if (ttip2 != null && ttip2.lines.Count != 0)
@@ -22,19 +22,19 @@ namespace Shockah.Base
 					break;
 				}
 			}
-			if (ttip == null && STooltip.global.lines.Count != 0) ttip = STooltip.global;
+			if (ttip == null && MBase.me.globalTip.lines.Count != 0) ttip = MBase.me.globalTip;
 			if (ttip != null)
 			{
 				ttip.Draw(sb, Main.mouse + new Vector2(10, 10));
 				ttip.Clear();
 			}
-			else if (!string.IsNullOrEmpty(SBase.tip))
+			else if (!string.IsNullOrEmpty(MBase.me.tip))
 			{
-				ttip = STooltip.global;
-				ttip += SBase.tip;
+				ttip = MBase.me.globalTip;
+				ttip += MBase.me.tip;
 				ttip.Draw(sb, Main.mouse + new Vector2(10, 10));
 				ttip.Clear();
-				SBase.tip = null;
+				MBase.me.tip = null;
 			}
 		}
 	}

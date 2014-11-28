@@ -37,9 +37,7 @@ namespace Shockah.Base
 			}
 		}
 
-		public static readonly STooltip global = new STooltip();
-		
-		public List<Line> lines = new List<Line>();
+		public readonly List<Line> lines = new List<Line>();
 		public float sideSeparator = 32f;
 		public Color background = new Color(0, 0, 0, 0);
 		public float? alpha = null;
@@ -89,9 +87,14 @@ namespace Shockah.Base
 				if (alpha.HasValue) Drawing.DrawBox(sb, pos.X - 6, pos.Y - 6, sizeCalc.X + 12, sizeCalc.Y + 12, alpha.Value);
 				else Drawing.DrawBox(sb, pos.X - 6, pos.Y - 6, sizeCalc.X + 12, sizeCalc.Y + 12, background);
 			}
-			foreach (Action<SpriteBatch, STooltip, Rectangle> h in SBase.EventPreSTooltipDraw) h(sb, this, new Rectangle((int)pos.X, (int)pos.Y, (int)sizeCalc.X, (int)sizeCalc.Y));
+
+			var ev = (SEvent<SpriteBatch, STooltip, Rectangle>)MBase.me.handler.events["PreSTooltipDraw"];
+			foreach (Tuple<object, double> tuple in ev.handlers)
+				((Action<SpriteBatch, STooltip, Rectangle>)tuple.Item1)(sb, this, new Rectangle((int)pos.X, (int)pos.Y, (int)sizeCalc.X, (int)sizeCalc.Y));
 			ActualDraw(sb, pos, sizeCalc);
-			foreach (Action<SpriteBatch, STooltip, Rectangle> h in SBase.EventPostSTooltipDraw) h(sb, this, new Rectangle((int)pos.X, (int)pos.Y, (int)sizeCalc.X, (int)sizeCalc.Y));
+			ev = (SEvent<SpriteBatch, STooltip, Rectangle>)MBase.me.handler.events["PostSTooltipDraw"];
+			foreach (Tuple<object, double> tuple in ev.handlers)
+				((Action<SpriteBatch, STooltip, Rectangle>)tuple.Item1)(sb, this, new Rectangle((int)pos.X, (int)pos.Y, (int)sizeCalc.X, (int)sizeCalc.Y));
 		}
 
 		public virtual Vector2 ActualDraw(SpriteBatch sb, Vector2 pos, Vector2 sizeCalc = default(Vector2))
