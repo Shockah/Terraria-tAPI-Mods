@@ -5,26 +5,26 @@ using TAPI;
 
 namespace Shockah.Base
 {
-	public class SEventBase<T> where T : Delegate
+	public class SEventBase
 	{
-		public readonly List<Tuple<T, double>> handlers = new List<Tuple<T, double>>();
+		public readonly List<Tuple<object, double>> handlers = new List<Tuple<object, double>>();
 		public int Count { get { return handlers.Count; } }
 		protected bool dirty = true;
 
-		public void Add(T a)
+		public void Add(object a)
 		{
 			Add(a, 0d);
 		}
-		public void Add(T a, double priority)
+		public void Add(object a, double priority)
 		{
-			Add(new Tuple<T, double>(a, priority));
+			Add(new Tuple<object, double>(a, priority));
 		}
-		public void Add(Tuple<T, double> tuple)
+		public void Add(Tuple<object, double> tuple)
 		{
 			handlers.Add(tuple);
 			dirty = true;
 		}
-		public void Remove(T a)
+		public void Remove(object a)
 		{
 			for (int i = 0; i < handlers.Count; i++)
 				if (handlers[i].Item1 == a)
@@ -47,264 +47,264 @@ namespace Shockah.Base
 			dirty = false;
 		}
 
-		public static SEventBase<T> operator +(SEventBase<T> ev, T a)
+		public static SEventBase operator +(SEventBase ev, object a)
 		{
-			ev.handlers.Add(new Tuple<T, double>(a, 0d));
+			ev.handlers.Add(new Tuple<object, double>(a, 0d));
 			ev.dirty = true;
 			return ev;
 		}
-		public static SEventBase<T> operator +(SEventBase<T> ev, Tuple<T, double> tuple)
+		public static SEventBase operator +(SEventBase ev, Tuple<object, double> tuple)
 		{
 			ev.handlers.Add(tuple);
 			ev.dirty = true;
 			return ev;
 		}
-		public static SEventBase<T> operator -(SEventBase<T> ev, T a)
+		public static SEventBase operator -(SEventBase ev, object a)
 		{
 			ev.Remove(a);
 			return ev;
 		}
-		public static SEventBase<T> operator -(SEventBase<T> ev, Tuple<T, double> tuple)
+		public static SEventBase operator -(SEventBase ev, Tuple<object, double> tuple)
 		{
 			ev.Remove(tuple.Item1);
 			return ev;
 		}
 	}
 
-	public class SEvent : SEventBase<Action>
+	public class SEvent : SEventBase
 	{
 		public void Call()
 		{
 			Prepare();
-			foreach (Tuple<Action, double> handler in handlers)
-				handler.Item1();
+			foreach (Tuple<object, double> handler in handlers)
+				((Action)handler.Item1)();
 		}
 	}
-	public class SEvent<A> : SEventBase<Action<A>>
+	public class SEvent<A> : SEventBase
 	{
 		public void Call(A a)
 		{
 			Prepare();
-			foreach (Tuple<Action<A>, double> handler in handlers)
-				handler.Item1(a);
+			foreach (Tuple<object, double> handler in handlers)
+				((Action<A>)handler.Item1)(a);
 		}
 	}
-	public class SEvent<A, B> : SEventBase<Action<A, B>>
+	public class SEvent<A, B> : SEventBase
 	{
 		public void Call(A a, B b)
 		{
 			Prepare();
-			foreach (Tuple<Action<A, B>, double> handler in handlers)
-				handler.Item1(a, b);
+			foreach (Tuple<object, double> handler in handlers)
+				((Action<A, B>)handler.Item1)(a, b);
 		}
 	}
-	public class SEvent<A, B, C> : SEventBase<Action<A, B, C>>
+	public class SEvent<A, B, C> : SEventBase
 	{
 		public void Call(A a, B b, C c)
 		{
 			Prepare();
-			foreach (Tuple<Action<A, B, C>, double> handler in handlers)
-				handler.Item1(a, b, c);
+			foreach (Tuple<object, double> handler in handlers)
+				((Action<A, B, C>)handler.Item1)(a, b, c);
 		}
 	}
-	public class SEvent<A, B, C, D> : SEventBase<Action<A, B, C, D>>
+	public class SEvent<A, B, C, D> : SEventBase
 	{
 		public void Call(A a, B b, C c, D d)
 		{
 			Prepare();
-			foreach (Tuple<Action<A, B, C, D>, double> handler in handlers)
-				handler.Item1(a, b, c, d);
+			foreach (Tuple<object, double> handler in handlers)
+				((Action<A, B, C, D>)handler.Item1)(a, b, c, d);
 		}
 	}
-	public class SEvent<A, B, C, D, E> : SEventBase<Action<A, B, C, D, E>>
+	public class SEvent<A, B, C, D, E> : SEventBase
 	{
 		public void Call(A a, B b, C c, D d, E e)
 		{
 			Prepare();
-			foreach (Tuple<Action<A, B, C, D, E>, double> handler in handlers)
-				handler.Item1(a, b, c, d, e);
+			foreach (Tuple<object, double> handler in handlers)
+				((Action<A, B, C, D, E>)handler.Item1)(a, b, c, d, e);
 		}
 	}
-	public class SEvent<A, B, C, D, E, F> : SEventBase<Action<A, B, C, D, E, F>>
+	public class SEvent<A, B, C, D, E, F> : SEventBase
 	{
 		public void Call(A a, B b, C c, D d, E e, F f)
 		{
 			Prepare();
-			foreach (Tuple<Action<A, B, C, D, E, F>, double> handler in handlers)
-				handler.Item1(a, b, c, d, e, f);
+			foreach (Tuple<object, double> handler in handlers)
+				((Action<A, B, C, D, E, F>)handler.Item1)(a, b, c, d, e, f);
 		}
 	}
 
-	public class SEventFTrue : SEventBase<Func<bool>>
+	public class SEventFTrue : SEventBase
 	{
 		public bool Call()
 		{
 			Prepare();
-			foreach (Tuple<Func<bool>, double> handler in handlers)
-				if (handler.Item1())
+			foreach (Tuple<object, double> handler in handlers)
+				if (((Func<bool>)handler.Item1)())
 					return true;
 			return false;
 		}
 	}
-	public class SEventFTrue<A> : SEventBase<Func<A, bool>>
+	public class SEventFTrue<A> : SEventBase
 	{
 		public bool Call(A a)
 		{
 			Prepare();
-			foreach (Tuple<Func<A, bool>, double> handler in handlers)
-				if (handler.Item1(a))
+			foreach (Tuple<object, double> handler in handlers)
+				if (((Func<A, bool>)handler.Item1)(a))
 					return true;
 			return false;
 		}
 	}
-	public class SEventFTrue<A, B> : SEventBase<Func<A, B, bool>>
+	public class SEventFTrue<A, B> : SEventBase
 	{
 		public bool Call(A a, B b)
 		{
 			Prepare();
-			foreach (Tuple<Func<A, B, bool>, double> handler in handlers)
-				if (handler.Item1(a, b))
+			foreach (Tuple<object, double> handler in handlers)
+				if (((Func<A, B, bool>)handler.Item1)(a, b))
 					return true;
 			return false;
 		}
 	}
-	public class SEventFTrue<A, B, C> : SEventBase<Func<A, B, C, bool>>
+	public class SEventFTrue<A, B, C> : SEventBase
 	{
 		public bool Call(A a, B b, C c)
 		{
 			Prepare();
-			foreach (Tuple<Func<A, B, C, bool>, double> handler in handlers)
-				if (handler.Item1(a, b, c))
+			foreach (Tuple<object, double> handler in handlers)
+				if (((Func<A, B, C, bool>)handler.Item1)(a, b, c))
 					return true;
 			return false;
 		}
 	}
-	public class SEventFTrue<A, B, C, D> : SEventBase<Func<A, B, C, D, bool>>
+	public class SEventFTrue<A, B, C, D> : SEventBase
 	{
 		public bool Call(A a, B b, C c, D d)
 		{
 			Prepare();
-			foreach (Tuple<Func<A, B, C, D, bool>, double> handler in handlers)
-				if (handler.Item1(a, b, c, d))
+			foreach (Tuple<object, double> handler in handlers)
+				if (((Func<A, B, C, D, bool>)handler.Item1)(a, b, c, d))
 					return true;
 			return false;
 		}
 	}
-	public class SEventFTrue<A, B, C, D, E> : SEventBase<Func<A, B, C, D, E, bool>>
+	public class SEventFTrue<A, B, C, D, E> : SEventBase
 	{
 		public bool Call(A a, B b, C c, D d, E e)
 		{
 			Prepare();
-			foreach (Tuple<Func<A, B, C, D, E, bool>, double> handler in handlers)
-				if (handler.Item1(a, b, c, d, e))
+			foreach (Tuple<object, double> handler in handlers)
+				if (((Func<A, B, C, D, E, bool>)handler.Item1)(a, b, c, d, e))
 					return true;
 			return false;
 		}
 	}
-	public class SEventFTrue<A, B, C, D, E, F> : SEventBase<Func<A, B, C, D, E, F, bool>>
+	public class SEventFTrue<A, B, C, D, E, F> : SEventBase
 	{
 		public bool Call(A a, B b, C c, D d, E e, F f)
 		{
 			Prepare();
-			foreach (Tuple<Func<A, B, C, D, E, F, bool>, double> handler in handlers)
-				if (handler.Item1(a, b, c, d, e, f))
+			foreach (Tuple<object, double> handler in handlers)
+				if (((Func<A, B, C, D, E, F, bool>)handler.Item1)(a, b, c, d, e, f))
 					return true;
 			return false;
 		}
 	}
 
-	public class SEventFBool : SEventBase<Func<bool?>>
+	public class SEventFBool : SEventBase
 	{
 		public bool? Call()
 		{
 			Prepare();
-			foreach (Tuple<Func<bool?>, double> handler in handlers)
+			foreach (Tuple<object, double> handler in handlers)
 			{
-				bool? r = handler.Item1();
+				bool? r = ((Func<bool?>)handler.Item1)();
 				if (r.HasValue)
 					return r;
 			}
 			return null;
 		}
 	}
-	public class SEventFBool<A> : SEventBase<Func<A, bool?>>
+	public class SEventFBool<A> : SEventBase
 	{
 		public bool? Call(A a)
 		{
 			Prepare();
-			foreach (Tuple<Func<A, bool?>, double> handler in handlers)
+			foreach (Tuple<object, double> handler in handlers)
 			{
-				bool? r = handler.Item1(a);
+				bool? r = ((Func<A, bool?>)handler.Item1)(a);
 				if (r.HasValue)
 					return r;
 			}
 			return null;
 		}
 	}
-	public class SEventFBool<A, B> : SEventBase<Func<A, B, bool?>>
+	public class SEventFBool<A, B> : SEventBase
 	{
 		public bool? Call(A a, B b)
 		{
 			Prepare();
-			foreach (Tuple<Func<A, B, bool?>, double> handler in handlers)
+			foreach (Tuple<object, double> handler in handlers)
 			{
-				bool? r = handler.Item1(a, b);
+				bool? r = ((Func<A, B, bool?>)handler.Item1)(a, b);
 				if (r.HasValue)
 					return r;
 			}
 			return null;
 		}
 	}
-	public class SEventFBool<A, B, C> : SEventBase<Func<A, B, C, bool?>>
+	public class SEventFBool<A, B, C> : SEventBase
 	{
 		public bool? Call(A a, B b, C c)
 		{
 			Prepare();
-			foreach (Tuple<Func<A, B, C, bool?>, double> handler in handlers)
+			foreach (Tuple<object, double> handler in handlers)
 			{
-				bool? r = handler.Item1(a, b, c);
+				bool? r = ((Func<A, B, C, bool?>)handler.Item1)(a, b, c);
 				if (r.HasValue)
 					return r;
 			}
 			return null;
 		}
 	}
-	public class SEventFBool<A, B, C, D> : SEventBase<Func<A, B, C, D, bool?>>
+	public class SEventFBool<A, B, C, D> : SEventBase
 	{
 		public bool? Call(A a, B b, C c, D d)
 		{
 			Prepare();
-			foreach (Tuple<Func<A, B, C, D, bool?>, double> handler in handlers)
+			foreach (Tuple<object, double> handler in handlers)
 			{
-				bool? r = handler.Item1(a, b, c, d);
+				bool? r = ((Func<A, B, C, D, bool?>)handler.Item1)(a, b, c, d);
 				if (r.HasValue)
 					return r;
 			}
 			return null;
 		}
 	}
-	public class SEventFBool<A, B, C, D, E> : SEventBase<Func<A, B, C, D, E, bool?>>
+	public class SEventFBool<A, B, C, D, E> : SEventBase
 	{
 		public bool? Call(A a, B b, C c, D d, E e)
 		{
 			Prepare();
-			foreach (Tuple<Func<A, B, C, D, E, bool?>, double> handler in handlers)
+			foreach (Tuple<object, double> handler in handlers)
 			{
-				bool? r = handler.Item1(a, b, c, d, e);
+				bool? r = ((Func<A, B, C, D, E, bool?>)handler.Item1)(a, b, c, d, e);
 				if (r.HasValue)
 					return r;
 			}
 			return null;
 		}
 	}
-	public class SEventFBool<A, B, C, D, E, F> : SEventBase<Func<A, B, C, D, E, F, bool?>>
+	public class SEventFBool<A, B, C, D, E, F> : SEventBase
 	{
 		public bool? Call(A a, B b, C c, D d, E e, F f)
 		{
 			Prepare();
-			foreach (Tuple<Func<A, B, C, D, E, F, bool?>, double> handler in handlers)
+			foreach (Tuple<object, double> handler in handlers)
 			{
-				bool? r = handler.Item1(a, b, c, d, e, f);
+				bool? r = ((Func<A, B, C, D, E, F, bool?>)handler.Item1)(a, b, c, d, e, f);
 				if (r.HasValue)
 					return r;
 			}

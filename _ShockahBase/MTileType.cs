@@ -12,8 +12,8 @@ namespace Shockah.Base
 
 		public override bool PreKill(int x, int y, bool fail, bool effectsOnly, bool noItem)
 		{
-			SEvent<int, int, int, Item> ev = ((MBase)modBase).handler.events["TileLoot"];
-			if (ev.Count == 0) return;
+			var ev = (SEvent<int, int, int, Item>)((MBase)modBase).handler.events["TileLoot"];
+			if (ev.Count == 0) return true;
 
 			if (nested == 0)
 			{
@@ -30,7 +30,7 @@ namespace Shockah.Base
 
 		public override void PostKill(int x, int y, bool fail, bool effectsOnly, bool noItem)
 		{
-			SEvent<int, int, int, Item> ev = ((MBase)modBase).handler.events["TileLoot"];
+			var ev = (SEvent<int, int, int, Item>)((MBase)modBase).handler.events["TileLoot"];
 			if (ev.Count == 0) return;
 
 			nested--;

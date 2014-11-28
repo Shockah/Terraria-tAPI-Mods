@@ -24,25 +24,25 @@ namespace Shockah.Base
 			handler.events["IsUnsafeToSpawn"] = new SEventFBool<NPC>();
 			handler.events["BuffHasTimer"] = new SEventFBool<int>();
 
-			handler.funcs["IsBoss"] = IsBoss;
-			handler.funcs["RequiresAttaching"] = RequiresAttaching;
-			handler.funcs["IsUnsafeToSpawn"] = IsUnsafeToSpawn;
-			handler.funcs["BuffHasTimer"] = BuffHasTimer;
+			handler.funcs["IsBoss"] = new Func<NPC, bool>(IsBoss);
+			handler.funcs["RequiresAttaching"] = new Func<NPC, bool>(RequiresAttaching);
+			handler.funcs["IsUnsafeToSpawn"] = new Func<NPC, bool>(IsUnsafeToSpawn);
+			handler.funcs["BuffHasTimer"] = new Func<int, bool>(BuffHasTimer);
 
-			handler.funcs["PutItem"] = (Muple<Item> item, Item[] container) =>
-				PutItem(ref item.Item, container);
-			handler.funcs["PutItemRange"] = (Muple<Item> item, Item[] container, int rangeStart, int rangeEnd) =>
-				PutItem(ref item.Item, container, rangeStart, rangeEnd);
+			handler.funcs["PutItem"] = new Func<Muple<Item>, Item[], bool>((Muple<Item> item, Item[] container) =>
+				PutItem(ref item.Item, container));
+			handler.funcs["PutItemRange"] = new Func<Muple<Item>, Item[], int, int, bool>((Muple<Item> item, Item[] container, int rangeStart, int rangeEnd) =>
+				PutItem(ref item.Item, container, rangeStart, rangeEnd));
 
-			handler.funcs["CopyFurther"] = CopyFurther;
-			handler.actions["CopyFutherInto"] = CopyFurtherInto;
+			handler.funcs["CopyFurther"] = new Func<BinBuffer, BinBuffer>(CopyFurther);
+			handler.actions["CopyFutherInto"] = new Action<BinBuffer, BinBuffer>(CopyFurtherInto);
 
 			//SFrame.LoadAll();
 		}
 
 		public override void OnAllModsLoaded()
 		{
-			handler.events["MenuStateChanged"] += (menu) => {
+			handler.events["MenuStateChanged"] += new Action<bool>((menu) => {
 				/*if (menu)
 				{
 					SFrame.DestroyAll(false);
@@ -50,31 +50,31 @@ namespace Shockah.Base
 					SFrame.DestroyAll(true);
 					SPopupMenu.menus.Clear();
 				}*/
-			};
+			});
 
-			handler.events["IsBoss"] += (npc) => {
+			handler.events["IsBoss"] += new Func<NPC, bool?>((npc) => {
 				if (npc.boss) return true;
 				if (npc.type >= 13 && npc.type <= 15) return true; //Eater of Worlds
 				if (npc.type >= 134 && npc.type <= 136) return true; //The Destroyer
 				if (npc.type == 325 || npc.type == 327) return true; //Mourning Wood, Pumpking
 				if (npc.type >= 344 && npc.type <= 346) return true; //Everscream, Ice Queen, Santa-NK1
 				return null;
-			};
-			handler.events["RequiresAttaching"] += (npc) => {
+			});
+			handler.events["RequiresAttaching"] += new Func<NPC, bool?>((npc) => {
 				if (npc.type == 43 || npc.type == 56 || npc.type == 101 || npc.type == 175 || npc.type == 259 || npc.type == 260) return true;
 				return null;
-			};
-			handler.events["IsUnsafeToSpawn"] += (npc) => {
+			});
+			handler.events["IsUnsafeToSpawn"] += new Func<NPC, bool?>((npc) => {
 				if (npc.type == 263) return true;
 				return null;
-			};
-			handler.events["BuffHasTimer"] += (type) => {
+			});
+			handler.events["BuffHasTimer"] += new Func<int, bool?>((type) => {
 				if (Main.buffNoTimeDisplay[type]) return false;
 				if (Main.vanityPet[type] || Main.lightPet[type]) return false;
 				if (noTimerBuffs.Contains(type)) return false;
 				if (!Main.localPlayer.honeyWet && type == 48) return true;
 				return null;
-			};
+			});
 		}
 
 		public override void PreGameDraw(SpriteBatch sb)

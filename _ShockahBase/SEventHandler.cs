@@ -6,10 +6,10 @@ namespace Shockah.Base
 {
 	public class SEventHandler
 	{
-		protected Dictionary<string, SEventBase<Delegate>> events = new Dictionary<string, SEventBase<Delegate>>();
+		protected Dictionary<string, SEventBase> events = new Dictionary<string, SEventBase>();
 		public int Count { get { return events.Count; } }
 
-		public SEventBase<Delegate> this[string name]
+		public SEventBase this[string name]
 		{
 			get { return events[name]; }
 			set { events[name] = value; }

@@ -10,8 +10,8 @@ namespace Shockah.Base
 
 		public override bool PreNPCLoot()
 		{
-			SEvent<NPC, int, Item> ev = ((MBase)modBase).handler.events["NPCLoot"];
-			if (ev.Count == 0) return;
+			var ev = (SEvent<NPC, int, Item>)((MBase)modBase).handler.events["NPCLoot"];
+			if (ev.Count == 0) return true;
 
 			cacheItems = new uint[Main.item.Length - 1];
 			for (int i = 0; i < cacheItems.Length; i++)
@@ -25,7 +25,7 @@ namespace Shockah.Base
 
 		public override void PostNPCLoot()
 		{
-			SEvent<NPC, int, Item> ev = ((MBase)modBase).handler.events["NPCLoot"];
+			var ev = (SEvent<NPC, int, Item>)((MBase)modBase).handler.events["NPCLoot"];
 			if (ev.Count == 0) return;
 
 			for (int i = 0; i < cacheItems.Length; i++)

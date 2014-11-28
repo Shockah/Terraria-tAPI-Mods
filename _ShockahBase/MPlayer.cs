@@ -17,7 +17,7 @@ namespace Shockah.Base
 		public override void PostUpdate()
 		{
 			if (Main.netMode == 2 || player.whoAmI != Main.myPlayer) return;
-			SEvent<Player, string, int, Item, Item> ev = ((MBase)modBase).handler.events["InventoryChanged"];
+			var ev = (SEvent<Player, string, int, Item, Item>)((MBase)modBase).handler.events["InventoryChanged"];
 			if (ev.Count == 0) return;
 
 			bool wasNull = false;
